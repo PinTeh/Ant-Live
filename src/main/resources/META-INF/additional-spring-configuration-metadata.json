@@ -1,0 +1,83 @@
+{
+  "properties": [
+    {
+      "name": "tx.sms.smsSign",
+      "type": "java.lang.String",
+      "description": "Description for tx.sms.smsSign."
+    },
+    {
+      "name": "tx.sms.appid",
+      "type": "java.lang.String",
+      "description": "Description for tx.sms.appid."
+    },
+    {
+      "name": "tx.sms.templateId",
+      "type": "java.lang.String",
+      "description": "Description for tx.sms.templateId."
+    },
+    {
+      "name": "tx.sms.appkey",
+      "type": "java.lang.String",
+      "description": "Description for tx.sms.appkey."
+    },
+    {
+      "name": "spring.mail.name",
+      "type": "java.lang.String",
+      "description": "Description for spring.mail.name."
+    },
+    {
+      "name": "tencent.sms.appid",
+      "type": "java.lang.String",
+      "description": "Description for tencent.sms.appid."
+    },
+    {
+      "name": "tencent.sms.appkey",
+      "type": "java.lang.String",
+      "description": "Description for tencent.sms.appkey."
+    },
+    {
+      "name": "tencent.sms.templateId",
+      "type": "java.lang.String",
+      "description": "Description for tencent.sms.templateId."
+    },
+    {
+      "name": "tencent.sms.smsSign",
+      "type": "java.lang.String",
+      "description": "Description for tencent.sms.smsSign."
+    },
+    {
+      "name": "tencent.live.domain",
+      "type": "java.lang.String",
+      "description": "Description for tencent.live.domain."
+    },
+    {
+      "name": "tencent.live.appName",
+      "type": "java.lang.String",
+      "description": "Description for tencent.live.appName."
+    },
+    {
+      "name": "alipay.path",
+      "type": "java.lang.String",
+      "description": "Description for alipay.path."
+    },
+    {
+      "name": "tencent.live.iii",
+      "type": "java.lang.String",
+      "description": "Description for tencent.live.iii."
+    },
+    {
+      "name": "tencent.live.kkk",
+      "type": "java.lang.String",
+      "description": "Description for tencent.live.kkk."
+    },
+    {
+      "name": "tencent.cos.bucketName",
+      "type": "java.lang.String",
+      "description": "Description for tencent.cos.bucketName."
+    },
+    {
+      "name": "tencent.cos.path",
+      "type": "java.lang.String",
+      "description": "Description for tencent.cos.path."
+    }
+  ] }

@@ -39,6 +39,7 @@ public class Constants {
         /**
          * 直播状态描述
          */
+        UNAUTH(-1,"未认证"),
         STOP(0,"未开播"),
         LIVING(1,"正在直播中"),
         BANNING(2,"已被封禁")

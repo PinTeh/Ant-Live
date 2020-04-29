@@ -1,8 +1,6 @@
 package cn.imhtb.antlive.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -15,6 +13,7 @@ import java.time.LocalDateTime;
 @TableName("tb_user")
 public class User {
 
+    @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
 
     @TableField(exist = false)

@@ -63,6 +63,11 @@ public class TencentLiveController {
         this.tencentLiveService = tencentLiveService;
     }
 
+    /**
+     * 获取推流密钥
+     * 1. 用户没认证
+     * 2. 直播间已被封禁
+     */
     @GetMapping("/open")
     public ApiResponse open(HttpServletRequest request){
         // get token
@@ -70,11 +75,17 @@ public class TencentLiveController {
         Integer uid = JwtUtils.getId(token);
         // get room by uid
         Room r = roomService.getOne(new QueryWrapper<Room>().eq("user_id",uid).last("limit 0,1"));
+
+        Map<String,String> ret = new HashMap<>(2);
+        ret.put("pushUrl","rtmp://" + domain + "/" + appName + "/");
+        ret.put("secret","申请失败，请认证后重新尝试");
+        if (r.getStatus() == -1){
+            return ApiResponse.ofSuccess(ret);
+        }
         // generator push url
         long txTime = LocalDateTime.now().plusHours(12L).toInstant(ZoneOffset.of("+8")).toEpochMilli();
         String safeUrl = TencentLiveServiceImpl.getSafeUrl("", String.valueOf(r.getId()), txTime/1000);
-        Map<String,String> ret = new HashMap<>(2);
-        ret.put("pushUrl","rtmp://" + domain + "/" + appName + "/");
+
         ret.put("secret",+ r.getId() + "?" + safeUrl);
         return ApiResponse.ofSuccess(ret);
     }

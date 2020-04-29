@@ -1,12 +1,7 @@
 package cn.imhtb.antlive.entity;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -17,9 +12,11 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @TableName("tb_room")
 public class Room {
 
+    @TableId(value = "id",type = IdType.AUTO)
     private Integer id;
 
     private Integer userId;

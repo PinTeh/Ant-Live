@@ -79,5 +79,30 @@
       "name": "tencent.cos.path",
       "type": "java.lang.String",
       "description": "Description for tencent.cos.path."
+    },
+    {
+      "name": "aliyun.iii",
+      "type": "java.lang.String",
+      "description": "Description for aliyun.iii."
+    },
+    {
+      "name": "aliyun.kkk",
+      "type": "java.lang.String",
+      "description": "Description for aliyun.kkk."
+    },
+    {
+      "name": "aliyun.diskId",
+      "type": "java.lang.String",
+      "description": "Description for aliyun.diskId."
+    },
+    {
+      "name": "aliyun.regionId",
+      "type": "java.lang.String",
+      "description": "Description for aliyun.regionId."
+    },
+    {
+      "name": "aliyun.instanceId",
+      "type": "java.lang.String",
+      "description": "Description for aliyun.instanceId."
     }
   ] }

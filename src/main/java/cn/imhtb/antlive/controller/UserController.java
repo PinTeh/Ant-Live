@@ -85,23 +85,8 @@ public class UserController {
         if (StringUtils.isEmpty(account)||StringUtils.isEmpty(request.getPassword())){
             return ApiResponse.ofError("参数传递错误");
         }
-        String verifyCode = request.getCode();
-        String redisCode;
-        User u = modelMapper.map(request,User.class);
-        u.setPassword(encoder.encode(u.getPassword()));
-        if (account.contains("@")){
-            redisCode = redisUtils.get("email:" + account).toString();
-            u.setEmail(account);
-        }else {
-            redisCode = redisUtils.get("email:" + account).toString();
-            u.setMobile(account);
-        }
-        if (!redisCode.isEmpty() && redisCode.equals(verifyCode)){
-            userService.save(u);
-        }else {
-            return ApiResponse.ofError("验证码错误，请重新尝试");
-        }
-        return ApiResponse.ofSuccess();
+
+       return userService.register(request);
     }
 
     @PostMapping("/code")

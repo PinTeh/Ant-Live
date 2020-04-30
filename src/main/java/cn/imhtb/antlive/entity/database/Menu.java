@@ -5,37 +5,35 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * @author PinTeh
- * @date 2020/4/9
+ * @date 2020/4/29
  */
 @Data
-public class Withdrawal {
+public class Menu {
 
     private Integer id;
 
-    private String identity;
+    private Integer menuIndex;
 
-    private String identityName;
+    private String icon;
 
-    private String mark;
+    private String path;
 
-    private String type;
+    private String title;
 
-    private Integer userId;
+    private Integer pid;
 
-    private Integer status;
+    private Integer sort;
 
-    private BigDecimal virtualAmount;
-
-    private BigDecimal realAmount;
+    private Integer hidden;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    @TableField(fill = FieldFill.INSERT_UPDATE)
+    @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
+
 }

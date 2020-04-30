@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("tb_category")
 public class Category {
 
     private Integer id;

@@ -69,7 +69,7 @@ public class UserController {
             }
             String jwt = JwtUtils.createToken(user);
             LoginResponse loginResponse = new LoginResponse(jwt, user);
-            if (user.getRole() != 0){
+            if (user.getRoleId() != 0){
                 List<RolePower> rolePowers = rolePowerService.list();
                 List<FrontMenuItem> frontMenuItems = rolePowers.stream().map(v -> JSON.parseObject(v.getContent(), FrontMenuItem.class)).collect(Collectors.toList());
                 loginResponse.setMenu(frontMenuItems);

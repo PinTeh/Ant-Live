@@ -2,33 +2,24 @@ package cn.imhtb.antlive.entity.database;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
  * @author PinTeh
- * @date 2020/3/25
+ * @date 2020/4/30
  */
 @Data
-public class RoomPresent {
-    private Long id;
+public class Role {
 
-    private Integer fromId;
+    private Integer id;
 
-    private Integer toId;
+    private String name;
 
-    private Integer roomId;
+    private String permission;
 
-    private Integer presentId;
-
-    private Integer number;
-
-    private BigDecimal unitPrice;
-
-    private BigDecimal totalPrice;
+    private Integer level;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

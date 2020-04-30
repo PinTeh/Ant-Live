@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
  * @date 2020/4/14
  */
 @Data
-@TableName("tb_live_detect")
 public class LiveDetect {
 
     private Integer id;

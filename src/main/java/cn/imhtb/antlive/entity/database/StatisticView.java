@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("tb_statistic_view")
 public class StatisticView {
 
     private Integer id;

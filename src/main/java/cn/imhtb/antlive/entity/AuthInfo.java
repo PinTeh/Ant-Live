@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("tb_auth")
+@TableName("auth")
 public class AuthInfo {
 
     private int id;

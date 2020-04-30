@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("tb_live_info")
 public class LiveInfo {
 
     private Integer id;

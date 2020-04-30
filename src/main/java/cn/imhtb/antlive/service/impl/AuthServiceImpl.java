@@ -27,6 +27,8 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, AuthInfo> implement
         for (Integer id : ids) {
             AuthInfo authInfo = authMapper.selectById(id);
             AuthInfo update = new AuthInfo();
+            //不设置UserId会自动为0？
+            update.setUserId(authInfo.getUserId());
             update.setId(id);
             update.setStatus(status);
             authMapper.updateById(update);

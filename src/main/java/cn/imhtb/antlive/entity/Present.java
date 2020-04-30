@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("tb_present")
 public class Present {
 
     private Integer id;

@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName("tb_statistic_speak")
 public class StatisticSpeak {
 
     private Integer id;

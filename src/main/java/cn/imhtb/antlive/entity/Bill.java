@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("tb_bill")
 public class Bill {
 
     private Long id;

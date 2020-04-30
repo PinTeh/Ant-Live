@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
  * @author PinTeh
  */
 @Data
-@TableName("tb_user")
 public class User {
 
     @TableId(value = "id",type = IdType.AUTO)
@@ -32,7 +31,7 @@ public class User {
 
     private String sex;
 
-    private Integer role;
+    private Integer roleId;
 
     private int disabled;
 

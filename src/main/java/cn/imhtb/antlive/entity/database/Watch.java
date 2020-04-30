@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
  */
 @Data
 @Builder
-@TableName("tb_watch")
 public class Watch {
 
     private Integer id;

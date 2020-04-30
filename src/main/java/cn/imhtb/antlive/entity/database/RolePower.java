@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("tb_role_power")
+@TableName("role_power")
 public class RolePower {
     private Integer id;
     private Integer role;

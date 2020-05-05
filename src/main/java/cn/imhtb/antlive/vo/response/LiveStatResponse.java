@@ -16,6 +16,8 @@ public class LiveStatResponse {
 
    private List<LiveStat> liveStats;
 
+   private Long total;
+
    @Data
    public static class LiveStat{
 

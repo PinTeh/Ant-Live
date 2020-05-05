@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface StatisticViewMapper extends BaseMapper<StatisticView> {
 
-    @Select("select sum(member_number) member_number,sum(visitor_number) visitor_number,sum(total_number) total_number,DATE_FORMAT(date, '%Y-%m-%d') date from tb_statistic_view  where DATE_SUB(CURDATE(), INTERVAL #{days} DAY) <= date(date) group by DATE_FORMAT(date, '%Y-%m-%d')")
+    @Select("select sum(member_number) member_number,sum(visitor_number) visitor_number,sum(total_number) total_number,DATE_FORMAT(date, '%Y-%m-%d') date from statistic_view  where DATE_SUB(CURDATE(), INTERVAL #{days} DAY) <= date(date) group by DATE_FORMAT(date, '%Y-%m-%d')")
     List<StatisticView> listInDateRange(int days);
 }

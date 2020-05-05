@@ -31,6 +31,8 @@ public class User {
 
     private String sex;
 
+    private String signature;
+
     private Integer roleId;
 
     private int disabled;

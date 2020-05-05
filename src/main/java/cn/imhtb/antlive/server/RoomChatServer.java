@@ -60,7 +60,6 @@ public class RoomChatServer {
         } else {
             CHAT_ROOMS.get(rid).add(session);
         }
-
         User user = userService.getById(JwtUtils.getIdNoError (token));
         if (user!=null){
             Long ret = (Long) redisUtils.hIncr(RedisPrefix.MEMBER_VIEW,rid);

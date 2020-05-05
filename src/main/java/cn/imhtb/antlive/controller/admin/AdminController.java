@@ -87,13 +87,6 @@ public class AdminController {
         return ApiResponse.ofSuccess(iPage);
     }
 
-    @GetMapping("/present/list")
-    public ApiResponse presentList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit){
-        IPage<Present> iPage = presentService.page(new Page<>(page,limit), new QueryWrapper<Present>().orderByDesc("id"));
-        return ApiResponse.ofSuccess(iPage);
-    }
-
-
     @GetMapping("/liveInfo/list")
     public ApiResponse liveInfoList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit,
                                     @RequestParam(required = false) Integer rid,@RequestParam(required = false) String dateRange){

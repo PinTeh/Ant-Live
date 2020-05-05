@@ -9,8 +9,11 @@ import cn.imhtb.antlive.utils.JwtUtils;
 import cn.imhtb.antlive.utils.LocalDateTimeUtils;
 import cn.imhtb.antlive.vo.response.LiveStatResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,14 +37,30 @@ public class LiveInfoController {
         this.roomService = roomService;
     }
 
-    @GetMapping("")
-    public ApiResponse list(Integer rid, HttpServletRequest request){
+    @GetMapping("/list")
+    public ApiResponse list(Integer rid,
+                            @RequestParam(required = false) String dateRange,
+                            @RequestParam(required = false, defaultValue = "10") Integer limit,
+                            @RequestParam(required = false, defaultValue = "1") Integer page,
+                            HttpServletRequest request){
         String token = request.getHeader(JwtUtils.getHeaderKey());
         Integer uid = JwtUtils.getId(token);
         Room room = roomService.getOne(new QueryWrapper<Room>().eq("user_id", uid));
-
-        List<LiveInfo> list = liveInfoService.list(new QueryWrapper<LiveInfo>().eq("room_id", room.getId()).eq("status",1).orderByDesc("id"));
-        LiveStatResponse response = packageResponse(list);
+        String maxTime = "", minTime = "";
+        boolean condition = !StringUtils.isEmpty(dateRange) && !"null".equals(dateRange);
+        if (condition) {
+            maxTime = dateRange.split(",")[1];
+            minTime = dateRange.split(",")[0];
+        }
+        QueryWrapper<LiveInfo> liveInfoQueryWrapper = new QueryWrapper<LiveInfo>()
+                .eq("room_id", room.getId())
+                .eq("status", 1)
+                .le(condition,"start_time",maxTime)
+                .ge(condition,"start_time",minTime)
+                .orderByDesc("id");
+        Page<LiveInfo> liveInfoPage = liveInfoService.page(new Page<LiveInfo>(page,limit),liveInfoQueryWrapper);
+        LiveStatResponse response = packageResponse(liveInfoPage.getRecords());
+        response.setTotal(liveInfoPage.getTotal());
         return ApiResponse.ofSuccess(response);
     }
 
@@ -59,7 +78,6 @@ public class LiveInfoController {
             liveStat.setTime(sub);
             liveStats.add(liveStat);
         }
-
         response.setLiveStats(liveStats);
         response.setTotalTime(totalTime);
         return response;

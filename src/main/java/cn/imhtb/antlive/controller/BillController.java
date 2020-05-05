@@ -48,6 +48,9 @@ public class BillController {
         this.withdrawalService = withdrawalService;
     }
 
+    /**
+     * 提现
+     */
     @PostMapping("/withdrawal")
     public ApiResponse withdrawal(@RequestBody WithdrawalRequest withdrawalRequest, HttpServletRequest request){
         Integer uid = JwtUtils.getId(request);
@@ -131,6 +134,9 @@ public class BillController {
         return pay;
     }
 
+    /**
+     * 充值
+     */
     @GetMapping(value = "/recharge")
     public ApiResponse recharge(String num,HttpServletRequest request) throws Exception{
         String no = UUID.randomUUID().toString().replaceAll("-", "").substring(10);
@@ -141,7 +147,7 @@ public class BillController {
         }
         String username = (String) claims.get("username");
         int totalAmount = Integer.parseInt(num);
-        String subject = "Live 金豆充值(为" + username + "购买)";
+        String subject = "Live 直播开心果充值(为" + username + "购买)";
         String pay = alipayService.webPagePay(no, totalAmount / 10, subject,claims.getId());
         return ApiResponse.ofSuccess("html",pay);
     }

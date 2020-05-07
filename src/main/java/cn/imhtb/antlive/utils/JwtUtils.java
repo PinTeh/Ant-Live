@@ -1,5 +1,6 @@
 package cn.imhtb.antlive.utils;
 
+import cn.imhtb.antlive.common.JwtConstants;
 import cn.imhtb.antlive.entity.User;
 import cn.imhtb.antlive.handler.UnAuthException;
 import com.alipay.api.internal.util.StringUtils;
@@ -31,7 +32,7 @@ public class JwtUtils {
     /**
      * 密钥
      */
-    private static final String SECRET = "tomato24523467452245234624562345";
+    private static final String SECRET = "+/UElOVEVILUFOVC1MSVZF";
 
     /**
      * 创建token
@@ -42,7 +43,7 @@ public class JwtUtils {
             return null;
         }
 
-        return Jwts.builder().setSubject(SUBJECT)
+        String token = Jwts.builder().setSubject(SUBJECT)
                 .setId(String.valueOf(user.getId()))
                 .claim("username", user.getNickName())
                 .claim("imageUrl", "ttt")
@@ -50,11 +51,13 @@ public class JwtUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_SECONDS))
                 .signWith(SignatureAlgorithm.HS256, SECRET).compact();
 
+        return JwtConstants.TOKEN_PREFIX + token;
+
     }
 
     public static String createTokenByParams(Integer id,String nickName,String account) {
 
-        return Jwts.builder().setSubject(SUBJECT)
+        String token = Jwts.builder().setSubject(SUBJECT)
                 .setId(String.valueOf(id))
                 .claim("username", nickName)
                 .setIssuedAt(new Date())
@@ -62,6 +65,7 @@ public class JwtUtils {
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_SECONDS))
                 .signWith(SignatureAlgorithm.HS256, SECRET).compact();
 
+        return JwtConstants.TOKEN_PREFIX + token;
     }
 
     public static SecretKey generalKey() {

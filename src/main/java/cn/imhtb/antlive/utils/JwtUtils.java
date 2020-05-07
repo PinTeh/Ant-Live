@@ -22,7 +22,7 @@ public class JwtUtils {
      */
     private static final String SUBJECT = "Ant Live";
 
-    private static final String HEADER_KEY = "token";
+    private static final String HEADER_KEY = JwtConstants.TOKEN_HEADER;
 
     /**
      * 过期延时
@@ -80,7 +80,7 @@ public class JwtUtils {
         try {
             return Jwts.parser()
                     .setSigningKey(SECRET)
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(token.replace(JwtConstants.TOKEN_PREFIX, ""))
                     .getBody();
         } catch (Exception e) {
             return null;
@@ -92,7 +92,7 @@ public class JwtUtils {
         try {
             Claims body = Jwts.parser()
                     .setSigningKey(SECRET)
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(token.replace(JwtConstants.TOKEN_PREFIX, ""))
                     .getBody();
             if (body == null) {
                 throw new UnAuthException("验证token失败");
@@ -107,7 +107,7 @@ public class JwtUtils {
         try {
             Claims body = Jwts.parser()
                     .setSigningKey(SECRET)
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(token.replace(JwtConstants.TOKEN_PREFIX, ""))
                     .getBody();
             if (body == null) {
                 throw new UnAuthException("验证token失败");
@@ -125,7 +125,7 @@ public class JwtUtils {
         try {
             Claims body = Jwts.parser()
                     .setSigningKey(SECRET)
-                    .parseClaimsJws(token)
+                    .parseClaimsJws(token.replace(JwtConstants.TOKEN_PREFIX, ""))
                     .getBody();
             return Integer.valueOf(body.getId());
         }catch (Exception e){
@@ -140,7 +140,7 @@ public class JwtUtils {
     public static String getUsernameByToken(String token) {
         return Jwts.parser()
                 .setSigningKey(SECRET)
-                .parseClaimsJws(token)
+                .parseClaimsJws(token.replace(JwtConstants.TOKEN_PREFIX, ""))
                 .getBody()
                 .getSubject();
     }

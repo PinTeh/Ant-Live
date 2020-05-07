@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencentcloudapi.live.v20180801.models.DescribeLiveForbidStreamListResponse;
 import com.tencentcloudapi.live.v20180801.models.ForbidStreamInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,12 +77,14 @@ public class AdminController {
     }
 
     @GetMapping("/room/list")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ApiResponse roomList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit){
         IPage<Room> iPage = roomService.page(new Page<>(page,limit), new QueryWrapper<Room>().orderByDesc("id"));
         return ApiResponse.ofSuccess(iPage);
     }
 
     @GetMapping("/auth/list")
+    @PreAuthorize("hasAnyRole('ROLE_COMMON')")
     public ApiResponse authList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit,@RequestParam(required = false) Integer status){
         IPage<AuthInfo> iPage = authService.page(new Page<>(page,limit), new QueryWrapper<AuthInfo>().eq(status!=null,"status",status).orderByDesc("id"));
         return ApiResponse.ofSuccess(iPage);

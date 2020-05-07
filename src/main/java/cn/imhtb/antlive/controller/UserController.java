@@ -51,7 +51,7 @@ public class UserController {
         this.tokenService = tokenService;
     }
 
-    @RequestMapping("/login")
+    @RequestMapping("/login/bak")
     public ApiResponse login(@RequestBody LoginRequest request){
         if (StringUtils.isEmpty(request.getAccount())||StringUtils.isEmpty(request.getPassword())){
             return ApiResponse.ofError("参数传递错误");

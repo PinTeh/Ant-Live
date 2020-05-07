@@ -1,4 +1,4 @@
-package cn.imhtb.antlive.config;
+package cn.imhtb.antlive.config.mybatis;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.mybatis.spring.annotation.MapperScan;

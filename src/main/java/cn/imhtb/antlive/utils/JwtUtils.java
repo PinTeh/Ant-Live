@@ -52,6 +52,18 @@ public class JwtUtils {
 
     }
 
+    public static String createTokenByParams(Integer id,String nickName,String account) {
+
+        return Jwts.builder().setSubject(SUBJECT)
+                .setId(String.valueOf(id))
+                .claim("username", nickName)
+                .setIssuedAt(new Date())
+                .setSubject(account)
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_SECONDS))
+                .signWith(SignatureAlgorithm.HS256, SECRET).compact();
+
+    }
+
     public static SecretKey generalKey() {
         byte[] encodedKey = Base64.decode(SECRET);
         return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
@@ -119,5 +131,13 @@ public class JwtUtils {
 
     public static String getHeaderKey() {
         return HEADER_KEY;
+    }
+
+    public static String getUsernameByToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(SECRET)
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 }

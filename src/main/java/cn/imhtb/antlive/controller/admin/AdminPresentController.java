@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/admin/present")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 public class AdminPresentController {
 
     private final IPresentService presentService;

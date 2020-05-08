@@ -84,7 +84,7 @@ public class AdminController {
     }
 
     @GetMapping("/auth/list")
-    @PreAuthorize("hasAnyRole('ROLE_COMMON')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ApiResponse authList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit,@RequestParam(required = false) Integer status){
         IPage<AuthInfo> iPage = authService.page(new Page<>(page,limit), new QueryWrapper<AuthInfo>().eq(status!=null,"status",status).orderByDesc("id"));
         return ApiResponse.ofSuccess(iPage);

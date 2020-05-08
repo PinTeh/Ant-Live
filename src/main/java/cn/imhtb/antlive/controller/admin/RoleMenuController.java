@@ -51,6 +51,15 @@ public class RoleMenuController {
         return ApiResponse.ofSuccess();
     }
 
+    @PostMapping("/menu/save")
+    public ApiResponse saveMenu(@RequestBody MenuRequest request){
+        Menu menu = modelMapper.map(request, Menu.class);
+        menu.setTitle(request.getLabel());
+        menu.setMenuIndex(request.getIndex());
+        menuService.save(menu);
+        return ApiResponse.ofSuccess();
+    }
+
 
     @PostMapping("/role/menu/update")
     public ApiResponse updateRoleMenu(@RequestBody RoleMenuUpdateRequest request){

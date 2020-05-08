@@ -1,0 +1,26 @@
+package cn.imhtb.antlive.entity.database;
+
+import lombok.Data;
+import org.apache.tomcat.jni.Local;
+
+import java.time.LocalDateTime;
+
+/**
+ * @author PinTeh
+ * @date 2020/5/8
+ */
+@Data
+public class SysPushLog {
+
+    private Integer id;
+
+    private String content;
+
+    private Integer status;
+
+    private LocalDateTime createTime;
+
+    private LocalDateTime updateTime;
+
+    private Integer sysPushId;
+}

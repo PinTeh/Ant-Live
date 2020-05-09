@@ -5,6 +5,7 @@ import cn.imhtb.antlive.entity.database.Menu;
 import cn.imhtb.antlive.entity.database.Role;
 import cn.imhtb.antlive.service.IMenuService;
 import cn.imhtb.antlive.service.IRoleService;
+import cn.imhtb.antlive.vo.request.IdsRequest;
 import cn.imhtb.antlive.vo.request.MenuRequest;
 import cn.imhtb.antlive.vo.request.RoleMenuUpdateRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author PinTeh
@@ -41,7 +45,12 @@ public class RoleMenuController {
 
     @GetMapping("/menu/listByRole")
     public ApiResponse listByRole(@RequestParam(value = "rid",defaultValue = "1") Integer roleId,@RequestParam(value = "pid",defaultValue = "0") Integer pid){
-        return menuService.listMenusByRole(roleId,pid);
+        return ApiResponse.ofSuccess(menuService.listMenusByRole(roleId,pid));
+    }
+
+    @PostMapping("/menu/listByRoleIds")
+    public ApiResponse listByRoleIds(@RequestBody IdsRequest request, @RequestParam(value = "pid",defaultValue = "0") Integer pid){
+        return menuService.listMenusByRoleIds(Arrays.asList(request.getIds()),pid);
     }
 
     @PostMapping("/menu/update")

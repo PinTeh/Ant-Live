@@ -6,6 +6,7 @@ import cn.imhtb.antlive.entity.database.RoleMenu;
 import cn.imhtb.antlive.mappers.MenuMapper;
 import cn.imhtb.antlive.mappers.RoleMenuMapper;
 import cn.imhtb.antlive.service.IMenuService;
+import cn.imhtb.antlive.vo.FrontMenuItem;
 import cn.imhtb.antlive.vo.request.RoleMenuUpdateRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -34,11 +35,22 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    public ApiResponse listMenusByRole(Integer roleId,Integer pid) {
+    public List<FrontMenuItem> listMenusByRole(Integer roleId,Integer pid) {
         List<RoleMenu> roleMenus = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>().eq("role_id",roleId));
         List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", pid).eq("hidden",0).orderByAsc("sort"));
         List<Integer> menuIds = roleMenus.stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
-        return ApiResponse.ofSuccess(listMenusTree(menus,menuIds,0));
+        return listMenusTree(menus,menuIds,0);
+    }
+
+    @Override
+    public ApiResponse listMenusByRoleIds(List<Integer> roleIds, Integer pid) {
+        List<FrontMenuItem> list = new ArrayList<>();
+        roleIds.forEach(roleId -> {
+            list.addAll(listMenusByRole(roleId, pid));
+        });
+        List<FrontMenuItem> ret = new ArrayList<>(new LinkedHashSet<>(list));
+        List<FrontMenuItem> retSorted = ret.stream().sorted(Comparator.comparing(FrontMenuItem::getSort)).collect(Collectors.toList());
+        return ApiResponse.ofSuccess(retSorted);
     }
 
     @Override
@@ -66,40 +78,26 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         return ApiResponse.ofSuccess();
     }
 
-    private Object listMenusTree(List<Menu> menus,List<Integer> menuIds,Integer hidden){
-        List<Map<String,Object>> list = new LinkedList<>();
+    private List<FrontMenuItem> listMenusTree(List<Menu> menus,List<Integer> menuIds,Integer hidden){
+        List<FrontMenuItem> list = new LinkedList<>();
         menus.forEach(v -> {
             if (v!=null){
                 List<Menu> childList = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", v.getId()).eq("hidden",hidden).orderByAsc("sort"));
-                // 可能出错
-                if (menuIds == null){
-                    Map<String,Object> map = new HashMap<>(16);
-                    map.put("id",v.getId());
-                    map.put("label",v.getTitle());
-                    map.put("index",v.getMenuIndex());
-                    map.put("icon",v.getIcon());
-                    map.put("path",v.getPath());
-                    map.put("hidden",v.getHidden());
-                    map.put("sort",v.getSort());
-                    map.put("pid",v.getPid());
+
+                if (menuIds == null || menuIds.contains(v.getId())){
+                    FrontMenuItem menuItem = new FrontMenuItem();
+                    menuItem.setId(v.getId());
+                    menuItem.setLabel(v.getTitle());
+                    menuItem.setIndex(v.getMenuIndex());
+                    menuItem.setIcon(v.getIcon());
+                    menuItem.setPath(v.getPath());
+                    menuItem.setHidden(v.getHidden());
+                    menuItem.setSort(v.getSort());
+                    menuItem.setPid(v.getPid());
                     if(childList!=null && childList.size()!=0){
-                        map.put("children",listMenusTree(childList,menuIds,hidden));
+                        menuItem.setChildren(listMenusTree(childList,menuIds,hidden));
                     }
-                    list.add(map);
-                }else if (menuIds.contains(v.getId())){
-                    Map<String,Object> map = new HashMap<>(16);
-                    map.put("id",v.getId());
-                    map.put("label",v.getTitle());
-                    map.put("index",v.getMenuIndex());
-                    map.put("icon",v.getIcon());
-                    map.put("path",v.getPath());
-                    map.put("hidden",v.getHidden());
-                    map.put("sort",v.getSort());
-                    map.put("pid",v.getPid());
-                    if(childList!=null && childList.size()!=0){
-                        map.put("children",listMenusTree(childList,menuIds,hidden));
-                    }
-                    list.add(map);
+                    list.add(menuItem);
                 }
             }
         });

@@ -2,7 +2,11 @@ package cn.imhtb.antlive.service.impl;
 
 import cn.imhtb.antlive.entity.JwtUser;
 import cn.imhtb.antlive.entity.User;
+import cn.imhtb.antlive.entity.database.Role;
+import cn.imhtb.antlive.entity.database.UserRole;
+import cn.imhtb.antlive.mappers.RoleMapper;
 import cn.imhtb.antlive.mappers.UserMapper;
+import cn.imhtb.antlive.mappers.UserRoleMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author PinTeh
@@ -26,10 +31,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final ModelMapper modelMapper;
 
+    private final UserRoleMapper userRoleMapper;
 
-    public UserDetailsServiceImpl(UserMapper userMapper, ModelMapper modelMapper) {
+    private final RoleMapper roleMapper;
+
+    public UserDetailsServiceImpl(UserMapper userMapper, ModelMapper modelMapper, UserRoleMapper userRoleMapper, RoleMapper roleMapper) {
         this.userMapper = userMapper;
         this.modelMapper = modelMapper;
+        this.userRoleMapper = userRoleMapper;
+        this.roleMapper = roleMapper;
     }
 
     @Override
@@ -48,9 +58,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             jwtUser = modelMapper.map(user, JwtUser.class);
             jwtUser.setUsername(user.getMobile());
         }
-        //TODO
+
+        // 获取用户角色
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        List<UserRole> userRoles = userRoleMapper.selectList(new QueryWrapper<UserRole>().eq("user_id", user.getId()));
+        List<Integer> roleIds = userRoles.stream().map(UserRole::getRoleId).collect(Collectors.toList());
+        jwtUser.setRoleIds(roleIds);
+        userRoles.forEach(v -> {
+            Role role = roleMapper.selectById(v.getRoleId());
+            authorities.add(new SimpleGrantedAuthority(role.getPermission()));
+        });
         jwtUser.setAuthorities(authorities);
         return jwtUser;
     }

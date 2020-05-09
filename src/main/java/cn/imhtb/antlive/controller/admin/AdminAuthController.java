@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/admin/auth")
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_AUTH')")
+@PreAuthorize("hasAnyRole('ROLE_ROOT','ROLE_AUTH')")
 public class AdminAuthController {
 
 

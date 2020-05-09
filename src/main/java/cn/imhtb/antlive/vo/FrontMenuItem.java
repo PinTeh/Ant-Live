@@ -2,6 +2,8 @@ package cn.imhtb.antlive.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @author PinTeh
  * @date 2020/4/22
@@ -9,8 +11,15 @@ import lombok.Data;
 @Data
 public class FrontMenuItem {
 
+    private Integer id;
     private Integer index;
     private String icon;
     private String path;
     private String title;
+    private String label;
+    private Integer hidden;
+    private Integer sort;
+    private Integer pid;
+    private List<FrontMenuItem> children;
+
 }

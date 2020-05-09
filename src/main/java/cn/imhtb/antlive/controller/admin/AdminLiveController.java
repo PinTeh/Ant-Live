@@ -30,7 +30,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/admin/live")
-@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_LIVE')")
+@PreAuthorize("hasAnyRole('ROLE_ROOT','ROLE_LIVE')")
 public class AdminLiveController {
 
 

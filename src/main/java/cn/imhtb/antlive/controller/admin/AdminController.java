@@ -34,7 +34,7 @@ import java.util.stream.Stream;
  */
 @RestController
 @RequestMapping("/admin")
-@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+@PreAuthorize("hasAnyRole('ROLE_ROOT')")
 public class AdminController {
 
     private final IRoomService roomService;

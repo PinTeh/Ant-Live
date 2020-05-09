@@ -6,9 +6,7 @@ import cn.imhtb.antlive.entity.Bill;
 import cn.imhtb.antlive.entity.database.Withdrawal;
 import cn.imhtb.antlive.service.IAlipayService;
 import cn.imhtb.antlive.service.IBillService;
-import cn.imhtb.antlive.service.IMailService;
 import cn.imhtb.antlive.service.IWithdrawalService;
-import cn.imhtb.antlive.utils.DecimalUtils;
 import cn.imhtb.antlive.utils.JwtUtils;
 import cn.imhtb.antlive.vo.request.WithdrawalRequest;
 import com.alipay.api.internal.util.AlipaySignature;
@@ -16,17 +14,18 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * @author PinTeh

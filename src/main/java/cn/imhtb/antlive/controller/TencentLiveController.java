@@ -193,6 +193,7 @@ public class TencentLiveController {
         log.info("----------" + response.toString());
         int confidence = response.getConfidence();
         Integer rid = Integer.valueOf(response.getStreamId());
+        log.info("直播截图异常检测: rid = " + rid + ",confidence:" + confidence);
 
         LiveDetect liveDetect = modelMapper.map(response, LiveDetect.class);
         liveDetect.setRoomId(rid);
@@ -204,6 +205,7 @@ public class TencentLiveController {
         liveDetect.setType(type.substring(0,type.length()-1));
         liveDetect.setHandleStatus(0);
         if (confidence >= 80){
+            log.info("直播截图异常检测: 置信度>80,系统自动封禁 ");
             liveDetect.setHandleStatus(1);
             liveDetect.setResumeTime(LocalDateTime.now().plusHours(8));
             // 封号处理

@@ -1,14 +1,11 @@
 package cn.imhtb.antlive.controller;
 
 import cn.imhtb.antlive.common.ApiResponse;
-import cn.imhtb.antlive.common.Constants;
 import cn.imhtb.antlive.entity.AuthInfo;
-import cn.imhtb.antlive.entity.Room;
 import cn.imhtb.antlive.service.IAuthService;
-import cn.imhtb.antlive.service.IRoomService;
 import cn.imhtb.antlive.utils.JwtUtils;
 import cn.imhtb.antlive.vo.request.AuthRequest;
-import cn.imhtb.antlive.vo.request.IdsRequest;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,13 +46,9 @@ public class AuthController {
         return ApiResponse.ofSuccess(authService.getById(id));
     }
 
-    @PostMapping("/pass/{type}")
-    public ApiResponse pass(@RequestBody IdsRequest request,@PathVariable("type")String type){
-        if ("pass".equals(type)){
-            authService.updateStatusByIds(request.getIds(),Constants.AuthStatus.YES.getCode());
-        }else if ("reset".equals(type)){
-            authService.updateStatusByIds(request.getIds(),Constants.AuthStatus.NO.getCode());
-        }
-        return ApiResponse.ofSuccess();
+    @GetMapping("/info")
+    public ApiResponse getOneByUserId(HttpServletRequest request){
+        Integer uid = JwtUtils.getId(request);
+        return ApiResponse.ofSuccess(authService.getOne(new QueryWrapper<AuthInfo>().eq("user_id",uid)));
     }
 }

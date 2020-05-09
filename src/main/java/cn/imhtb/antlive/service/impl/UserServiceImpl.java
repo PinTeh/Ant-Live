@@ -3,9 +3,11 @@ package cn.imhtb.antlive.service.impl;
 import cn.imhtb.antlive.common.ApiResponse;
 import cn.imhtb.antlive.common.Constants;
 import cn.imhtb.antlive.entity.AuthInfo;
+import cn.imhtb.antlive.entity.Bill;
 import cn.imhtb.antlive.entity.Room;
 import cn.imhtb.antlive.entity.User;
 import cn.imhtb.antlive.mappers.AuthMapper;
+import cn.imhtb.antlive.mappers.BillMapper;
 import cn.imhtb.antlive.mappers.RoomMapper;
 import cn.imhtb.antlive.mappers.UserMapper;
 import cn.imhtb.antlive.service.IUserService;
@@ -19,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.math.BigDecimal;
 
 @Slf4j
 @Service
@@ -34,14 +38,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUs
 
     private final RedisUtils redisUtils;
 
+    private final BillMapper billMapper;
+
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public UserServiceImpl(UserMapper userMapper, AuthMapper authMapper, ModelMapper modelMapper, RedisUtils redisUtils, RoomMapper roomMapper) {
+    public UserServiceImpl(UserMapper userMapper, AuthMapper authMapper, ModelMapper modelMapper, RedisUtils redisUtils, RoomMapper roomMapper, BillMapper billMapper) {
         this.userMapper = userMapper;
         this.authMapper = authMapper;
         this.modelMapper = modelMapper;
         this.redisUtils = redisUtils;
         this.roomMapper = roomMapper;
+        this.billMapper = billMapper;
     }
 
     @Override
@@ -108,6 +115,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUs
             userMapper.insert(u);
             log.info("注册返回id" + u.getId());
             roomMapper.insert(Room.builder().userId(u.getId()).build());
+            billMapper.insert(Bill.builder().userId(u.getId()).balance(new BigDecimal(0)).billChange(new BigDecimal(0)).type(0).mark("初始化账单").build());
         }else {
             return ApiResponse.ofError("验证码错误，请重新尝试");
         }

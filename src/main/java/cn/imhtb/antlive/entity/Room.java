@@ -32,11 +32,11 @@ public class Room {
 
     private String rtmpUrl;
 
-    private int disabled;
+    private Integer disabled;
 
-    private int status;
+    private Integer status;
 
-    private int categoryId;
+    private Integer categoryId;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

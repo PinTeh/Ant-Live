@@ -2,10 +2,12 @@ package cn.imhtb.antlive.controller.admin;
 
 import cn.imhtb.antlive.common.ApiResponse;
 import cn.imhtb.antlive.entity.database.Menu;
+import cn.imhtb.antlive.entity.database.Role;
 import cn.imhtb.antlive.service.IMenuService;
 import cn.imhtb.antlive.service.IRoleService;
 import cn.imhtb.antlive.vo.request.MenuRequest;
 import cn.imhtb.antlive.vo.request.RoleMenuUpdateRequest;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +71,11 @@ public class RoleMenuController {
 
     @GetMapping("/role/list")
     public ApiResponse roleList(){
-        return ApiResponse.ofSuccess(roleService.list());
+        return ApiResponse.ofSuccess(roleService.list(new QueryWrapper<Role>().orderByAsc("level")));
+    }
+
+    @PostMapping("/role/save")
+    public ApiResponse roleSave(@RequestBody Role role){
+        return ApiResponse.ofSuccess(roleService.save(role));
     }
 }

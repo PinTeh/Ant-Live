@@ -58,7 +58,7 @@ public class RoomController {
             return ApiResponse.ofError();
         }
         Room room = new Room();
-        room.setId(room.getId());
+        room.setId(one.getId());
         room.setTitle(request.getTitle());
         room.setCover(request.getCover());
         room.setCategoryId(request.getCid());

@@ -8,18 +8,19 @@ import cn.imhtb.antlive.mappers.RoomMapper;
 import cn.imhtb.antlive.service.IAuthService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.tomcat.util.bcel.Const;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthServiceImpl extends ServiceImpl<AuthMapper, AuthInfo> implements IAuthService {
 
-    @Autowired
-    private AuthMapper authMapper;
+    private final AuthMapper authMapper;
 
-    @Autowired
-    private RoomMapper roomMapper;
+    private final RoomMapper roomMapper;
+
+    public AuthServiceImpl(AuthMapper authMapper, RoomMapper roomMapper) {
+        this.authMapper = authMapper;
+        this.roomMapper = roomMapper;
+    }
 
     @Override
     public void updateStatusByIds(Integer[] ids, Integer status) {

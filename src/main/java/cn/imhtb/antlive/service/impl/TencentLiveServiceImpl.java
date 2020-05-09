@@ -84,6 +84,7 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
 
     @Override
     public boolean ban(Integer rid,String resumeTime){
+        log.info("调用腾讯云封禁接口: rid = " + rid);
         ForbidLiveStreamRequest forbidLiveStreamRequest = new ForbidLiveStreamRequest();
         forbidLiveStreamRequest.setAppName("live");
         forbidLiveStreamRequest.setDomainName("live.imhtb.cn");
@@ -101,6 +102,7 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
             return false;
         }
         log.info(ForbidLiveStreamRequest.toJsonString(resp));
+        log.info("调用腾讯云封禁接口：执行成功");
         return true;
     }
 

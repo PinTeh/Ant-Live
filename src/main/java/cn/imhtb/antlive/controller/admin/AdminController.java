@@ -3,6 +3,7 @@ package cn.imhtb.antlive.controller.admin;
 import cn.imhtb.antlive.common.ApiResponse;
 import cn.imhtb.antlive.common.Constants;
 import cn.imhtb.antlive.entity.*;
+import cn.imhtb.antlive.entity.database.LiveDetect;
 import cn.imhtb.antlive.entity.database.StatisticSpeak;
 import cn.imhtb.antlive.entity.database.StatisticView;
 import cn.imhtb.antlive.service.*;
@@ -33,60 +34,32 @@ import java.util.stream.Stream;
  */
 @RestController
 @RequestMapping("/admin")
+@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 public class AdminController {
 
-    private final IUserService userService;
-
     private final IRoomService roomService;
-
-    private final IAuthService authService;
 
     private final IBillService billService;
 
     private final ILiveInfoService liveInfoService;
-
-    private final IPresentService presentService;
-
-    private final ITencentLiveService tencentLiveService;
 
     private final IStatisticViewService statisticViewService;
 
     private final IStatisticSpeakService statisticSpeakService;
 
 
-    public AdminController(IStatisticSpeakService statisticSpeakService, IUserService userService, IRoomService roomService, IAuthService authService, IBillService billService, ILiveInfoService liveInfoService, IPresentService presentService, IStatisticViewService statisticViewService, ITencentLiveService tencentLiveService) {
-        this.userService = userService;
+    public AdminController(IStatisticSpeakService statisticSpeakService, IRoomService roomService, IBillService billService, ILiveInfoService liveInfoService,  IStatisticViewService statisticViewService ) {
         this.roomService = roomService;
-        this.authService = authService;
         this.billService = billService;
         this.liveInfoService = liveInfoService;
-        this.presentService = presentService;
         this.statisticViewService = statisticViewService;
         this.statisticSpeakService = statisticSpeakService;
-        this.tencentLiveService = tencentLiveService;
     }
 
-    @GetMapping("/user/list")
-    public ApiResponse userList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit,
-                                @RequestParam(required = false)Integer uid,@RequestParam(required = false)Integer disabled){
-        IPage<User> iPage = userService.page(new Page<>(page,limit), new QueryWrapper<User>()
-                .eq(uid!=null,"id",uid)
-                .eq(disabled!=null,"disabled",disabled)
-                .orderByDesc("id"));
-        return ApiResponse.ofSuccess(iPage);
-    }
 
     @GetMapping("/room/list")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ApiResponse roomList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit){
         IPage<Room> iPage = roomService.page(new Page<>(page,limit), new QueryWrapper<Room>().orderByDesc("id"));
-        return ApiResponse.ofSuccess(iPage);
-    }
-
-    @GetMapping("/auth/list")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    public ApiResponse authList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit,@RequestParam(required = false) Integer status){
-        IPage<AuthInfo> iPage = authService.page(new Page<>(page,limit), new QueryWrapper<AuthInfo>().eq(status!=null,"status",status).orderByDesc("id"));
         return ApiResponse.ofSuccess(iPage);
     }
 
@@ -152,64 +125,6 @@ public class AdminController {
             ret.add(map.getOrDefault(v,StatisticSpeak.builder().number(0).date(LocalDate.parse(v)).build()));
         });
         return ApiResponse.ofSuccess(ret);
-    }
-
-    /**
-        {
-          "Response": {
-            "RequestId": "1369339a-d886-47b8-bfe0-5c0fd56269e4",
-            "TotalNum": 1,
-            "TotalPage": 1,
-            "PageNum": 1,
-            "PageSize": 10,
-            "ForbidStreamList": [
-              {
-                "StreamName": "1",
-                "ExpireTime": "2020-04-21 17:55:57",
-                "CreateTime": "2020-04-14 17:55:57"
-              }
-            ]
-          }
-        }
-     */
-    @GetMapping("/live/ban/list")
-    public ApiResponse banList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit){
-        DescribeLiveForbidStreamListResponse response = tencentLiveService.banList(page,limit);
-        ForbidStreamInfo[] forbidStreamList = response.getForbidStreamList();
-        List<LiveBanResponse> responses = new ArrayList<>();
-        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        for (ForbidStreamInfo forbidStreamInfo : forbidStreamList) {
-            String streamName = forbidStreamInfo.getStreamName();
-            Room r = roomService.getById(Integer.valueOf(streamName));
-            LiveBanResponse liveBanResponse = LiveBanResponse.builder()
-                    .roomId(r.getId())
-                    .userId(r.getUserId())
-                    .reason("放小视频")
-                    .resumeTime(LocalDateTime.parse(forbidStreamInfo.getExpireTime(),df))
-                    .createTime(LocalDateTime.parse(forbidStreamInfo.getCreateTime(),df))
-                    .status(r.getStatus())
-                    .build();
-            responses.add(liveBanResponse);
-        }
-
-        Map<String,Object> map = new HashMap<>(2);
-        map.put("records",responses);
-        map.put("total",response.getTotalNum());
-        return ApiResponse.ofSuccess(map);
-    }
-
-    /**
-     *  封禁用户
-     */
-    @PostMapping("/user/block/{type}")
-    public ApiResponse userBlock(@RequestBody IdsRequest request,@PathVariable(name = "type") String type){
-        Integer[] ids = request.getIds();
-        if ("block".equals(type)){
-            userService.updateStatusByIds(ids, Constants.DisabledStatus.NO.getCode());
-        }else if ("unblock".equals(type)){
-            userService.updateStatusByIds(ids, Constants.DisabledStatus.YES.getCode());
-        }
-        return ApiResponse.ofSuccess();
     }
 
     private static List<String> getBetweenDate(LocalDate start, LocalDate end) {

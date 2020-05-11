@@ -81,7 +81,7 @@ public class AlipayServiceImpl implements IAlipayService {
     public void trans(String outTradeNo, Integer virtualAmount,String uid,String identity,String identityName) throws AlipayApiException {
 
         /* 开心果 与 金豆 转换率 10:1  提现比例 2 : 1 */
-        int realTransAmount = Math.abs(virtualAmount / 10 * 2);
+        int realTransAmount = Math.abs(virtualAmount / 10 / 2);
         AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest ();
         request.setBizContent ( "{"   +
                 "\"out_biz_no\":\"" + outTradeNo + "\","   +

@@ -107,8 +107,10 @@ public class Constants {
         /**
          * 认证描述
          */
-        NO(0,"未认证"),
-        YES(1,"已认证");
+        NO(0,"等待认证"),
+        YES(1,"认证通过"),
+        REJECT(3,"认证失败"),
+        AUTO_PASS(2,"智能审核通过");
 
         private int code;
 

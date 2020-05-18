@@ -9,6 +9,7 @@ import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.live.v20180801.LiveClient;
+import com.tencentcloudapi.ocr.v20181119.OcrClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,5 +48,15 @@ public class TencentConfig {
         ClientConfig clientConfig = new ClientConfig(region);
         // 3 生成 cos 客户端。
         return new COSClient(cred, clientConfig);
+    }
+
+    @Bean
+    public OcrClient getOcrClient(){
+        Credential cred = new Credential(iii, kkk);
+        HttpProfile httpProfile = new HttpProfile();
+        httpProfile.setEndpoint("ocr.tencentcloudapi.com");
+        ClientProfile clientProfile = new ClientProfile();
+        clientProfile.setHttpProfile(httpProfile);
+        return new OcrClient(cred, "ap-guangzhou", clientProfile);
     }
 }

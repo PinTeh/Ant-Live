@@ -17,6 +17,7 @@ import cn.imhtb.antlive.service.impl.TencentLiveServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -181,7 +182,7 @@ public class TencentLiveController {
      */
     @RequestMapping("/screenshot")
     public void screenshot(){
-
+        log.info("----腾讯云直播截图回调----");
     }
 
     /**
@@ -195,6 +196,8 @@ public class TencentLiveController {
         Integer rid = Integer.valueOf(response.getStreamId());
         log.info("直播截图异常检测: rid = " + rid + ",confidence:" + confidence);
 
+        //LiveDetect Id  多匹配 StreamId ChannelId
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         LiveDetect liveDetect = modelMapper.map(response, LiveDetect.class);
         liveDetect.setRoomId(rid);
         StringBuilder builder = new StringBuilder();
@@ -209,7 +212,7 @@ public class TencentLiveController {
             liveDetect.setHandleStatus(1);
             liveDetect.setResumeTime(LocalDateTime.now().plusHours(8));
             // 封号处理
-            tencentLiveService.ban(rid, null);
+            // tencentLiveService.ban(rid, null);
         }
         liveDetectService.save(liveDetect);
 

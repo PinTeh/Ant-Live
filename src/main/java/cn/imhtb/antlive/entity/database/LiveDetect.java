@@ -28,6 +28,7 @@ public class LiveDetect {
 
     private Integer pornScore;
 
+    @TableField(exist = false)
     private Integer screenshotTime;
 
     private Integer level;

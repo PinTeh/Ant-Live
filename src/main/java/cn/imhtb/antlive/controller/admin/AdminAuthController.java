@@ -43,6 +43,8 @@ public class AdminAuthController {
             authService.updateStatusByIds(request.getIds(), Constants.AuthStatus.YES.getCode());
         }else if ("reset".equals(type)){
             authService.updateStatusByIds(request.getIds(),Constants.AuthStatus.NO.getCode());
+        }else if("reject".equals(type)){
+            authService.updateStatusByIds(request.getIds(),Constants.AuthStatus.REJECT.getCode());
         }
         return ApiResponse.ofSuccess();
     }

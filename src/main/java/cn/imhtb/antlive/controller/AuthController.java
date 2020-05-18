@@ -28,12 +28,11 @@ public class AuthController {
     }
 
     @PostMapping()
-    public ApiResponse auth(@RequestBody AuthRequest authRequest, HttpServletRequest request){
+    public ApiResponse save(@RequestBody AuthRequest authRequest, HttpServletRequest request){
         Integer uid = JwtUtils.getId(request);
         authRequest.setUserId(uid);
         AuthInfo authInfo = modelMapper.map(authRequest, AuthInfo.class);
-        authService.save(authInfo);
-        return ApiResponse.ofSuccess();
+        return authService.saveAndCheck(authInfo);
     }
 
     @GetMapping("/")

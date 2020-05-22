@@ -135,4 +135,28 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
         }
         return null;
     }
+
+    @Override
+    public DescribeLiveSnapshotTemplatesResponse snapshotTemplatesList() {
+        String params = "{}";
+        DescribeLiveSnapshotTemplatesRequest req = DescribeLiveSnapshotTemplatesRequest.fromJsonString(params, DescribeLiveSnapshotTemplatesRequest.class);
+        try {
+            DescribeLiveSnapshotTemplatesResponse response = client.DescribeLiveSnapshotTemplates(req);
+            System.out.println(DescribeLiveSnapshotTemplatesRequest.toJsonString(response));
+            return response;
+        } catch (TencentCloudSDKException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void snapshotTemplatesUpdate(ModifyLiveSnapshotTemplateRequest request) {
+        try {
+            ModifyLiveSnapshotTemplateResponse response = client.ModifyLiveSnapshotTemplate(request);
+            log.info("修改截图模板:{}",ModifyLiveSnapshotTemplateResponse.toJsonString(response));
+        } catch (TencentCloudSDKException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -11,11 +11,9 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencentcloudapi.live.v20180801.models.DescribeLiveForbidStreamListResponse;
 import com.tencentcloudapi.live.v20180801.models.ForbidStreamInfo;
+import com.tencentcloudapi.live.v20180801.models.ModifyLiveSnapshotTemplateRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -45,6 +43,27 @@ public class AdminLiveController {
         this.roomService = roomService;
         this.liveDetectService = liveDetectService;
     }
+
+    @GetMapping("/detect/list")
+    public ApiResponse liveDetectList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit){
+        Page<LiveDetect> liveDetectPage = liveDetectService.page(new Page<>(page, limit), new QueryWrapper<LiveDetect>().orderByDesc("id"));
+        return ApiResponse.ofSuccess(liveDetectPage);
+    }
+
+    /**
+     * 获取鉴黄模板列表
+     */
+    @GetMapping("/snapshot/template/list")
+    public ApiResponse snapshotTemplatesList(){
+        return ApiResponse.ofSuccess(tencentLiveService.snapshotTemplatesList());
+    }
+
+    @PostMapping("/snapshot/template/update")
+    public ApiResponse snapshotTemplatesUpdate(@RequestBody ModifyLiveSnapshotTemplateRequest request){
+        tencentLiveService.snapshotTemplatesUpdate(request);
+        return ApiResponse.ofSuccess();
+    }
+
 
     /**
      * 调用腾讯云获取封禁列表
@@ -89,12 +108,6 @@ public class AdminLiveController {
         map.put("records",responses);
         map.put("total",response.getTotalNum());
         return ApiResponse.ofSuccess(map);
-    }
-
-    @GetMapping("/live/detect/list")
-    public ApiResponse liveDetectList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit){
-        Page<LiveDetect> liveDetectPage = liveDetectService.page(new Page<>(page, limit), new QueryWrapper<LiveDetect>().orderByDesc("id"));
-        return ApiResponse.ofSuccess(liveDetectPage);
     }
 
 

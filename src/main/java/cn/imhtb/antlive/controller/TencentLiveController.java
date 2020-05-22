@@ -52,16 +52,13 @@ public class TencentLiveController {
 
     private final ILiveDetectService liveDetectService;
 
-    private final ITencentLiveService tencentLiveService;
-
     private final ModelMapper modelMapper;
 
-    public TencentLiveController(IRoomService roomService, ILiveInfoService liveInfoService, ModelMapper modelMapper, ILiveDetectService liveDetectService, ITencentLiveService tencentLiveService) {
+    public TencentLiveController(IRoomService roomService, ILiveInfoService liveInfoService, ModelMapper modelMapper, ILiveDetectService liveDetectService ) {
         this.roomService = roomService;
         this.liveInfoService = liveInfoService;
         this.modelMapper = modelMapper;
         this.liveDetectService = liveDetectService;
-        this.tencentLiveService = tencentLiveService;
     }
 
     /**

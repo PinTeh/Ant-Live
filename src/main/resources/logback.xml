@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true" scanPeriod="60 seconds" debug="true" >
+<configuration scan="false" scanPeriod="60 seconds" debug="true" >
     <!--    <springProperty scope="context" name="contextName" source="spring.application.name"/>-->
     <!--    <springProperty scope="context" name="logPath" source="logback.logpath"/>-->
-    <property name="contextName" value="log-vr-office" />
-    <property name="logPath" value="/vr-logs/develop/" />
+    <property name="contextName" value="log-live" />
+    <property name="logPath" value="/live-logs/develop/" />
     <contextName>${contextName}</contextName>
     <property name="LOG_HOME" value="${logPath}/${contextName}" />
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %X{reqId} %X{serverIp} %X{serverName} %-5level %logger{100} - %msg%n" />
@@ -61,10 +61,10 @@
             <charset class="java.nio.charset.Charset">UTF-8</charset>
         </encoder>
     </appender>
-    <logger name="com.coocaa.fire.vr.office" level="DEBUG"/>
+    <logger name="cn.imhtb.antlive" level="DEBUG"/>
     <logger name="org.springframework" level="INFO"/>
     <!--日志打印的包的范围，及分类日志文件存储 -->
-    <logger name="com.coocaa.fire.vr.office" additivity="false">
+    <logger name="cn.imhtb.antlive" additivity="false">
         <level value="DEBUG" />
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="ERROR"/>

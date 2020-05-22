@@ -11,6 +11,7 @@ import cn.imhtb.antlive.vo.request.RoleMenuUpdateRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -29,12 +30,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    public ApiResponse listMenus(Integer pid,Integer hidden) {
+    @Cacheable("menus")
+    public List<FrontMenuItem> listMenus(Integer pid,Integer hidden) {
         List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", pid).eq("hidden",hidden).orderByAsc("sort"));
-        return ApiResponse.ofSuccess(listMenusTree(menus,null,hidden));
+        return listMenusTree(menus,null,hidden);
     }
 
     @Override
+    @Cacheable(cacheNames = "menu",key = "#roleId")
     public List<FrontMenuItem> listMenusByRole(Integer roleId,Integer pid) {
         List<RoleMenu> roleMenus = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>().eq("role_id",roleId));
         List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", pid).eq("hidden",0).orderByAsc("sort"));
@@ -43,14 +46,15 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    public ApiResponse listMenusByRoleIds(List<Integer> roleIds, Integer pid) {
+    @Cacheable(cacheNames = "menu",key = "#roleIds.toArray()")
+    public List<FrontMenuItem> listMenusByRoleIds(List<Integer> roleIds, Integer pid) {
         List<FrontMenuItem> list = new ArrayList<>();
         roleIds.forEach(roleId -> {
             list.addAll(listMenusByRole(roleId, pid));
         });
         List<FrontMenuItem> ret = new ArrayList<>(new LinkedHashSet<>(list));
         List<FrontMenuItem> retSorted = ret.stream().sorted(Comparator.comparing(FrontMenuItem::getSort)).collect(Collectors.toList());
-        return ApiResponse.ofSuccess(retSorted);
+        return retSorted;
     }
 
     @Override

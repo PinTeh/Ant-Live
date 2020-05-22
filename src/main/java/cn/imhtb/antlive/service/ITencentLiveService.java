@@ -2,8 +2,8 @@ package cn.imhtb.antlive.service;
 
 
 import com.tencentcloudapi.live.v20180801.models.DescribeLiveForbidStreamListResponse;
-
-import java.util.List;
+import com.tencentcloudapi.live.v20180801.models.DescribeLiveSnapshotTemplatesResponse;
+import com.tencentcloudapi.live.v20180801.models.ModifyLiveSnapshotTemplateRequest;
 
 /**
  * @author PinTeh
@@ -16,4 +16,8 @@ public interface ITencentLiveService {
     boolean resume(Integer rid) ;
 
     DescribeLiveForbidStreamListResponse banList(Integer page,Integer limit);
+
+    DescribeLiveSnapshotTemplatesResponse snapshotTemplatesList();
+
+    void snapshotTemplatesUpdate(ModifyLiveSnapshotTemplateRequest request);
 }

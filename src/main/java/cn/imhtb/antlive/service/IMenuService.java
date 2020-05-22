@@ -10,11 +10,11 @@ import java.util.List;
 
 public interface IMenuService extends IService<Menu> {
 
-    ApiResponse listMenus(Integer pid,Integer hidden);
+    List<FrontMenuItem> listMenus(Integer pid,Integer hidden);
 
     List<FrontMenuItem> listMenusByRole(Integer roleId, Integer pid);
 
-    ApiResponse listMenusByRoleIds(List<Integer> roleIds, Integer pid);
+    List<FrontMenuItem> listMenusByRoleIds(List<Integer> roleIds, Integer pid);
 
     ApiResponse updateRoleMenu(RoleMenuUpdateRequest request);
 }

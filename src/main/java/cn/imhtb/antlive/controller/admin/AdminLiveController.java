@@ -2,7 +2,9 @@ package cn.imhtb.antlive.controller.admin;
 
 import cn.imhtb.antlive.common.ApiResponse;
 import cn.imhtb.antlive.entity.Room;
+import cn.imhtb.antlive.entity.database.BanRecord;
 import cn.imhtb.antlive.entity.database.LiveDetect;
+import cn.imhtb.antlive.service.IBanRecordService;
 import cn.imhtb.antlive.service.ILiveDetectService;
 import cn.imhtb.antlive.service.IRoomService;
 import cn.imhtb.antlive.service.ITencentLiveService;
@@ -12,6 +14,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencentcloudapi.live.v20180801.models.DescribeLiveForbidStreamListResponse;
 import com.tencentcloudapi.live.v20180801.models.ForbidStreamInfo;
 import com.tencentcloudapi.live.v20180801.models.ModifyLiveSnapshotTemplateRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,19 +37,29 @@ public class AdminLiveController {
 
     private final IRoomService roomService;
 
+    private final IBanRecordService banRecordService;
+
     private final ILiveDetectService liveDetectService;
 
     private final ITencentLiveService tencentLiveService;
 
-    public AdminLiveController(ITencentLiveService tencentLiveService, IRoomService roomService, ILiveDetectService liveDetectService) {
+
+    public AdminLiveController(ITencentLiveService tencentLiveService, IRoomService roomService, ILiveDetectService liveDetectService, IBanRecordService banRecordService) {
         this.tencentLiveService = tencentLiveService;
         this.roomService = roomService;
         this.liveDetectService = liveDetectService;
+        this.banRecordService = banRecordService;
     }
 
     @GetMapping("/detect/list")
     public ApiResponse liveDetectList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit){
         Page<LiveDetect> liveDetectPage = liveDetectService.page(new Page<>(page, limit), new QueryWrapper<LiveDetect>().orderByDesc("id"));
+        return ApiResponse.ofSuccess(liveDetectPage);
+    }
+
+    @GetMapping("/ban/record/list")
+    public ApiResponse banRecordList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit){
+        Page<BanRecord> liveDetectPage = banRecordService.page(new Page<>(page, limit), new QueryWrapper<BanRecord>().orderByDesc("id"));
         return ApiResponse.ofSuccess(liveDetectPage);
     }
 
@@ -109,6 +122,7 @@ public class AdminLiveController {
         map.put("total",response.getTotalNum());
         return ApiResponse.ofSuccess(map);
     }
+
 
 
 

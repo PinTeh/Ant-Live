@@ -52,7 +52,7 @@ public class RoleController {
 
     @GetMapping("/menu/list")
     public ApiResponse list(@RequestParam(value = "pid",defaultValue = "0") Integer pid,@RequestParam(value = "hidden",defaultValue = "0")Integer hidden){
-        return ApiResponse.ofSuccess(menuService.listMenus(pid,hidden));
+        return ApiResponse.ofSuccess(menuService.listMenus(pid,null));
     }
 
     @GetMapping("/menu/listByRole")

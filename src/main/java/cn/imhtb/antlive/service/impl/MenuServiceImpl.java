@@ -11,6 +11,7 @@ import cn.imhtb.antlive.vo.request.RoleMenuUpdateRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -30,14 +31,14 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    @Cacheable("menus")
+    //@Cacheable("menus")
     public List<FrontMenuItem> listMenus(Integer pid,Integer hidden) {
-        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", pid).eq("hidden",hidden).orderByAsc("sort"));
+        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", pid).eq(hidden!=null,"hidden",hidden).orderByAsc("sort"));
         return listMenusTree(menus,null,hidden);
     }
 
     @Override
-    @Cacheable(cacheNames = "menu",key = "#roleId")
+    //@Cacheable(cacheNames = "menu",key = "#roleId")
     public List<FrontMenuItem> listMenusByRole(Integer roleId,Integer pid) {
         List<RoleMenu> roleMenus = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>().eq("role_id",roleId));
         List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", pid).eq("hidden",0).orderByAsc("sort"));
@@ -46,18 +47,18 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
     }
 
     @Override
-    @Cacheable(cacheNames = "menu",key = "#roleIds.toArray()")
+    //@Cacheable(cacheNames = "menu",key = "#roleIds.toArray()")
     public List<FrontMenuItem> listMenusByRoleIds(List<Integer> roleIds, Integer pid) {
         List<FrontMenuItem> list = new ArrayList<>();
         roleIds.forEach(roleId -> {
             list.addAll(listMenusByRole(roleId, pid));
         });
         List<FrontMenuItem> ret = new ArrayList<>(new LinkedHashSet<>(list));
-        List<FrontMenuItem> retSorted = ret.stream().sorted(Comparator.comparing(FrontMenuItem::getSort)).collect(Collectors.toList());
-        return retSorted;
+        return  ret.stream().sorted(Comparator.comparing(FrontMenuItem::getSort)).collect(Collectors.toList());
     }
 
     @Override
+    //@CacheEvict(cacheNames = "menu")
     public ApiResponse updateRoleMenu(RoleMenuUpdateRequest request) {
         Integer roleId = request.getRoleId();
         List<Integer> currentMenuIds = request.getMenuIds();
@@ -86,7 +87,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         List<FrontMenuItem> list = new LinkedList<>();
         menus.forEach(v -> {
             if (v!=null){
-                List<Menu> childList = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", v.getId()).eq("hidden",hidden).orderByAsc("sort"));
+                List<Menu> childList = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", v.getId()).eq(hidden!=null,"hidden",hidden).orderByAsc("sort"));
 
                 if (menuIds == null || menuIds.contains(v.getId())){
                     FrontMenuItem menuItem = new FrontMenuItem();

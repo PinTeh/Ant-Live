@@ -80,7 +80,6 @@ public class RoomController {
         return ApiResponse.ofSuccess(room);
     }
 
-
     /**
      * Get living rooms list
      */
@@ -97,7 +96,7 @@ public class RoomController {
     }
 
     private RoomResponse packageRoomResponse(Room room){
-        //TODO 优化
+        //TODO
         User user = userService.getById(room.getUserId());
         Category category = categoryService.getById(room.getCategoryId());
         RoomResponse response = new RoomResponse();

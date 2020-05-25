@@ -12,4 +12,8 @@ public class CommonUtils {
         String uuid = UUID.randomUUID().toString();
         return uuid.replaceAll("-","").substring(16);
     }
+
+    public static String getOrderNo(){
+        return  UUID.randomUUID().toString().replaceAll("-", "").substring(10);
+    }
 }

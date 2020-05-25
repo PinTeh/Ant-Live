@@ -7,6 +7,7 @@ import cn.imhtb.antlive.entity.database.LiveDetect;
 import cn.imhtb.antlive.entity.database.StatisticSpeak;
 import cn.imhtb.antlive.entity.database.StatisticView;
 import cn.imhtb.antlive.service.*;
+import cn.imhtb.antlive.utils.JwtUtils;
 import cn.imhtb.antlive.utils.LocalDateTimeUtils;
 import cn.imhtb.antlive.vo.request.IdsRequest;
 import cn.imhtb.antlive.vo.response.LiveBanResponse;
@@ -20,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,7 +48,6 @@ public class AdminController {
     private final IStatisticViewService statisticViewService;
 
     private final IStatisticSpeakService statisticSpeakService;
-
 
     public AdminController(IStatisticSpeakService statisticSpeakService, IRoomService roomService, IBillService billService, ILiveInfoService liveInfoService,  IStatisticViewService statisticViewService ) {
         this.roomService = roomService;
@@ -98,8 +99,10 @@ public class AdminController {
     }
 
     @GetMapping("/stat/view/list")
-    public ApiResponse statViewList(@RequestParam(required = false) Integer days){
-        List<StatisticView> statisticViews = statisticViewService.listInDateRange(days);
+    public ApiResponse statViewList(@RequestParam(required = false) Integer days,@RequestParam(required = false)Integer rid,HttpServletRequest request){
+        Integer uid = JwtUtils.getId(request);
+        Room room = roomService.getOne(new QueryWrapper<Room>().eq("user_id",uid));
+        List<StatisticView> statisticViews = statisticViewService.listInDateRange(days,rid==null?room.getId():rid);
         Map<String,StatisticView> map = new HashMap<>(statisticViews.size());
         statisticViews.forEach(v-> map.put(v.getDate().toString(),v));
         LocalDate end = LocalDate.now();
@@ -113,8 +116,10 @@ public class AdminController {
     }
 
     @GetMapping("/stat/speak/list")
-    public ApiResponse statSpeakList(@RequestParam(required = false) Integer days){
-        List<StatisticSpeak> statisticSpeaks = statisticSpeakService.listInDateRange(days);
+    public ApiResponse statSpeakList(@RequestParam(required = false) Integer days,@RequestParam(required = false) Integer rid,HttpServletRequest request){
+        Integer uid = JwtUtils.getId(request);
+        Room room = roomService.getOne(new QueryWrapper<Room>().eq("user_id",uid));
+        List<StatisticSpeak> statisticSpeaks = statisticSpeakService.listInDateRange(days,rid==null?room.getId():rid);
         Map<String,StatisticSpeak> map = new HashMap<>(statisticSpeaks.size());
         statisticSpeaks.forEach(v-> map.put(v.getDate().toString(),v));
         LocalDate end = LocalDate.now();

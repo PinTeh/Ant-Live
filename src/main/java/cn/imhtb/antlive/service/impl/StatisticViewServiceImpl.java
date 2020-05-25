@@ -24,7 +24,7 @@ public class StatisticViewServiceImpl extends ServiceImpl<StatisticViewMapper, S
     }
 
     @Override
-    public List<StatisticView> listInDateRange(int days) {
-        return statisticViewMapper.listInDateRange(days);
+    public List<StatisticView> listInDateRange(int days,Integer rid) {
+        return statisticViewMapper.listInDateRange(days,rid);
     }
 }

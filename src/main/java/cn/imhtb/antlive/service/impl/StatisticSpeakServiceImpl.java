@@ -23,7 +23,7 @@ public class StatisticSpeakServiceImpl extends ServiceImpl<StatisticSpeakMapper,
     }
 
     @Override
-    public List<StatisticSpeak> listInDateRange(int days) {
-        return statisticSpeakMapper.listInDateRange(days);
+    public List<StatisticSpeak> listInDateRange(int days,Integer rid) {
+        return statisticSpeakMapper.listInDateRange(days,rid);
     }
 }

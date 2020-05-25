@@ -10,5 +10,5 @@ import java.util.List;
  * @date 2020/4/11
  */
 public interface IStatisticViewService extends IService<StatisticView> {
-    List<StatisticView> listInDateRange(int days);
+    List<StatisticView> listInDateRange(int days,Integer rid);
 }

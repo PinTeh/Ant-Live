@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface IStatisticSpeakService extends IService<StatisticSpeak> {
 
-    List<StatisticSpeak> listInDateRange(int days);
+    List<StatisticSpeak> listInDateRange(int days,Integer rid);
 
 }

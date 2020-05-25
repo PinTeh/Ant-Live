@@ -11,6 +11,7 @@ import cn.imhtb.antlive.mappers.UserMapper;
 import cn.imhtb.antlive.server.RoomChatServer;
 import cn.imhtb.antlive.server.WebMessage;
 import cn.imhtb.antlive.service.IRoomPresentService;
+import cn.imhtb.antlive.utils.CommonUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -75,24 +76,30 @@ public class RoomPresentServiceImpl extends ServiceImpl<RoomPresentMapper, RoomP
         fromBill.setType(1);
         fromBill.setBillChange(totalPrice.negate());
         fromBill.setUserId(fromId);
+        fromBill.setOrderNo(CommonUtils.getOrderNo());
 
         Bill toBill = new Bill();
         toBill.setBillChange(totalPrice);
         toBill.setBalance(toLast.getBalance().add(totalPrice));
-        toBill.setMark("收获礼物");
+        toBill.setMark("获赠礼物");
         toBill.setType(0);
         toBill.setBillChange(totalPrice);
         toBill.setUserId(toId);
+        toBill.setOrderNo(CommonUtils.getOrderNo());
 
         int rf = roomPresentMapper.insert(roomPresent);
         int rs = billMapper.insert(fromBill);
         int rt = billMapper.insert(toBill);
 
-        User fromUser = userMapper.selectById(fromId);
-        WebMessage webMessage = WebMessage.createPresent(
+        try {
+            User fromUser = userMapper.selectById(fromId);
+            WebMessage webMessage = WebMessage.createPresent(
                 fromUser,
                 new WebMessage.P(present.getId(), present.getName(), present.getIcon(), number));
-        roomChatServer.sendSystemPresentMessage(webMessage.toJson(),room.getId());
+            roomChatServer.sendSystemPresentMessage(webMessage.toJson(),room.getId());
+        }catch (Exception e){
+            log.error("RoomChatServer err:{}",e.getMessage());
+        }
 
         return rf == 1 && rs == 1 && rt ==1;
     }

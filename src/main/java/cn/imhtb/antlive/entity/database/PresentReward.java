@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @date 2020/3/25
  */
 @Data
-public class RoomPresent {
+public class PresentReward {
     private Long id;
 
     private Integer fromId;
@@ -25,6 +25,10 @@ public class RoomPresent {
     private Integer presentId;
 
     private Integer number;
+
+    private Integer videoId;
+
+    private Integer type;
 
     private BigDecimal unitPrice;
 

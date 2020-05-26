@@ -6,6 +6,7 @@ import cn.imhtb.antlive.entity.database.Category;
 import cn.imhtb.antlive.service.ICategoryService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ public class CategoryController {
     }
 
     @GetMapping("/list")
+    @Cacheable("category")
     public ApiResponse list(@RequestParam(required = false, defaultValue = "10") Integer limit
             , @RequestParam(required = false, defaultValue = "1") Integer page){
         QueryWrapper<Category> wrapper = new QueryWrapper<Category>().eq("disabled", Constants.DisabledStatus.YES.getCode()).orderByDesc("sort");

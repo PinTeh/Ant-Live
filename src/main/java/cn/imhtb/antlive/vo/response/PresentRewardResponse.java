@@ -1,12 +1,12 @@
 package cn.imhtb.antlive.vo.response;
 
-import cn.imhtb.antlive.entity.database.RoomPresent;
+import cn.imhtb.antlive.entity.database.PresentReward;
 
 /**
  * @author PinTeh
  * @date 2020/4/8
  */
-public class RoomPresentResponse extends RoomPresent {
+public class PresentRewardResponse extends PresentReward {
 
     private String presentName;
 

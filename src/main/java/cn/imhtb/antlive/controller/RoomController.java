@@ -5,19 +5,24 @@ import cn.imhtb.antlive.common.Constants;
 import cn.imhtb.antlive.entity.Room;
 import cn.imhtb.antlive.entity.User;
 import cn.imhtb.antlive.entity.database.Category;
+import cn.imhtb.antlive.entity.database.Watch;
 import cn.imhtb.antlive.service.ICategoryService;
 import cn.imhtb.antlive.service.IRoomService;
 import cn.imhtb.antlive.service.IUserService;
+import cn.imhtb.antlive.service.IWatchService;
 import cn.imhtb.antlive.utils.JwtUtils;
 import cn.imhtb.antlive.vo.request.RoomInfoSaveRequest;
 import cn.imhtb.antlive.vo.response.RoomResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.BiIntFunction;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -35,10 +40,13 @@ public class RoomController {
 
     private final ICategoryService categoryService;
 
-    public RoomController(IRoomService roomService, IUserService userService, ICategoryService categoryService) {
+    private final IWatchService watchService;
+
+    public RoomController(IRoomService roomService, IUserService userService, ICategoryService categoryService, IWatchService watchService) {
         this.roomService = roomService;
         this.userService = userService;
         this.categoryService = categoryService;
+        this.watchService = watchService;
     }
 
     @GetMapping("/info")
@@ -71,6 +79,18 @@ public class RoomController {
     public ApiResponse roomInfo(Integer rid){
         Room room = roomService.getById(rid);
         return ApiResponse.ofSuccess(packageRoomResponse(room));
+    }
+
+    /**
+     * 获取额外信息
+     */
+    @GetMapping("/extra/info")
+    public ApiResponse extraInfo(Integer rid,HttpServletRequest request){
+        Integer uid = JwtUtils.getId(request);
+        List<Watch> watches = watchService.list(new QueryWrapper<Watch>().eq("watch_type", 1).eq("user_id", uid).eq("room_id", rid));
+        Map<String,Object> ret = new HashMap<>();
+        ret.put("isFollow",watches.size() > 0);
+        return ApiResponse.ofSuccess(ret);
     }
 
     @GetMapping("/setting/info")

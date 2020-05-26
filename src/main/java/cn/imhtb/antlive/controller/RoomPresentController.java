@@ -1,10 +1,10 @@
 package cn.imhtb.antlive.controller;
 
 import cn.imhtb.antlive.common.ApiResponse;
-import cn.imhtb.antlive.entity.database.RoomPresent;
-import cn.imhtb.antlive.service.IRoomPresentService;
+import cn.imhtb.antlive.entity.database.PresentReward;
+import cn.imhtb.antlive.service.IPresentRewardService;
 import cn.imhtb.antlive.utils.JwtUtils;
-import cn.imhtb.antlive.vo.response.RoomPresentResponse;
+import cn.imhtb.antlive.vo.response.PresentRewardResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.util.StringUtils;
@@ -26,17 +26,17 @@ public class RoomPresentController {
 
     //private String column = "id,from_id,to_id,room_id,present_id,number,unit_price,total_price,create_time,update_time,present_name";
 
-    private final IRoomPresentService roomPresentService;
+    private final IPresentRewardService presentRewardService;
 
-    public RoomPresentController(IRoomPresentService roomPresentService) {
-        this.roomPresentService = roomPresentService;
+    public RoomPresentController(IPresentRewardService presentRewardService) {
+        this.presentRewardService = presentRewardService;
     }
 
     @GetMapping("/list")
     public ApiResponse list(HttpServletRequest request
             , @RequestParam(required = false, defaultValue = "10") Integer limit
             , @RequestParam(required = false, defaultValue = "1") Integer page
-            , @RequestParam(required = false) String dateRange) {
+            , @RequestParam(required = false) String dateRange,@RequestParam(required = false)Integer t) {
         Integer uid = JwtUtils.getId(request);
         String maxTime = "", minTime = "";
         boolean condition = !StringUtils.isEmpty(dateRange) && !"null".equals(dateRange);
@@ -44,16 +44,17 @@ public class RoomPresentController {
             maxTime = dateRange.split(",")[1];
             minTime = dateRange.split(",")[0];
         }
-        QueryWrapper<RoomPresent> wrapper = new QueryWrapper<RoomPresent>()
+        QueryWrapper<PresentReward> wrapper = new QueryWrapper<PresentReward>()
                 .eq("to_id", uid)
+                .eq(t!=null,"type",t)
                 .le(condition,"create_time",maxTime)
                 .ge(condition,"create_time",minTime)
                 .orderByDesc("id");
-        Page<RoomPresent> roomPresentPage = roomPresentService.page(new Page<>(page, limit), wrapper);
+        Page<PresentReward> roomPresentPage = presentRewardService.page(new Page<>(page, limit), wrapper);
         return ApiResponse.ofSuccess(roomPresentPage);
     }
 
-    private List<RoomPresentResponse> packagePresentName(List<RoomPresent> list) {
+    private List<PresentRewardResponse> packagePresentName(List<PresentReward> list) {
         return null;
     }
 }

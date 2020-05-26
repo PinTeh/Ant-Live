@@ -10,4 +10,6 @@ import lombok.Data;
 public class IdsRequest {
 
     private Integer[] ids;
+
+    private Integer type;
 }

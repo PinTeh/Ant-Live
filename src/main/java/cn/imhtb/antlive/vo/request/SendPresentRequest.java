@@ -14,4 +14,6 @@ public class SendPresentRequest {
     private Integer number;
 
     private Integer rid;
+
+    private Integer vid;
 }

@@ -103,6 +103,56 @@ public class Constants {
         }
     }
 
+    public enum BillType{
+        /**
+         * 直播信息状态描述
+         */
+        INCOME(0,"收入"),
+        OUTLAY(1,"支出"),
+        ;
+        private int code;
+
+        private String desc;
+
+        BillType(int code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+    }
+
+    public enum BillMark{
+        /**
+         * 直播信息状态描述
+         */
+        LIVE_REWARD(0,"直播打赏"),
+        VIDEO_REWARD(1,"视频打赏"),
+        ;
+        private int code;
+
+        private String desc;
+
+        BillMark(int code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+    }
+
     public enum AuthStatus{
         /**
          * 认证描述
@@ -158,16 +208,35 @@ public class Constants {
             return code;
         }
 
-        public void setCode(String code) {
+        public String getDesc() {
+            return desc;
+        }
+
+    }
+
+    public enum PresentRewardType{
+        /**
+         * 打赏类型
+         */
+        LIVE(0,"LIVE"),
+        VIDEO(1,"VIDEO");
+
+        private Integer code;
+
+        private String desc;
+
+        PresentRewardType(Integer code, String desc) {
             this.code = code;
+            this.desc = desc;
+        }
+
+        public Integer getCode() {
+            return code;
         }
 
         public String getDesc() {
             return desc;
         }
 
-        public void setDesc(String desc) {
-            this.desc = desc;
-        }
     }
 }

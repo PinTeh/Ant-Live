@@ -8,6 +8,7 @@ import cn.imhtb.antlive.service.IRoomService;
 import cn.imhtb.antlive.service.IUserService;
 import cn.imhtb.antlive.service.IWatchService;
 import cn.imhtb.antlive.utils.JwtUtils;
+import cn.imhtb.antlive.vo.request.IdsRequest;
 import cn.imhtb.antlive.vo.request.WatchRequest;
 import cn.imhtb.antlive.vo.response.WatchResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -44,7 +45,7 @@ public class WatchController {
 
     @PostMapping("")
     public ApiResponse save(@RequestBody WatchRequest watchRequest, HttpServletRequest request){
-        Integer uid = JwtUtils.getId(request.getHeader(JwtUtils.getHeaderKey()));
+        Integer uid = JwtUtils.getId(request);
         Watch build = Watch.builder().roomId(watchRequest.getRid()).userId(uid).watchType(watchRequest.getType()).build();
         try {
             watchService.save(build);
@@ -68,11 +69,13 @@ public class WatchController {
     }
 
     @DeleteMapping("")
-    public ApiResponse del(Integer id,HttpServletRequest request){
+    public ApiResponse del(@RequestBody IdsRequest ids, HttpServletRequest request){
         Integer uid = JwtUtils.getId(request.getHeader(JwtUtils.getHeaderKey()));
-        Watch watch = watchService.getById(id);
-        if (watch!=null && watch.getUserId().equals(uid)){
-            watchService.removeById(id);
+        for (Integer rid : ids.getIds()) {
+            Watch watch = watchService.getOne(new QueryWrapper<Watch>().eq("user_id",uid).eq("room_id",rid).eq("watch_type",ids.getType()));
+            if (watch != null){
+                watchService.removeById(watch.getId());
+            }
         }
         return ApiResponse.ofSuccess();
     }

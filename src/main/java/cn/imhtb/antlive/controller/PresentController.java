@@ -3,10 +3,10 @@ package cn.imhtb.antlive.controller;
 import cn.imhtb.antlive.common.ApiResponse;
 import cn.imhtb.antlive.common.Constants;
 import cn.imhtb.antlive.entity.Present;
-import cn.imhtb.antlive.entity.Room;
 import cn.imhtb.antlive.service.IPresentService;
-import cn.imhtb.antlive.service.IRoomPresentService;
+import cn.imhtb.antlive.service.IPresentRewardService;
 import cn.imhtb.antlive.service.IRoomService;
+import cn.imhtb.antlive.service.IVideoService;
 import cn.imhtb.antlive.utils.JwtUtils;
 import cn.imhtb.antlive.vo.request.SendPresentRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -24,14 +24,11 @@ public class PresentController {
 
     private final IPresentService presentService;
 
-    private final IRoomService roomService;
+    private final IPresentRewardService presentRewardService;
 
-    private final IRoomPresentService roomPresentService;
-
-    public PresentController(IPresentService presentService, IRoomService roomService, IRoomPresentService roomPresentService) {
+    public PresentController(IPresentService presentService, IPresentRewardService presentRewardService) {
         this.presentService = presentService;
-        this.roomService = roomService;
-        this.roomPresentService = roomPresentService;
+        this.presentRewardService = presentRewardService;
     }
 
     @GetMapping()
@@ -41,14 +38,21 @@ public class PresentController {
     }
 
     /**
-     * give presents
+     * reward presents
      */
-    @PostMapping("/send")
-    public ApiResponse send(@RequestBody SendPresentRequest sendPresentRequest, HttpServletRequest request){
-        String token = request.getHeader(JwtUtils.getHeaderKey());
-        Integer uid = JwtUtils.getId(token);
-        Room room = roomService.getById(sendPresentRequest.getRid());
-        Present present = presentService.getById(sendPresentRequest.getPid());
-        return roomPresentService.create(uid, present, room, sendPresentRequest.getNumber())?ApiResponse.ofSuccess():ApiResponse.ofError();
+    @PostMapping("/live/reward")
+    public ApiResponse live(@RequestBody SendPresentRequest sendPresentRequest, HttpServletRequest request){
+        Integer uid = JwtUtils.getId(request);
+        return presentRewardService.createReward(uid, sendPresentRequest.getPid(), sendPresentRequest.getRid(), sendPresentRequest.getNumber(),Constants.PresentRewardType.LIVE.getCode())?ApiResponse.ofSuccess():ApiResponse.ofError();
+    }
+
+    @PostMapping("/video/reward")
+    public ApiResponse video(@RequestBody SendPresentRequest sendPresentRequest, HttpServletRequest request){
+        Integer uid = JwtUtils.getId(request);
+        return presentRewardService.createReward(uid,
+                sendPresentRequest.getPid(),
+                sendPresentRequest.getVid(),
+                sendPresentRequest.getNumber(),
+                Constants.PresentRewardType.VIDEO.getCode())?ApiResponse.ofSuccess():ApiResponse.ofError();
     }
 }

@@ -75,6 +75,10 @@ public class RoomChatServer {
 
         redisUtils.hIncr(RedisPrefix.TOTAL_VIEW,rid);
 
+        String key = String.format(RedisPrefix.LIVE_KEY_PREFIX, rid);
+        if(redisUtils.exists(key)){
+            redisUtils.hIncr(key,RedisPrefix.LIVE_CLICK_COUNT);
+        }
     }
 
     @OnMessage
@@ -88,7 +92,10 @@ public class RoomChatServer {
 
             // Statistic
             redisUtils.hIncr(RedisPrefix.MEMBER_SPEAK,rid);
-
+            String key = String.format(RedisPrefix.LIVE_KEY_PREFIX, rid);
+            if(redisUtils.exists(key)){
+                redisUtils.hIncr(key,RedisPrefix.LIVE_DAN_MU_COUNT);
+            }
             sendMessage(webMessage.toJson(), CHAT_ROOMS.get(rid),session);
         }
         log.info("[收到消息] rid:" + rid + ", message:" + message);

@@ -37,4 +37,10 @@ public class LiveInfo {
 
     private Integer userId;
 
+    private String clickCount;
+
+    private String danMuCount;
+
+    private String presentCount;
+
 }

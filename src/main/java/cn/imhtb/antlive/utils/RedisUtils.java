@@ -95,17 +95,26 @@ public class RedisUtils {
     public Object hIncr(String h,String key){
         return redisTemplate.opsForHash().increment(h,key,1);
     }
+
+    public Object hIncrBy(String h,String key,Long v){
+        return redisTemplate.opsForHash().increment(h,key,v);
+    }
     /**
      * 哈希 添加
      */
-    public void hmSet(String key, Object hashKey, Object value){
+    public void hPut(String key, Object hashKey, Object value){
         HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
         hash.put(key,hashKey,value);
     }
+
+    public void hPutAll(String key, Map<Object, Object> maps) {
+        redisTemplate.opsForHash().putAll(key, maps);
+    }
+
     /**
      * 哈希获取数据
      */
-    public Object hmGet(String key, Object hashKey){
+    public Object hGet(String key, Object hashKey){
         HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
         return hash.get(key,hashKey);
     }
@@ -113,7 +122,7 @@ public class RedisUtils {
     /**
      * 哈希获取数据
      */
-    public Map<Object, Object> hmGetAll(String key){
+    public Map<Object, Object> hGetAll(String key){
         HashOperations<String, Object, Object> hash = redisTemplate.opsForHash();
         return hash.entries(key);
     }

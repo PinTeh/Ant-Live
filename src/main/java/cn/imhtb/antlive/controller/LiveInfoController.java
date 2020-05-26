@@ -58,7 +58,7 @@ public class LiveInfoController {
                 .le(condition,"start_time",maxTime)
                 .ge(condition,"start_time",minTime)
                 .orderByDesc("id");
-        Page<LiveInfo> liveInfoPage = liveInfoService.page(new Page<LiveInfo>(page,limit),liveInfoQueryWrapper);
+        Page<LiveInfo> liveInfoPage = liveInfoService.page(new Page<>(page,limit),liveInfoQueryWrapper);
         LiveStatResponse response = packageResponse(liveInfoPage.getRecords());
         response.setTotal(liveInfoPage.getTotal());
         return ApiResponse.ofSuccess(response);
@@ -73,6 +73,9 @@ public class LiveInfoController {
             liveStat.setEndTime(v.getEndTime());
             liveStat.setStartTime(v.getStartTime());
             liveStat.setId(v.getId());
+            liveStat.setDanMuCount(v.getDanMuCount());
+            liveStat.setPresentCount(v.getPresentCount());
+            liveStat.setClickCount(v.getClickCount());
             long sub = LocalDateTimeUtils.subMinutes(v.getStartTime(), v.getEndTime());
             totalTime += sub;
             liveStat.setTime(sub);

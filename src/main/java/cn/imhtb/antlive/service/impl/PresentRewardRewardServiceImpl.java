@@ -8,10 +8,12 @@ import cn.imhtb.antlive.entity.User;
 import cn.imhtb.antlive.entity.database.PresentReward;
 import cn.imhtb.antlive.entity.database.Video;
 import cn.imhtb.antlive.mappers.*;
+import cn.imhtb.antlive.server.RedisPrefix;
 import cn.imhtb.antlive.server.RoomChatServer;
 import cn.imhtb.antlive.server.WebMessage;
 import cn.imhtb.antlive.service.IPresentRewardService;
 import cn.imhtb.antlive.utils.CommonUtils;
+import cn.imhtb.antlive.utils.RedisUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +46,9 @@ public class PresentRewardRewardServiceImpl extends ServiceImpl<PresentRewardMap
 
     private final RoomMapper roomMapper;
 
-    public PresentRewardRewardServiceImpl(PresentRewardMapper presentRewardMapper, BillMapper billMapper, UserMapper userMapper, RoomChatServer roomChatServer, VideoMapper videoMapper, PresentMapper presentMapper, RoomMapper roomMapper) {
+    private final RedisUtils redisUtils;
+
+    public PresentRewardRewardServiceImpl(PresentRewardMapper presentRewardMapper, BillMapper billMapper, UserMapper userMapper, RoomChatServer roomChatServer, VideoMapper videoMapper, PresentMapper presentMapper, RoomMapper roomMapper, RedisUtils redisUtils) {
         this.presentRewardMapper = presentRewardMapper;
         this.billMapper = billMapper;
         this.userMapper = userMapper;
@@ -52,6 +56,7 @@ public class PresentRewardRewardServiceImpl extends ServiceImpl<PresentRewardMap
         this.videoMapper = videoMapper;
         this.presentMapper = presentMapper;
         this.roomMapper = roomMapper;
+        this.redisUtils = redisUtils;
     }
 
     @Override
@@ -79,8 +84,17 @@ public class PresentRewardRewardServiceImpl extends ServiceImpl<PresentRewardMap
             presentReward.setRoomId(room.getId());
             presentReward.setType(Constants.PresentRewardType.LIVE.getCode());
             mark = Constants.BillMark.LIVE_REWARD.getDesc();
+
             // 直播间显示赠送礼物信息
             try {
+
+                // TODO 逻辑有点问题
+                String key = String.format(RedisPrefix.LIVE_KEY_PREFIX, room.getId());
+                if(redisUtils.exists(key)){
+                    // 舍去小数点
+                    redisUtils.hIncrBy(key,RedisPrefix.LIVE_PRESENT_COUNT,totalPrice.longValue());
+                }
+
                 User fromUser = userMapper.selectById(fromId);
                 WebMessage webMessage = WebMessage.createPresent(
                         fromUser,

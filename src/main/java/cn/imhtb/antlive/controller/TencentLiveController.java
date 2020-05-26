@@ -7,13 +7,14 @@ import cn.imhtb.antlive.entity.Room;
 import cn.imhtb.antlive.entity.database.LiveDetect;
 import cn.imhtb.antlive.entity.tencent.ShotRuleResponse;
 import cn.imhtb.antlive.entity.tencent.StreamResponse;
+import cn.imhtb.antlive.server.RedisPrefix;
 import cn.imhtb.antlive.service.ILiveDetectService;
 import cn.imhtb.antlive.service.ILiveInfoService;
 import cn.imhtb.antlive.service.IRoomService;
-import cn.imhtb.antlive.service.ITencentLiveService;
 import cn.imhtb.antlive.utils.CommonUtils;
 import cn.imhtb.antlive.utils.JwtUtils;
 import cn.imhtb.antlive.service.impl.TencentLiveServiceImpl;
+import cn.imhtb.antlive.utils.RedisUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.HashMap;
@@ -54,11 +56,14 @@ public class TencentLiveController {
 
     private final ModelMapper modelMapper;
 
-    public TencentLiveController(IRoomService roomService, ILiveInfoService liveInfoService, ModelMapper modelMapper, ILiveDetectService liveDetectService ) {
+    private final RedisUtils redisUtils;
+
+    public TencentLiveController(IRoomService roomService, ILiveInfoService liveInfoService, ModelMapper modelMapper, ILiveDetectService liveDetectService, RedisUtils redisUtils) {
         this.roomService = roomService;
         this.liveInfoService = liveInfoService;
         this.modelMapper = modelMapper;
         this.liveDetectService = liveDetectService;
+        this.redisUtils = redisUtils;
     }
 
     /**
@@ -111,18 +116,18 @@ public class TencentLiveController {
      */
     @RequestMapping("/start")
     public void start(@RequestBody StreamResponse response){
-        log.info("tencent live recall start ...");
+        log.info("腾讯云直播回调：启动回调 - 开始");
         log.info("response:" + response);
         String sign = DigestUtils.md5DigestAsHex(("AntLive" + response.getT()).getBytes());
         log.info("sign:" + sign + " ret:" + response.getSign().equals(sign));
         if (!response.getSign().equals(sign)){
-            log.warn("illegal request! stream_id:" + response.getStream_id());
+            log.error("illegal request! stream_id:" + response.getStream_id());
             return;
         }
 
         Room room = roomService.getById(Integer.valueOf(response.getStream_id()));
-        if (room == null || room.getStatus() != Constants.LiveStatus.STOP.getCode()){
-            log.warn("live start fail : because room = null or room's status not equals stop code");
+        if (room == null){
+            log.error("live start fail : because room = null ");
             return;
         }
 
@@ -138,6 +143,20 @@ public class TencentLiveController {
         liveInfo.setStartTime(LocalDateTime.now());
         liveInfoService.save(liveInfo);
 
+        //开始统计直播数据
+        /*
+            LIVE_STATISTIC:Rid {
+                info_id：live_info_id
+            }
+        */
+        String key = String.format(RedisPrefix.LIVE_KEY_PREFIX, String.valueOf(room.getId()));
+        Map<Object,Object> map = new HashMap<>(2);
+        map.put("live_info_id",liveInfo.getId().toString());
+        map.put("room_id",room.getId().toString());
+        log.info("直播开始：Redis开始统计直播数据 - key:{}， live_info_id:{},room_id:{}",key,liveInfo.getId(),room.getId());
+        redisUtils.hPutAll(key,map);
+        log.info("直播开始：Redis开始统计直播数据 - 插入完成");
+        log.info("腾讯云直播回调：启动回调 - 结束");
     }
 
     /**
@@ -145,7 +164,7 @@ public class TencentLiveController {
      */
     @RequestMapping("/end")
     public ApiResponse end(@RequestBody StreamResponse response){
-        log.info("tencent live recall end ...");
+        log.info("腾讯云直播回调：结束回调 - 开始");
         String sign = DigestUtils.md5DigestAsHex(("AntLive" + response.getT()).getBytes());
         log.info("sign:" + sign + " ret:" + response.getSign().equals(sign));
         if (!response.getSign().equals(sign)){
@@ -170,7 +189,21 @@ public class TencentLiveController {
         updateInfo.setEndTime(LocalDateTime.now());
         // 0-living 1-finished
         updateInfo.setStatus(Constants.LiveInfoStatus.YES.getCode());
+
+        //结束统计数据
+        String key = String.format(RedisPrefix.LIVE_KEY_PREFIX, String.valueOf(room.getId()));
+        Map<Object, Object> map = redisUtils.hGetAll(key);
+        log.info("直播结束：Redis获取统计数据 map size:{}，key:{}",map.size(),key);
+        String pc = (String)map.getOrDefault(RedisPrefix.LIVE_PRESENT_COUNT,"0");
+        String cc = (String) map.getOrDefault(RedisPrefix.LIVE_CLICK_COUNT,"0");
+        String dm = (String) map.getOrDefault(RedisPrefix.LIVE_DAN_MU_COUNT,"0");
+        redisUtils.remove(key);
+
+        updateInfo.setClickCount(cc);
+        updateInfo.setPresentCount(pc);
+        updateInfo.setDanMuCount(dm);
         liveInfoService.updateById(updateInfo);
+        log.info("腾讯云直播回调：结束回调 - 结束");
         return ApiResponse.ofSuccess();
     }
 
@@ -179,7 +212,7 @@ public class TencentLiveController {
      */
     @RequestMapping("/screenshot")
     public void screenshot(){
-        log.info("----腾讯云直播截图回调----");
+        log.info("腾讯云直播截图回调");
     }
 
     /**

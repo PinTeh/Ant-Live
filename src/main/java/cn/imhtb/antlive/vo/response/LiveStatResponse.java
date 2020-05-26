@@ -29,6 +29,12 @@ public class LiveStatResponse {
 
         private LocalDateTime endTime;
 
+        private String clickCount;
+
+        private String presentCount;
+
+        private String danMuCount;
+
     }
 
 

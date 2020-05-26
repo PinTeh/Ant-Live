@@ -7,7 +7,6 @@ import cn.imhtb.antlive.service.IStatisticSpeakService;
 import cn.imhtb.antlive.service.IStatisticViewService;
 import cn.imhtb.antlive.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -48,7 +47,7 @@ public class StatisticsSchedule {
          */
         LocalDate now = LocalDate.now().minusDays(1L);
         log.info("定时任务当前时间:" + now);
-        Map<Object, Object> memberSpeak = redisUtils.hmGetAll(RedisPrefix.MEMBER_SPEAK);
+        Map<Object, Object> memberSpeak = redisUtils.hGetAll(RedisPrefix.MEMBER_SPEAK);
         List<StatisticSpeak> statisticSpeaks = new ArrayList<>();
         memberSpeak.forEach((k,v)->{
             // rid date number
@@ -68,8 +67,8 @@ public class StatisticsSchedule {
 
          */
         List<StatisticView> statisticViews = new ArrayList<>();
-        Map<Object, Object> memberView = redisUtils.hmGetAll(RedisPrefix.MEMBER_VIEW);
-        Map<Object, Object> totalView = redisUtils.hmGetAll(RedisPrefix.TOTAL_VIEW);
+        Map<Object, Object> memberView = redisUtils.hGetAll(RedisPrefix.MEMBER_VIEW);
+        Map<Object, Object> totalView = redisUtils.hGetAll(RedisPrefix.TOTAL_VIEW);
         totalView.forEach((k,v)->{
             log.info("totalView:" + k + "," + v);
             StatisticView statisticView = new StatisticView();

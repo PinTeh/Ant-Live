@@ -122,4 +122,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUs
         return ApiResponse.ofSuccess("注册成功");
     }
 
+    @Override
+    public Integer countToday() {
+        return userMapper.countToday();
+    }
+
 }

@@ -57,7 +57,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").authenticated()
                 .antMatchers(HttpMethod.DELETE, "/admin/**").hasRole("ADMIN")
                 // 其他都放行了
-                .antMatchers("/upload").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 //添加自定义Filter

@@ -1,5 +1,7 @@
 package cn.imhtb.antlive.entity.database;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import org.apache.tomcat.jni.Local;
 
@@ -18,8 +20,10 @@ public class SysPushLog {
 
     private Integer status;
 
+    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
     private Integer sysPushId;

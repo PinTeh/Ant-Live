@@ -5,22 +5,22 @@ import cn.imhtb.antlive.common.Constants;
 import cn.imhtb.antlive.entity.LiveInfo;
 import cn.imhtb.antlive.entity.Room;
 import cn.imhtb.antlive.entity.database.LiveDetect;
+import cn.imhtb.antlive.entity.database.SysPush;
+import cn.imhtb.antlive.entity.database.SysPushLog;
 import cn.imhtb.antlive.entity.tencent.ShotRuleResponse;
 import cn.imhtb.antlive.entity.tencent.StreamResponse;
 import cn.imhtb.antlive.server.RedisPrefix;
-import cn.imhtb.antlive.service.ILiveDetectService;
-import cn.imhtb.antlive.service.ILiveInfoService;
-import cn.imhtb.antlive.service.IRoomService;
-import cn.imhtb.antlive.utils.CommonUtils;
-import cn.imhtb.antlive.utils.JwtUtils;
+import cn.imhtb.antlive.service.*;
+import cn.imhtb.antlive.utils.*;
 import cn.imhtb.antlive.service.impl.TencentLiveServiceImpl;
-import cn.imhtb.antlive.utils.RedisUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +30,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,6 +51,14 @@ public class TencentLiveController {
     @Value("${tencent.live.appName}")
     private String appName;
 
+    private final MailUtils mailUtils;
+
+    private final SmsUtils smsUtils;
+
+    private final ISysPushLogService sysPushLogService;
+
+    private final ISysPushService sysPushService;
+
     private final IRoomService roomService;
 
     private final ILiveInfoService liveInfoService;
@@ -58,12 +69,19 @@ public class TencentLiveController {
 
     private final RedisUtils redisUtils;
 
-    public TencentLiveController(IRoomService roomService, ILiveInfoService liveInfoService, ModelMapper modelMapper, ILiveDetectService liveDetectService, RedisUtils redisUtils) {
+    private final ITencentLiveService tencentLiveService;
+
+    public TencentLiveController(IRoomService roomService, ILiveInfoService liveInfoService, ModelMapper modelMapper, ILiveDetectService liveDetectService, RedisUtils redisUtils, SmsUtils smsUtils, ISysPushLogService sysPushLogService, ISysPushService sysPushService, MailUtils mailUtils, ITencentLiveService tencentLiveService) {
         this.roomService = roomService;
         this.liveInfoService = liveInfoService;
         this.modelMapper = modelMapper;
         this.liveDetectService = liveDetectService;
         this.redisUtils = redisUtils;
+        this.smsUtils = smsUtils;
+        this.sysPushLogService = sysPushLogService;
+        this.sysPushService = sysPushService;
+        this.mailUtils = mailUtils;
+        this.tencentLiveService = tencentLiveService;
     }
 
     /**
@@ -192,16 +210,25 @@ public class TencentLiveController {
 
         //结束统计数据
         String key = String.format(RedisPrefix.LIVE_KEY_PREFIX, String.valueOf(room.getId()));
-        Map<Object, Object> map = redisUtils.hGetAll(key);
-        log.info("直播结束：Redis获取统计数据 map size:{}，key:{}",map.size(),key);
-        String pc = (String)map.getOrDefault(RedisPrefix.LIVE_PRESENT_COUNT,"0");
-        String cc = (String) map.getOrDefault(RedisPrefix.LIVE_CLICK_COUNT,"0");
-        String dm = (String) map.getOrDefault(RedisPrefix.LIVE_DAN_MU_COUNT,"0");
-        redisUtils.remove(key);
+        try {
 
-        updateInfo.setClickCount(cc);
-        updateInfo.setPresentCount(pc);
-        updateInfo.setDanMuCount(dm);
+            Map<Object, Object> map = redisUtils.hGetAll(key);
+            log.info("直播结束：Redis获取统计数据 map size:{}，key:{}",map.size(),key);
+            String pc = String.valueOf(map.getOrDefault(RedisPrefix.LIVE_PRESENT_COUNT,"0"));
+            String cc = String.valueOf(map.getOrDefault(RedisPrefix.LIVE_CLICK_COUNT,"0"));
+            String dm = String.valueOf(map.getOrDefault(RedisPrefix.LIVE_DAN_MU_COUNT,"0"));
+
+            updateInfo.setClickCount(cc);
+            updateInfo.setPresentCount(pc);
+            updateInfo.setDanMuCount(dm);
+
+        }catch (Exception e){
+            log.error("直播结束 : Redis取值出现异常 {}",e.getMessage());
+            e.printStackTrace();
+        }finally {
+            redisUtils.remove(key);
+        }
+
         liveInfoService.updateById(updateInfo);
         log.info("腾讯云直播回调：结束回调 - 结束");
         return ApiResponse.ofSuccess();
@@ -221,7 +248,7 @@ public class TencentLiveController {
      */
     @RequestMapping("/appraise")
     public void appraise(@RequestBody ShotRuleResponse response) {
-        log.info("----------" + response.toString());
+        log.info("智能鉴黄回调: " + response.toString());
         int confidence = response.getConfidence();
         Integer rid = Integer.valueOf(response.getStreamId());
         log.info("直播截图异常检测: rid = " + rid + ",confidence:" + confidence);
@@ -240,9 +267,29 @@ public class TencentLiveController {
         if (confidence >= 80){
             log.info("直播截图异常检测: 置信度>80,系统自动封禁 ");
             liveDetect.setHandleStatus(1);
-            liveDetect.setResumeTime(LocalDateTime.now().plusHours(8));
+            LocalDateTime resumeTime = LocalDateTime.now().plusDays(3);
+            liveDetect.setResumeTime(resumeTime);
+
+            List<SysPush> sysPushes = sysPushService.list(new QueryWrapper<SysPush>().like("listener_items", "salacity-notice").eq("open",1));
+            sysPushes.forEach(v -> {
+                ArrayList<String> params = new ArrayList<>();
+                params.add(String.valueOf(rid));
+                params.add("直播内容涉黄");
+                if(!StringUtils.isEmpty(v.getEmail())){
+                    mailUtils.sendSimpleMessage(v.getEmail(),"直播内容监控异常","直播内容监控异常 , 房间号:" + rid);
+                }
+                if(!StringUtils.isEmpty(v.getMobile())){
+                    smsUtils.txSmsSend(v.getMobile(),params,"server");
+                }
+                SysPushLog sysPushLog = new SysPushLog();
+                sysPushLog.setSysPushId(v.getId());
+                sysPushLog.setContent("直播内容监控异常，房间号:" + rid);
+                sysPushLogService.save(sysPushLog);
+            });
+
             // 封号处理
-            // tencentLiveService.ban(rid, null);
+            DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            tencentLiveService.ban(rid, resumeTime.format(df),"自动封禁:涉黄");
         }
         liveDetectService.save(liveDetect);
 

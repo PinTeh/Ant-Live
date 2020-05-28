@@ -15,4 +15,5 @@ public interface StatisticSpeakMapper extends BaseMapper<StatisticSpeak> {
 
     @Select("select sum(number) number,DATE_FORMAT(date, '%Y-%m-%d') date from statistic_speak  where DATE_SUB(CURDATE(), INTERVAL #{days} DAY) <= date(date) and room_id = #{rid} group by DATE_FORMAT(date, '%Y-%m-%d')")
     List<StatisticSpeak> listInDateRange(int days,Integer rid);
+
 }

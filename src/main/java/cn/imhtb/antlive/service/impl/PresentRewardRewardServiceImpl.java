@@ -134,7 +134,7 @@ public class PresentRewardRewardServiceImpl extends ServiceImpl<PresentRewardMap
         toBill.setBillChange(totalPrice);
         toBill.setBalance(toLast.getBalance().add(totalPrice));
         toBill.setMark(mark);
-        fromBill.setType(Constants.BillType.INCOME.getCode());
+        toBill.setType(Constants.BillType.INCOME.getCode());
         toBill.setBillChange(totalPrice);
         toBill.setUserId(toId);
         toBill.setOrderNo(CommonUtils.getOrderNo());

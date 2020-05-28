@@ -11,7 +11,7 @@ import com.tencentcloudapi.live.v20180801.models.ModifyLiveSnapshotTemplateReque
  */
 public interface ITencentLiveService {
 
-    boolean ban(Integer rid,String resumeTime) ;
+    boolean ban(Integer rid,String resumeTime,String reason) ;
 
     boolean resume(Integer rid) ;
 

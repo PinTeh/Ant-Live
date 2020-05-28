@@ -68,7 +68,7 @@ public class LiveController {
 
     @RequestMapping("/ban")
     public void ban() throws TencentCloudSDKException {
-        tencentLiveService.ban(1,"");
+        tencentLiveService.ban(1,"","");
     }
 
     @RequestMapping("/on_done")

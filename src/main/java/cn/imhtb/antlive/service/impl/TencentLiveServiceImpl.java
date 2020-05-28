@@ -1,10 +1,20 @@
 package cn.imhtb.antlive.service.impl;
 
+import cn.imhtb.antlive.common.ApiResponse;
+import cn.imhtb.antlive.common.Constants;
+import cn.imhtb.antlive.entity.LiveInfo;
+import cn.imhtb.antlive.entity.Room;
+import cn.imhtb.antlive.entity.database.BanRecord;
+import cn.imhtb.antlive.mappers.BanRecordMapper;
+import cn.imhtb.antlive.mappers.LiveInfoMapper;
+import cn.imhtb.antlive.mappers.RoomMapper;
 import cn.imhtb.antlive.service.ITencentLiveService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
 import com.tencentcloudapi.live.v20180801.LiveClient;
 import com.tencentcloudapi.live.v20180801.models.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -25,10 +35,19 @@ import java.util.List;
 @Service
 public class TencentLiveServiceImpl implements ITencentLiveService {
 
+    private final RoomMapper roomMapper;
+
+    private final BanRecordMapper banRecordMapper;
+
+    private final LiveInfoMapper  liveInfoMapper;
+
     private final LiveClient client;
 
-    public TencentLiveServiceImpl(LiveClient liveClient) {
+    public TencentLiveServiceImpl(LiveClient liveClient, BanRecordMapper banRecordMapper, RoomMapper roomMapper, LiveInfoMapper liveInfoMapper) {
         this.client = liveClient;
+        this.banRecordMapper = banRecordMapper;
+        this.roomMapper = roomMapper;
+        this.liveInfoMapper = liveInfoMapper;
     }
 
     private static final String KEY = "9e57e2310202990ba3c470e250385784";
@@ -83,7 +102,30 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
     }
 
     @Override
-    public boolean ban(Integer rid,String resumeTime){
+    public boolean ban(Integer rid,String resumeTime,String reason){
+
+        List<BanRecord> banRecords = banRecordMapper.selectList(new QueryWrapper<BanRecord>().eq("room_id", rid).eq("status", 0));
+        if(banRecords.size()>0){
+            return false;
+        }
+
+        LiveInfo liveInfo = liveInfoMapper.selectOne(new QueryWrapper<LiveInfo>().eq("room_id", rid).orderByDesc("id").last("limit 0,1"));
+        if (liveInfo.getEndTime()==null){
+            // 不能直接更新liveInfo
+            LiveInfo updateInfo = new LiveInfo();
+            updateInfo.setId(liveInfo.getId());
+            updateInfo.setEndTime(LocalDateTime.now());
+            // 0-living 1-finished
+            updateInfo.setStatus(Constants.LiveInfoStatus.YES.getCode());
+            liveInfoMapper.updateById(updateInfo);
+        }
+
+        try {
+            roomMapper.updateById(Room.builder().id(rid).status(Constants.LiveStatus.BANNING.getCode()).build());
+        }catch (Exception e){
+            log.error("更新房间状态异常:{}",e.getMessage());
+        }
+
         log.info("调用腾讯云封禁接口: rid = " + rid);
         ForbidLiveStreamRequest forbidLiveStreamRequest = new ForbidLiveStreamRequest();
         forbidLiveStreamRequest.setAppName("live");
@@ -91,8 +133,17 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
         forbidLiveStreamRequest.setStreamName(String.valueOf(rid));
         forbidLiveStreamRequest.setReason("reason");
 
-        if (!resumeTime.isEmpty()){
+        /*
+         * 	恢复流的时间。UTC 格式，例如：2018-11-29T19:00:00Z。
+         * 注意：
+         * 1. 默认禁播7天，且最长支持禁播90天。
+         */
+        LocalDateTime resumeLocalDateTime = LocalDateTime.now().plusDays(7);
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        if (!StringUtils.isEmpty(resumeTime)){
             forbidLiveStreamRequest.setResumeTime(resumeTime);
+            //TODO 手动添加8小时
+            resumeLocalDateTime = LocalDateTime.parse(resumeTime,df).plusHours(8L);
         }
         ForbidLiveStreamResponse resp = null;
         try {
@@ -101,6 +152,19 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
             e.printStackTrace();
             return false;
         }
+
+        LocalDateTime now = LocalDateTime.now();
+        BanRecord record = new BanRecord();
+        record.setRoomId(rid);
+        record.setReason(reason);
+        record.setCreateTime(now);
+        record.setStartTime(now);
+        record.setResumeTime(resumeLocalDateTime);
+        record.setStatus(0);
+        banRecordMapper.insert(record);
+
+        roomMapper.updateById(Room.builder().id(rid).status(Constants.LiveStatus.BANNING.getCode()).build());
+
         log.info(ForbidLiveStreamRequest.toJsonString(resp));
         log.info("调用腾讯云封禁接口：执行成功");
         return true;
@@ -108,6 +172,7 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
 
     @Override
     public boolean resume(Integer rid) {
+        log.info("调用腾讯云恢复接口：执行开始");
         ResumeLiveStreamRequest resumeLiveStreamRequest = new ResumeLiveStreamRequest();
         resumeLiveStreamRequest.setAppName("live");
         resumeLiveStreamRequest.setDomainName("live.imhtb.cn");
@@ -119,7 +184,19 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
             e.printStackTrace();
             return false;
         }
-        log.info(ResumeLiveStreamRequest.toJsonString(response));
+        BanRecord record = banRecordMapper.selectOne(new QueryWrapper<BanRecord>().eq("room_id", rid).eq("status",0).orderByDesc("id").last("limit 0,1"));
+        if (record!=null){
+            BanRecord update = new BanRecord();
+            update.setId(record.getId());
+            update.setMark("手动恢复");
+            update.setStatus(1);
+            banRecordMapper.updateById(update);
+        }
+
+        roomMapper.updateById(Room.builder().id(rid).status(Constants.LiveStatus.STOP.getCode()).build());
+
+        log.info("调用腾讯云恢复接口: 返回{}",ResumeLiveStreamRequest.toJsonString(response));
+        log.info("调用腾讯云恢复接口：执行结束");
         return true;
     }
 

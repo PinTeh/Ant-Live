@@ -8,13 +8,13 @@ import cn.imhtb.antlive.service.IBanRecordService;
 import cn.imhtb.antlive.service.ILiveDetectService;
 import cn.imhtb.antlive.service.IRoomService;
 import cn.imhtb.antlive.service.ITencentLiveService;
+import cn.imhtb.antlive.vo.request.LiveBanRequest;
 import cn.imhtb.antlive.vo.response.LiveBanResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tencentcloudapi.live.v20180801.models.DescribeLiveForbidStreamListResponse;
 import com.tencentcloudapi.live.v20180801.models.ForbidStreamInfo;
 import com.tencentcloudapi.live.v20180801.models.ModifyLiveSnapshotTemplateRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,8 +52,8 @@ public class AdminLiveController {
     }
 
     @GetMapping("/detect/list")
-    public ApiResponse liveDetectList(@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit){
-        Page<LiveDetect> liveDetectPage = liveDetectService.page(new Page<>(page, limit), new QueryWrapper<LiveDetect>().orderByDesc("id"));
+    public ApiResponse liveDetectList(@RequestParam(required = false)Integer rid,@RequestParam(defaultValue = "1",required = false) Integer page,@RequestParam(defaultValue = "10",required = false) Integer limit){
+        Page<LiveDetect> liveDetectPage = liveDetectService.page(new Page<>(page, limit), new QueryWrapper<LiveDetect>().eq(rid!=null,"room_id",rid).orderByDesc("id"));
         return ApiResponse.ofSuccess(liveDetectPage);
     }
 
@@ -123,7 +123,15 @@ public class AdminLiveController {
         return ApiResponse.ofSuccess(map);
     }
 
+    @PostMapping("/ban")
+    public ApiResponse ban(@RequestBody LiveBanRequest request){
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        return tencentLiveService.ban(request.getRid(),request.getResumeTime(),request.getReason()) ? ApiResponse.ofSuccess():ApiResponse.ofError();
+    }
 
-
+    @PostMapping("/resume")
+    public ApiResponse resume(Integer rid){
+        return tencentLiveService.resume(rid) ? ApiResponse.ofSuccess():ApiResponse.ofError();
+    }
 
 }

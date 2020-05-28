@@ -14,4 +14,7 @@ public interface IUserService extends IService<User> {
     void updateStatusByIds(Integer[] ids,Integer status);
 
     ApiResponse register(RegisterRequest request);
+
+    Integer countToday();
+
 }

@@ -104,5 +104,15 @@
       "name": "aliyun.instanceId",
       "type": "java.lang.String",
       "description": "Description for aliyun.instanceId."
+    },
+    {
+      "name": "tencent.sms.templateNoticeId",
+      "type": "java.lang.String",
+      "description": "Description for tencent.sms.templateNoticeId."
+    },
+    {
+      "name": "tencent.sms.templateNoticeId",
+      "type": "java.lang.String",
+      "description": "Description for tencent.sms.templateNoticeId."
     }
   ] }

@@ -10,6 +10,7 @@ import com.tencentcloudapi.common.profile.ClientProfile;
 import com.tencentcloudapi.common.profile.HttpProfile;
 import com.tencentcloudapi.live.v20180801.LiveClient;
 import com.tencentcloudapi.ocr.v20181119.OcrClient;
+import com.tencentcloudapi.vod.v20180717.VodClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,5 +59,16 @@ public class TencentConfig {
         ClientProfile clientProfile = new ClientProfile();
         clientProfile.setHttpProfile(httpProfile);
         return new OcrClient(cred, "ap-guangzhou", clientProfile);
+    }
+
+    @Bean
+    public VodClient getVodClient(){
+        Credential cred = new Credential(iii, kkk);
+        HttpProfile httpProfile = new HttpProfile();
+        httpProfile.setEndpoint("vod.tencentcloudapi.com");
+        ClientProfile clientProfile = new ClientProfile();
+        clientProfile.setHttpProfile(httpProfile);
+        //Region公共参数，本接口不需要传递此参数。
+        return new VodClient(cred, "ap-chongqing", clientProfile);
     }
 }

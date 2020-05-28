@@ -237,6 +237,7 @@ public class BillController {
                 }
                 bill.setBillChange(bigDecimal);
                 bill.setType(0);
+                bill.setMark("充值");
                 bill.setUpdateTime(LocalDateTime.now());
                 bill.setCreateTime(LocalDateTime.now());
                 bill.setOrderNo(outTradeNo);

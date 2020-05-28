@@ -52,12 +52,8 @@ public class PushController {
     public ApiResponse update(HttpServletRequest request, @RequestBody SystemPushRequest systemPushRequest){
         Integer uid = JwtUtils.getId(request);
         SysPush update = modelMapper.map(systemPushRequest, SysPush.class);
-        if (update.getId() == null){
-            update.setUserId(uid);
-            systemPushService.save(update);
-        }else{
-            systemPushService.updateById(update);
-        }
+        update.setUserId(uid);
+        systemPushService.saveOrUpdate(update);
         return ApiResponse.ofSuccess();
     }
 }

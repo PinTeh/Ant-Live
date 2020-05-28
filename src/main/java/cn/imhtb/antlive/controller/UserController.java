@@ -90,12 +90,14 @@ public class UserController {
             redisUtils.set("email:"+account,code,Long.valueOf("2"), TimeUnit.MINUTES);
             mailUtils.sendSimpleMessage(account,"直播注册验证码","您的动态验证码为："+code+"，有效时间为2分钟，如非本人操作，请忽略本短信！");
             return ApiResponse.ofSuccess();
-        }else {
+        }else if(account.length() == 11){
             redisUtils.set("mobile:"+account,code,Long.valueOf("2"), TimeUnit.MINUTES);
             ArrayList<String> params = new ArrayList<>();
             params.add(String.valueOf(code));
-            smsUtils.txSmsSend(account,params);
+            smsUtils.txSmsSend(account,params,"code");
             return ApiResponse.ofSuccess();
+        }else {
+            return ApiResponse.ofError("账号参数异常");
         }
     }
 

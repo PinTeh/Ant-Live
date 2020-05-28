@@ -55,7 +55,11 @@ public class MailUtils {
         message.setTo(email);
         message.setSubject(subject);
         message.setText(content);
-        mailSender.send(message);
+        try {
+            mailSender.send(message);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

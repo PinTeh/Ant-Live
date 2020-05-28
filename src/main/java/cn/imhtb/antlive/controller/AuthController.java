@@ -48,6 +48,6 @@ public class AuthController {
     @GetMapping("/info")
     public ApiResponse getOneByUserId(HttpServletRequest request){
         Integer uid = JwtUtils.getId(request);
-        return ApiResponse.ofSuccess(authService.getOne(new QueryWrapper<AuthInfo>().eq("user_id",uid)));
+        return ApiResponse.ofSuccess(authService.getOne(new QueryWrapper<AuthInfo>().eq("user_id",uid).orderByDesc("id").last("limit 0,1")));
     }
 }

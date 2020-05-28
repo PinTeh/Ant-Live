@@ -3,6 +3,7 @@ package cn.imhtb.antlive.controller.admin;
 import cn.imhtb.antlive.common.ApiResponse;
 import cn.imhtb.antlive.common.Constants;
 import cn.imhtb.antlive.entity.User;
+import cn.imhtb.antlive.entity.database.Video;
 import cn.imhtb.antlive.service.IUserService;
 import cn.imhtb.antlive.vo.request.IdsRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -52,5 +53,13 @@ public class AdminUserController {
             userService.updateStatusByIds(ids, Constants.DisabledStatus.YES.getCode());
         }
         return ApiResponse.ofSuccess();
+    }
+
+    @PostMapping("/edit")
+    public ApiResponse edit(@RequestBody User user){
+        user.setCreateTime(null);
+        user.setUpdateTime(null);
+        userService.saveOrUpdate(user);
+        return ApiResponse.ofSuccess("Edit success");
     }
 }

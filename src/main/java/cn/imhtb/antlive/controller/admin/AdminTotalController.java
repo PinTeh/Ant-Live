@@ -35,7 +35,7 @@ import java.util.stream.Stream;
  */
 @RestController
 @RequestMapping("/admin/total")
-@PreAuthorize("hasAnyRole('ROLE_ROOT')")
+@PreAuthorize("hasAnyRole('ROLE_ROOT','ROLE_LIVE')")
 public class AdminTotalController {
 
     private final IUserService userService;

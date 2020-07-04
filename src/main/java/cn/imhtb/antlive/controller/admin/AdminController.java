@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/admin")
-@PreAuthorize("hasAnyRole('ROLE_ROOT')")
+@PreAuthorize("hasAnyRole('ROLE_ROOT','ROLE_LIVE')")
 public class AdminController {
 
     private final IRoomService roomService;

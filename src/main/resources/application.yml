@@ -1,0 +1,75 @@
+server:
+  port: 9000
+
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/ant-live?characterEncoding=utf-8&serverTimezone=GMT%2b8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      max-wait: 60000
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+
+  mail:
+    host: smtp.qq.com
+    username: xxx@qq.com
+    password: xxx
+    default-encoding: UTF-8
+    port: 465
+
+
+  redis:
+    database: 0
+    host: xxxx
+    port: 9379
+    password: xxx
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+    timeout: 5000
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 4096MB
+      max-request-size: 4096MB
+
+tencent:
+  sms:
+    appid: xxx
+    appkey: xxx
+    templateId: xxx
+    templateNoticeId: xxx
+    smsSign: xxx
+  live:
+    domain: live.imhtb.cn
+    appName: live
+    iii: xxx
+    kkk: xxx
+  cos:
+    bucketName: xxx
+    path: https://xxx.cos.ap-chengdu.myqcloud.com/
+
+#logging:
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+#  config: classpath:logback.xml
+
+alipay:
+  path: Q:/Learning/Live/BackEnd/AntLive/src/main/resources/static/
+
+aliyun:
+  iii: xxx
+  kkk: xxx
+  regionId: cn-shenzhen
+  instanceId: i-xxx

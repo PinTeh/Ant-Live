@@ -5,11 +5,32 @@ Ant Live 是一个直播平台。集成了一系列杂七杂八的功能😁，�
 
 
 
+## 如何运行
+
+- 克隆代码到本地 `git clone https://github.com/PinTeh/Ant-Live.git`
+- 还原数据库 /resource/sql/ant-live.sql
+- 修改配置文件application.yml，主要修改参数有数据库连接、redis连接字符串，尝试启动（按理说应该是可以启动了，默认账号密码`admin``123123`）
+- 后续根据自己需求修改配置文件application.yml，主要参数有腾讯云sms（短信服务）live（直播服务）cos（对象存储）
+- 对接了支付宝支付服务，根据需求在AlipayConfig类中配置商户私钥、公钥、应用ID、下载根证书配置
+- 如有问题，可以联系我
+
+## 启动前端服务
+- 仓库地址 https://github.com/PinTeh/AntLive-Pre
+- 下载后执行 `npm install` 安装依赖
+- 安装完依赖后，修改utils/request.js中的baseURL，改为自己的后端服务地址
+- 执行`npm run serve`启动服务
+- 访问localhost:8080 （默认，如修改了端口，自己根据实际情况修改）
+
+
+## 如有问题可以联系
+
+![qrcode](http://image.imhtb.cn/qrCode.jpg)
+
 
 ### Preview
 
 
-- [演示地址](http://www.imhtb.cn)
+- [演示地址](http://www.imhtb.cn) 已失效
 - 仅限演示用，若恶意破坏，将不再提供~
 
 

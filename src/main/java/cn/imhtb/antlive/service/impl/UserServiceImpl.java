@@ -72,7 +72,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUs
         boolean[] checked = new boolean[3];
         checked[0] = !StringUtils.isEmpty(user.getEmail());
         checked[1] = !StringUtils.isEmpty(user.getMobile());
-        Integer count = authMapper.selectCount(new QueryWrapper<AuthInfo>().eq("user_id", userId).eq("status", 1));
+        long count = authMapper.selectCount(new QueryWrapper<AuthInfo>().eq("user_id", userId).eq("status", 1));
         checked[2] = (count !=0 );
         return checked;
     }

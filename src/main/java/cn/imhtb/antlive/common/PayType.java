@@ -2,12 +2,9 @@ package cn.imhtb.antlive.common;
 
 public enum  PayType  {
     /**
-     *  马哥?
+     * 支付类型
      */
     ALI("支付宝",1),
-    /**
-     *  还是马哥?
-     */
     WECHAT("微信",2);
 
     private int code;

@@ -56,9 +56,9 @@ public class AdminTotalController {
     @GetMapping("/all/count")
     public ApiResponse allCount(){
         Map<String,Integer> map = new HashMap<>();
-        map.put("user",userService.count());
-        map.put("room",roomService.count());
-        map.put("video",videoService.count());
+        map.put("user",(int)userService.count());
+        map.put("room",(int)roomService.count());
+        map.put("video",(int)videoService.count());
         map.put("income",billService.countIncome());
         map.put("outlay",billService.countOutlay());
         map.put("bill",billService.countBill());
@@ -68,7 +68,7 @@ public class AdminTotalController {
     @GetMapping("/today/count")
     public ApiResponse todayCount(){
         Map<String,Integer> map = new HashMap<>();
-        map.put("livingRoom",roomService.count(new QueryWrapper<Room>().eq("status", Constants.LiveStatus.LIVING.getCode())));
+        map.put("livingRoom",(int)roomService.count(new QueryWrapper<Room>().eq("status", Constants.LiveStatus.LIVING.getCode())));
         map.put("userToday",userService.countToday());
         map.put("incomeToday",billService.incomeToday());
         map.put("outlayToday",billService.outlayToday());

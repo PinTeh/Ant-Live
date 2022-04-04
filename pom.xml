@@ -5,12 +5,12 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.4.RELEASE</version>
+        <version>2.6.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>cn.imhtb</groupId>
     <artifactId>ant-live</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0001.RELEASE</version>
     <name>ant-live</name>
     <description>Live project for Spring Boot</description>
 
@@ -23,12 +23,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-devtools</artifactId>-->
-<!--            <scope>runtime</scope>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -42,7 +36,7 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.3.1.tmp</version>
+            <version>3.5.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -51,13 +45,13 @@
         <dependency>
             <groupId>com.alipay.sdk</groupId>
             <artifactId>alipay-sdk-java</artifactId>
-            <version>4.9.13.ALL</version>
+            <version>4.22.67.ALL</version>
         </dependency>
-        <!--转账？-->
+        <!--转账-->
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>1.62</version>
+            <version>1.70</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

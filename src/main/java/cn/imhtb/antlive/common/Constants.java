@@ -9,9 +9,9 @@ public class Constants {
         YES(0,"可使用"),
         NO(1,"不可使用")
         ;
-        private int code;
+        private final int code;
 
-        private String desc;
+        private final String desc;
 
         DisabledStatus(int code, String desc) {
             this.code = code;
@@ -22,16 +22,8 @@ public class Constants {
             return code;
         }
 
-        public void setCode(int code) {
-            this.code = code;
-        }
-
         public String getDesc() {
             return desc;
-        }
-
-        public void setDesc(String desc) {
-            this.desc = desc;
         }
     }
 
@@ -39,14 +31,14 @@ public class Constants {
         /**
          * 直播状态描述
          */
-        UNAUTH(-1,"未认证"),
+        UN_AUTH(-1,"未认证"),
         STOP(0,"未开播"),
         LIVING(1,"正在直播中"),
         BANNING(2,"已被封禁")
         ;
-        private int code;
+        private final int code;
 
-        private String desc;
+        private final String desc;
 
         LiveStatus(int code, String desc) {
             this.code = code;
@@ -57,17 +49,10 @@ public class Constants {
             return code;
         }
 
-        public void setCode(int code) {
-            this.code = code;
-        }
-
         public String getDesc() {
             return desc;
         }
 
-        public void setDesc(String desc) {
-            this.desc = desc;
-        }
     }
 
     public enum LiveInfoStatus{
@@ -77,9 +62,9 @@ public class Constants {
         NO(0,"未完成"),
         YES(1,"完成"),
         ;
-        private int code;
+        private final int code;
 
-        private String desc;
+        private final String desc;
 
         LiveInfoStatus(int code, String desc) {
             this.code = code;
@@ -90,17 +75,10 @@ public class Constants {
             return code;
         }
 
-        public void setCode(int code) {
-            this.code = code;
-        }
-
         public String getDesc() {
             return desc;
         }
 
-        public void setDesc(String desc) {
-            this.desc = desc;
-        }
     }
 
     public enum BillType{
@@ -110,9 +88,9 @@ public class Constants {
         INCOME(0,"收入"),
         OUTLAY(1,"支出"),
         ;
-        private int code;
+        private final int code;
 
-        private String desc;
+        private final String desc;
 
         BillType(int code, String desc) {
             this.code = code;
@@ -135,9 +113,9 @@ public class Constants {
         LIVE_REWARD(0,"直播打赏"),
         VIDEO_REWARD(1,"视频打赏"),
         ;
-        private int code;
+        private final int code;
 
-        private String desc;
+        private final String desc;
 
         BillMark(int code, String desc) {
             this.code = code;
@@ -162,9 +140,9 @@ public class Constants {
         REJECT(3,"认证失败"),
         AUTO_PASS(2,"智能审核通过");
 
-        private int code;
+        private final int code;
 
-        private String desc;
+        private final String desc;
 
         AuthStatus(int code, String desc) {
             this.code = code;
@@ -175,16 +153,8 @@ public class Constants {
             return code;
         }
 
-        public void setCode(int code) {
-            this.code = code;
-        }
-
         public String getDesc() {
             return desc;
-        }
-
-        public void setDesc(String desc) {
-            this.desc = desc;
         }
     }
 
@@ -195,9 +165,9 @@ public class Constants {
         ALIPAY("alipay","支付宝"),
         WECHAT("wechat","微信");
 
-        private String code;
+        private final String code;
 
-        private String desc;
+        private final String desc;
 
         PayPlatform(String code, String desc) {
             this.code = code;
@@ -221,9 +191,9 @@ public class Constants {
         LIVE(0,"LIVE"),
         VIDEO(1,"VIDEO");
 
-        private Integer code;
+        private final Integer code;
 
-        private String desc;
+        private final String desc;
 
         PresentRewardType(Integer code, String desc) {
             this.code = code;

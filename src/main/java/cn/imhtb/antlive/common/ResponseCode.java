@@ -7,9 +7,8 @@ public enum ResponseCode {
     UN_AUTH_ERROR(401,"UN_AUTH_ERROR"),
     ;
 
-
-    private int code;
-    private String desc;
+    private final int code;
+    private final String desc;
 
     ResponseCode(int code, String desc) {
         this.code = code;

@@ -11,13 +11,10 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
-import com.tencentcloudapi.faceid.v20180301.models.IdCardOCRVerificationRequest;
 import com.tencentcloudapi.ocr.v20181119.OcrClient;
 import com.tencentcloudapi.ocr.v20181119.models.IDCardOCRRequest;
 import com.tencentcloudapi.ocr.v20181119.models.IDCardOCRResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.bcel.Const;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -59,7 +56,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, AuthInfo> implement
             }else if (status.equals(Constants.AuthStatus.NO.getCode())){
                 Room updateRoom = new Room();
                 updateRoom.setId(room.getId());
-                updateRoom.setStatus(Constants.LiveStatus.UNAUTH.getCode());
+                updateRoom.setStatus(Constants.LiveStatus.UN_AUTH.getCode());
                 roomMapper.updateById(updateRoom);
             }
         }

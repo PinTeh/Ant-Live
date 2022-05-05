@@ -118,7 +118,7 @@ public class AlipayConfig {
         } else {
             // unix or linux
             path = System.getProperty("user.dir");
-            path += "ant-live/";
+            path += "/";
             log.info("[----------Unix or Linux file path----------]" + path);
         }
 
@@ -137,7 +137,7 @@ public class AlipayConfig {
         try {
             return new DefaultAlipayClient(certAlipayRequest);
         } catch (AlipayApiException e) {
-            log.error("初始化支付宝客户端失败");
+            log.error("初始化支付宝客户端失败", e);
             return null;
         }
     }

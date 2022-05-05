@@ -14,6 +14,7 @@ import com.alipay.api.request.AlipayTradePagePayRequest;
 import com.alipay.api.response.AlipayFundTransUniTransferResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,24 +31,12 @@ public class AlipayServiceImpl implements IAlipayService {
 
     private final WithdrawalMapper withdrawalMapper;
 
-    /*
-    private DefaultAlipayClient alipayClient = new DefaultAlipayClient(
-            AlipayConfig.GATEWAY_URL,
-            AlipayConfig.APP_ID,
-            AlipayConfig.MERCHANT_PRIVATE_KEY,
-            "json",
-            AlipayConfig.CHARSET,
-            AlipayConfig.ALIPAY_PUBLIC_KEY,
-            AlipayConfig.SIGN_TYPE);
-     */
+    @Autowired(required = false)
+    private DefaultAlipayClient client;
 
-    private final DefaultAlipayClient client;
-
-    public AlipayServiceImpl(BillMapper billMapper, WithdrawalMapper withdrawalMapper, DefaultAlipayClient client) {
+    public AlipayServiceImpl(BillMapper billMapper, WithdrawalMapper withdrawalMapper) {
         this.billMapper = billMapper;
         this.withdrawalMapper = withdrawalMapper;
-        //init();
-        this.client = client;
     }
 
     @Override

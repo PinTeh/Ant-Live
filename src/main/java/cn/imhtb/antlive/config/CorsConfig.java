@@ -22,8 +22,6 @@ public class CorsConfig {
         List<String> allowedOriginPatterns = new ArrayList<>();
         allowedOriginPatterns.add("*");
         corsConfiguration.setAllowedOriginPatterns(allowedOriginPatterns);
-        // 允许任何域名使用
-        corsConfiguration.addAllowedOrigin("*");
         // 允许任何头
         corsConfiguration.addAllowedHeader("*");
         // 允许任何方法

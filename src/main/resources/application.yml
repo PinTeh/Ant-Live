@@ -41,18 +41,18 @@ spring:
 
 tencent:
   sms:
-    appid: xxx
-    appkey: xxx
-    templateId: xxx
-    templateNoticeId: xxx
-    smsSign: xxx
+    appid: 000
+    appkey: 000
+    templateId: 000
+    templateNoticeId: 000
+    smsSign: 000
   live:
     domain: live.imhtb.cn
     appName: live
-    iii: xxx
-    kkk: xxx
+    iii: 000
+    kkk: 000
   cos:
-    bucketName: xxx
+    bucketName: 000
     path: https://xxx.cos.ap-chengdu.myqcloud.com/
 
 #logging:

@@ -67,9 +67,3 @@ mybatis-plus:
 
 alipay:
   path: Q:/Learning/Live/BackEnd/AntLive/src/main/resources/static/
-
-aliyun:
-  iii: xxx
-  kkk: xxx
-  regionId: cn-shenzhen
-  instanceId: i-xxx

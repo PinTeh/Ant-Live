@@ -177,7 +177,7 @@ CREATE TABLE `category` (
                             `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
                             `sort` int DEFAULT NULL,
                             `disabled` int DEFAULT NULL,
-                            `is_deleted` int DEFAULT NULL,
+                            `is_deleted` int Not NULL DEFAULT 0,
                             `create_time` datetime DEFAULT NULL,
                             `update_time` datetime DEFAULT NULL,
                             `parent_id` int DEFAULT NULL,

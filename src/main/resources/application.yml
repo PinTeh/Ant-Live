@@ -63,6 +63,8 @@ mybatis-plus:
     banner: false
     db-config:
       id-type: auto
+      logic-not-delete-value: 0
+      logic-delete-value: 1
 #  config: classpath:logback.xml
 
 alipay:

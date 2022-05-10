@@ -2,6 +2,7 @@ package cn.imhtb.antlive.entity.database;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,7 @@ public class Category implements Serializable {
 
     private int  sort;
 
+    @TableLogic
     private int disabled;
 
     private int isDeleted;
@@ -33,4 +35,5 @@ public class Category implements Serializable {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
 }

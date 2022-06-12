@@ -1,10 +1,8 @@
 package cn.imhtb.antlive.utils;
 
-import sun.misc.BASE64Encoder;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.util.Random;
+import java.util.Base64;
 
 /**
  * @author PinTeh
@@ -54,8 +52,7 @@ public class TencentUtils {
     }
 
     private String base64Encode(byte[] buffer) {
-        BASE64Encoder encoder = new BASE64Encoder();
-        return encoder.encode(buffer);
+        return Base64.getEncoder().encodeToString(buffer);
     }
 
     public void setSecretId(String secretId) {

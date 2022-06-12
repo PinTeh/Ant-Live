@@ -2,11 +2,9 @@ package cn.imhtb.antlive.filter;
 
 import cn.imhtb.antlive.common.ApiResponse;
 import cn.imhtb.antlive.entity.JwtUser;
-import cn.imhtb.antlive.entity.User;
 import cn.imhtb.antlive.utils.JwtUtils;
 import cn.imhtb.antlive.vo.request.LoginRequest;
 import cn.imhtb.antlive.vo.response.JwtLoginResponse;
-import cn.imhtb.antlive.vo.response.LoginResponse;
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import sun.security.util.SecurityConstants;
 
 import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;

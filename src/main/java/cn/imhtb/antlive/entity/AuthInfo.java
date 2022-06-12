@@ -2,6 +2,7 @@ package cn.imhtb.antlive.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 @TableName("auth")
 public class AuthInfo {
 
+    @TableId
     private int id;
 
     private int userId;

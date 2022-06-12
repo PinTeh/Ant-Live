@@ -13,6 +13,12 @@ public interface IUserService extends IService<User> {
 
     void updateStatusByIds(Integer[] ids,Integer status);
 
+    /**
+     * 注册
+     *
+     * @param request 注册请求
+     * @return {@link ApiResponse}
+     */
     ApiResponse register(RegisterRequest request);
 
     Integer countToday();

@@ -6,21 +6,17 @@ import cn.imhtb.antlive.entity.User;
 import cn.imhtb.antlive.service.ITokenService;
 import cn.imhtb.antlive.service.IUserService;
 import cn.imhtb.antlive.utils.*;
-import cn.imhtb.antlive.vo.FrontMenuItem;
 import cn.imhtb.antlive.vo.request.LoginRequest;
 import cn.imhtb.antlive.vo.request.UserInfoUpdateRequest;
 import cn.imhtb.antlive.vo.response.LoginResponse;
 import cn.imhtb.antlive.vo.request.RegisterRequest;
-import com.alibaba.fastjson.JSON;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 /**
  * @author PinTeh
@@ -51,35 +47,8 @@ public class UserController {
         this.tokenService = tokenService;
     }
 
-    @RequestMapping("/login/bak")
-    public ApiResponse login(@RequestBody LoginRequest request){
-        if (StringUtils.isEmpty(request.getAccount())||StringUtils.isEmpty(request.getPassword())){
-            return ApiResponse.ofError("参数传递错误");
-        }
-        User user = userService.login(request.getAccount(), request.getPassword());
-        if (user!=null){
-            if (user.getDisabled()==1){
-                return ApiResponse.ofError("账号已被封禁");
-            }
-            String jwt = JwtUtils.createToken(user);
-            LoginResponse loginResponse = new LoginResponse(jwt, user);
-//            if (user.getRoleId() != 0){
-//                List<RolePower> rolePowers = rolePowerService.list();
-//                List<FrontMenuItem> frontMenuItems = rolePowers.stream().map(v -> JSON.parseObject(v.getContent(), FrontMenuItem.class)).collect(Collectors.toList());
-//                loginResponse.setMenu(frontMenuItems);
-//            }
-            return ApiResponse.ofSuccess(loginResponse);
-        }
-        return ApiResponse.ofError("账号或密码错误");
-    }
-
     @PostMapping("/register")
     public ApiResponse register(@RequestBody RegisterRequest request){
-        String account = request.getAccount();
-        if (StringUtils.isEmpty(account)||StringUtils.isEmpty(request.getPassword())){
-            return ApiResponse.ofError("参数传递错误");
-        }
-
        return userService.register(request);
     }
 

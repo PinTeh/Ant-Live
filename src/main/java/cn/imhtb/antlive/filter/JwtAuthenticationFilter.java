@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -47,16 +48,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             // 从输入流中获取到登录的信息
             LoginRequest loginRequest = objectMapper.readValue(request.getInputStream(), LoginRequest.class);
             //rememberMe.set(loginRequest.getRememberMe());
-            log.info("login request " + loginRequest.toString());
+            log.info("test login request, {}", loginRequest.toString());
             // 这部分和attemptAuthentication方法中的源码是一样的，
             // 只不过由于这个方法源码的是把用户名和密码这些参数的名字是死的，所以我们重写了一下
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
-                    loginRequest.getAccount(), loginRequest.getPassword());
+                    loginRequest.getUsername(), loginRequest.getPassword());
             return authenticationManager.authenticate(authRequest);
         } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException(e);
         }
+
     }
 
 
@@ -84,7 +85,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.getWriter().write(JSON.toJSONString(ApiResponse.ofSuccess(loginResponse)));
     }
 
-
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException authenticationException) throws IOException {
         //response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authenticationException.getMessage());
@@ -92,4 +92,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JSON.toJSONString(apiResponse));
     }
+
 }

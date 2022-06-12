@@ -1,7 +1,6 @@
 package cn.imhtb.antlive.service.impl;
 
 import cn.imhtb.antlive.common.ApiResponse;
-import cn.imhtb.antlive.common.Constants;
 import cn.imhtb.antlive.entity.AuthInfo;
 import cn.imhtb.antlive.entity.Bill;
 import cn.imhtb.antlive.entity.Room;
@@ -13,15 +12,17 @@ import cn.imhtb.antlive.mappers.UserMapper;
 import cn.imhtb.antlive.service.IUserService;
 import cn.imhtb.antlive.utils.RedisUtils;
 import cn.imhtb.antlive.vo.request.RegisterRequest;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 
 @Slf4j
@@ -39,6 +40,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUs
     private final RedisUtils redisUtils;
 
     private final BillMapper billMapper;
+
+    @Resource
+    private IUserService userService;
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
@@ -89,37 +93,50 @@ public class UserServiceImpl extends ServiceImpl<UserMapper,User> implements IUs
 
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public ApiResponse register(RegisterRequest request) {
-        String account = request.getAccount();
-        String verifyCode = request.getCode();
-        String redisCode;
-        User u = modelMapper.map(request,User.class);
-        u.setPassword(encoder.encode(u.getPassword()));
-        if (account.contains("@")){
-            redisCode = redisUtils.get("email:" + account).toString();
-            User exist = userMapper.selectOne(new QueryWrapper<User>().eq("email", account));
-            if (exist != null){
-                return ApiResponse.ofError("该邮箱已被注册");
-            }
-            u.setEmail(account);
-        }else {
-            redisCode = redisUtils.get("mobile:" + account).toString();
-            User exist = userMapper.selectOne(new QueryWrapper<User>().eq("mobile", account));
-            if (exist != null){
-                return ApiResponse.ofError("该手机号已被注册");
-            }
-            u.setMobile(account);
+        if (checkExistUsername(request.getUsername())){
+            return ApiResponse.ofError("当前用户名已存在");
         }
-        if (!redisCode.isEmpty() && redisCode.equals(verifyCode)){
-            userMapper.insert(u);
-            log.info("注册返回id" + u.getId());
-            roomMapper.insert(Room.builder().userId(u.getId()).build());
-            billMapper.insert(Bill.builder().userId(u.getId()).balance(new BigDecimal(0)).billChange(new BigDecimal(0)).type(0).mark("初始化账单").build());
-        }else {
-            return ApiResponse.ofError("验证码错误，请重新尝试");
-        }
+
+        User user = modelMapper.map(request,User.class);
+        user.setPassword(encoder.encode(user.getPassword()));
+
+        // 保存用户信息
+        userMapper.insert(user);
+        log.info("注册用户信息, userId = {}", user.getId());
+
+        // 初始化部分数据
+        initializeUserRegisterData(user);
         return ApiResponse.ofSuccess("注册成功");
+    }
+
+    /**
+     * 初始化用户注册数据
+     *
+     * @param user 用户
+     */
+    private void initializeUserRegisterData(User user) {
+        roomMapper.insert(Room.builder().userId(user.getId()).build());
+        billMapper.insert(Bill.builder()
+                .userId(user.getId())
+                .balance(new BigDecimal(0))
+                .billChange(new BigDecimal(0))
+                .type(0)
+                .mark("初始化账单")
+                .build());
+    }
+
+    /**
+     * 检查用户名是否存在
+     *
+     * @param username 用户名
+     * @return boolean
+     */
+    private boolean checkExistUsername(String username) {
+        Long count = userMapper.selectCount(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
+        return count > 0;
     }
 
     @Override

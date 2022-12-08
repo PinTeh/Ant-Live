@@ -126,3 +126,7 @@ Ant Live 是一个直播平台。集成了一系列杂七杂八的功能😁，�
 
 
 ![image.png](https://cdn.nlark.com/yuque/0/2020/png/297773/1593842793536-a2c1d037-5ce8-4ad4-ae3d-c7f41ba475cd.png#align=left&display=inline&height=291&margin=%5Bobject%20Object%5D&name=image.png&originHeight=645&originWidth=1654&size=65855&status=done&style=shadow&width=746)
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=PinTeh/Ant-Live&type=Date)](https://star-history.com/#PinTeh/Ant-Live&Date)

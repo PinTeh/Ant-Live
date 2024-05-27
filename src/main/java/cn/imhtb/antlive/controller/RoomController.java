@@ -123,6 +123,7 @@ public class RoomController {
         response.setId(room.getId());
         response.setTitle(room.getTitle());
         response.setLiveUrl(room.getRtmpUrl());
+        response.setPlayUrl(room.getPlayUrl());
         response.setCover(room.getCover());
         if (user != null) {
             response.setUserInfo(new RoomResponse.UserInfo(user.getId(), user.getNickName(), user.getAvatar()));

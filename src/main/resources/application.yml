@@ -47,18 +47,19 @@ tencent:
     templateNoticeId: 000
     smsSign: 000
   live:
-    domain: live.imhtb.cn
+    liveDomain: live.imhtb.cn
+    playDomain: play.imhtb.cn
     appName: live
-    iii: 000
-    kkk: 000
+    secretId: 000
+    secretKey: 000
   cos:
     bucketName: 000
     path: https://xxx.cos.ap-chengdu.myqcloud.com/
 
 #logging:
 mybatis-plus:
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     banner: false
     db-config:

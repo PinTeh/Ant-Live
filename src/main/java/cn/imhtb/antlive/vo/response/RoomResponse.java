@@ -20,6 +20,8 @@ public class RoomResponse {
 
     private String liveUrl;
 
+    private String playUrl;
+
     private Integer status;
 
     private CategoryInfo categoryInfo;

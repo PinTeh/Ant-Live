@@ -40,8 +40,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                                     FilterChain chain) throws IOException, ServletException {
 
         String token = request.getHeader(JwtConstants.TOKEN_HEADER);
-        log.info("get authentication:"+ token);
-
         if (token == null || !token.startsWith(JwtConstants.TOKEN_PREFIX)) {
             SecurityContextHolder.clearContext();
         } else {
@@ -55,10 +53,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
      * 获取用户认证信息 Authentication
      */
     private UsernamePasswordAuthenticationToken getAuthentication(String authorization) {
-        log.info("get authentication");
         try {
             String username = JwtUtils.getUsernameByToken(authorization);
-            logger.info("checking username:" + username);
             if (!StringUtils.isEmpty(username)) {
                 // 这里我们是又从数据库拿了一遍,避免用户的角色信息有变
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);

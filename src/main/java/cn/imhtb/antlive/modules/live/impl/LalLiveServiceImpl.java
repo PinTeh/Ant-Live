@@ -9,15 +9,17 @@ import cn.imhtb.antlive.pojo.LiveStatusVo;
 import cn.imhtb.antlive.pojo.StartOpenLiveVo;
 import cn.imhtb.antlive.service.ILiveInfoService;
 import cn.imhtb.antlive.service.IRoomService;
+import cn.imhtb.antlive.service.impl.TencentLiveServiceImpl;
 import cn.imhtb.antlive.utils.JwtUtils;
-import cn.imhtb.antlive.utils.LocalDateTimeUtils;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -25,7 +27,7 @@ import java.util.Objects;
  * lal直播服务impl
  *
  * @author pinteh
- * @since  2022/06/13
+ * @since 2022/06/13
  */
 @Slf4j
 @Service
@@ -40,16 +42,28 @@ public class LalLiveServiceImpl implements ILiveService {
     @Resource
     private ILiveInfoService liveInfoService;
 
+    @Value("${tencent.live.liveDomain}")
+    private String liveDomain;
+
+    @Value("${tencent.live.playDomain}")
+    private String playDomain;
+
+    @Value("${tencent.live.appName}")
+    private String appName;
+
     @Override
     public StartOpenLiveVo applySecret(HttpServletRequest request) {
         String token = request.getHeader(JwtUtils.getHeaderKey());
         Integer uid = JwtUtils.getId(token);
         Room room = roomService.getOne(new LambdaQueryWrapper<Room>().eq(Room::getUserId, uid));
-        if (Objects.isNull(room)){
+        if (Objects.isNull(room)) {
             throw new RuntimeException("开播失败");
         }
-        // TODO 设置密钥
-        room.setSecret("todo");
+        // generator push url
+        long txTime = LocalDateTime.now().plusHours(12L).toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        String safeUrl = TencentLiveServiceImpl.getSafeUrl("", String.valueOf(room.getId()), txTime / 1000);
+        room.setSecret(room.getId() + "?" + safeUrl);
+        room.setPlayUrl("http://" + playDomain + "/" + appName + "/" + room.getId() + ".flv");
         room.setStatus(Constants.LiveStatus.LIVING.getCode());
         roomService.updateById(room);
 
@@ -72,7 +86,7 @@ public class LalLiveServiceImpl implements ILiveService {
         String token = request.getHeader(JwtUtils.getHeaderKey());
         Integer uid = JwtUtils.getId(token);
         Room room = roomService.getOne(new LambdaQueryWrapper<Room>().eq(Room::getUserId, uid));
-        if (Objects.isNull(room) || room.getStatus() != Constants.LiveStatus.LIVING.getCode()){
+        if (Objects.isNull(room) || room.getStatus() != Constants.LiveStatus.LIVING.getCode()) {
             throw new RuntimeException("关闭直播失败");
         }
 
@@ -92,21 +106,20 @@ public class LalLiveServiceImpl implements ILiveService {
         String token = request.getHeader(JwtUtils.getHeaderKey());
         Integer uid = JwtUtils.getId(token);
         Room room = roomService.getOne(new LambdaQueryWrapper<Room>().eq(Room::getUserId, uid));
-        if (Objects.isNull(room)){
+        if (Objects.isNull(room)) {
             throw new RuntimeException("获取直播间信息失败");
         }
 
         LiveStatusVo build = LiveStatusVo.builder()
                 .liveStatus(room.getStatus())
-                .livePushUrl(lalLiveConfig.getRtmpPushStream())
-                // TODO
-                .livePushSecret("--")
-                .liveStartTime("2022-01-01 12:12:00")
+                .livePushUrl("rtmp://" + liveDomain + "/" + appName + "/")
+                .livePushSecret(room.getSecret())
+                .liveStartTime("")
                 .build();
 
-        if (room.getStatus() == Constants.LiveStatus.LIVING.getCode()){
+        if (room.getStatus() == Constants.LiveStatus.LIVING.getCode()) {
             LiveInfo historyLiveInfo = getHistoryLiveInfo(room);
-            build.setLivePushSecret(room.getId() + "");
+            build.setLivePushSecret(room.getSecret());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             build.setLiveStartTime(formatter.format(historyLiveInfo.getStartTime()));
         }
@@ -121,9 +134,9 @@ public class LalLiveServiceImpl implements ILiveService {
      */
     private LiveInfo getHistoryLiveInfo(Room room) {
         return liveInfoService.getOne(new LambdaQueryWrapper<LiveInfo>().eq(LiveInfo::getRoomId, room.getId())
-                .eq(LiveInfo::getStatus, Constants.LiveInfoStatus.NO.getCode())
-                .orderByDesc(LiveInfo::getCreateTime)
-                .last("limit 1"),
+                        .eq(LiveInfo::getStatus, Constants.LiveInfoStatus.NO.getCode())
+                        .orderByDesc(LiveInfo::getCreateTime)
+                        .last("limit 1"),
                 false);
     }
 

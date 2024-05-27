@@ -38,6 +38,8 @@ public class Room {
 
     private Integer categoryId;
 
+    private String playUrl;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 

@@ -1,5 +1,5 @@
 server:
-  port: 9000
+  port: 8088
 
 spring:
   datasource:
@@ -25,7 +25,7 @@ spring:
   redis:
     database: 0
     host: xxxx
-    port: 9379
+    port: 6379
     password: xxx
     jedis:
       pool:
@@ -42,15 +42,15 @@ spring:
 tencent:
   sms:
     appid: 000
-    appkey: 000
+    appKey: 000
     templateId: 000
     templateNoticeId: 000
     smsSign: 000
   live:
     domain: live.imhtb.cn
     appName: live
-    iii: 000
-    kkk: 000
+    secretId: 000
+    secretKey: 000
   cos:
     bucketName: 000
     path: https://xxx.cos.ap-chengdu.myqcloud.com/
@@ -69,3 +69,11 @@ mybatis-plus:
 
 alipay:
   path: Q:/Learning/Live/BackEnd/AntLive/src/main/resources/static/
+
+minio:
+  endpoint: http://localhost:9000
+  ip: localhost
+  port: 9000
+  accessKey: minio
+  secretKey: password
+  bucketName: live.file.bucket

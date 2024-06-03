@@ -425,6 +425,8 @@ DROP TABLE IF EXISTS `role_menu`;
 CREATE TABLE `role_menu` (
                              `role_id` int NOT NULL,
                              `menu_id` int NOT NULL,
+                             `create_time` datetime DEFAULT NULL,
+                             `update_time` datetime DEFAULT NULL,
                              PRIMARY KEY (`role_id`,`menu_id`) USING BTREE,
                              KEY `FK_ROLE_MENU_MENU_ID` (`menu_id`) USING BTREE,
                              CONSTRAINT `FK_ROLE_MENU_MENU_ID` FOREIGN KEY (`menu_id`) REFERENCES `menu` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -634,13 +636,14 @@ COMMIT;
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
                         `id` int NOT NULL AUTO_INCREMENT,
+                        `username` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci,
                         `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
                         `mobile` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
                         `avatar` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg',
                         `signature` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
                         `birthday` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
                         `sex` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                        `nick_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+                        `nickname` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
                         `create_time` datetime DEFAULT NULL,
                         `update_time` datetime DEFAULT NULL,
                         `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
@@ -654,20 +657,8 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10001, '$2a$10$puULYxVheVu/sJZk7rUbvujNheV9v7afPWETHv47sjS2KAXNptTEe', '', 'http://image.imhtb.cn/avatar.png', '个性签名', NULL, '男', 'PinTeh', '2020-05-09 18:47:23', '2020-05-09 11:33:16', '794409767@qq.com', 0, 0, 1);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10002, '$2a$10$GU9Ya.QrkZu.0TNxO4BuG.B9x26pD7Yl8jQUTENz3OuB3mBTqlWeC', NULL, 'http://q1.qlogo.cn/g?b=qq&nk=363353005&s=100', '个性签名', NULL, '女', '官方直播账号', '2020-05-09 18:47:25', '2020-04-30 23:20:45', '3633530052@qq.com', 0, 0, 0);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10007, '$2a$10$gZpGIsxQFU5tNCbLGr0uXuF3f7MYt2hKm66Mo532nblS.e6PX1KL.', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/temp-1588997462171756041053468475135.jpg', NULL, NULL, NULL, 'Lequal', '2020-05-09 11:58:29', '2020-05-12 23:23:43', '2818028189@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10008, '$2a$10$VWEIsoOddZB4JVrVPMOnT.Kh29X1FYWl5TvRqIGXjyyWSNoJhwHPK', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, 'lequal', '2020-05-13 17:34:19', '2020-05-13 18:00:40', '1576070851@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10009, '$2a$10$M9M/hvCB42gZHqvbc2tzHOUZt1gVr0O5ZSsWyR/x4UpmzwsPxEbI.', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, '测试用户1', '2020-05-18 12:52:48', '2020-05-19 11:43:40', '456456456@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10010, '$2a$10$ihwTAs8./uFG2prd7SDenOU1jhUe2N.2.VDP/SpgkyF33XUEeezQG', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, '123123', '2020-05-27 16:58:14', '2020-05-27 16:58:14', '36335300253@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10011, '$2a$10$sFn2iW4/L9fcGMKl.eqgM.tC1GcX.jRiKvOO4rFEAlAg4fqD50aNC', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, '123123', '2020-05-27 17:01:37', '2020-05-27 17:01:37', '3633532005@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10012, '$2a$10$uj9RWwancllT112ht0Uuo.q1Y/F2HpC52yVZVuU35Jh781GzvUh1G', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, '123123', '2020-05-27 17:03:04', '2020-05-27 17:03:04', '36332523005@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10013, '$2a$10$ETUeMp76vPNy9.I/.nUtiOAM5XuS8753VUvy1V723TEr2CsNOAxCS', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, '123123', '2020-05-27 17:04:30', '2020-05-27 17:04:30', '36335230055@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10014, '$2a$10$tiX1FP1Dd6CxlTYihhcrG.wxU5Mn2CtFMEMwEaMiFwsYSpqlnOEc2', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, '123123', '2020-05-27 17:06:09', '2020-05-27 17:06:09', '36366353005@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10015, '$2a$10$rVdkt24Vyu/DNfbnYrlwEOjffgThjqv4LIL0wNB.xelDm.BgbMkAa', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, '123123', '2020-05-27 17:08:06', '2020-05-27 17:08:06', '36343524345@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10016, '$2a$10$cAInYzageMiHtw4lHnIR8ejwhAa4/vRODPCot5kZ127Uk880qODiS', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, '123123', '2020-05-27 17:10:31', '2020-05-27 17:10:31', '363355563005@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10017, '$2a$10$x3YS39ADdjwvEpbz6VwJQOn0SCCv3FTzvZPBjVRl8gQgzkRye90wG', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, '12312', '2020-05-27 17:14:41', '2020-05-27 17:14:41', '363353005@qq.com', 0, 0, 100);
-INSERT INTO `user` (`id`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nick_name`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10018, '$2a$10$nYPILKoi2sI8ixY1A5a/KOQeCl4K6ggJ1yxGeprinoVRIBkw/FUFK', NULL, 'https://ant-live-store-1253825991.cos.ap-chengdu.myqcloud.com/gray_avatar.jpg', NULL, NULL, NULL, '没有负担', '2020-05-27 17:57:45', '2020-05-27 17:58:09', '123123123@qq.com', 0, 0, 100);
+INSERT INTO `user` (`id`, `username`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nickname`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10001, 'admin', '$2a$10$puULYxVheVu/sJZk7rUbvujNheV9v7afPWETHv47sjS2KAXNptTEe', '', 'http://image.imhtb.cn/avatar.png', '个性签名', NULL, '男', 'PinTeh', '2020-05-09 18:47:23', '2020-05-09 11:33:16', '794409767@qq.com', 0, 0, 1);
+INSERT INTO `user` (`id`, `username`, `password`, `mobile`, `avatar`, `signature`, `birthday`, `sex`, `nickname`, `create_time`, `update_time`, `email`, `is_validated`, `disabled`, `role_id`) VALUES (10002, 'demo', '$2a$10$GU9Ya.QrkZu.0TNxO4BuG.B9x26pD7Yl8jQUTENz3OuB3mBTqlWeC', NULL, 'http://q1.qlogo.cn/g?b=qq&nk=363353005&s=100', '个性签名', NULL, '女', '官方直播账号', '2020-05-09 18:47:25', '2020-04-30 23:20:45', '3633530052@qq.com', 0, 0, 0);
 COMMIT;
 
 -- ----------------------------

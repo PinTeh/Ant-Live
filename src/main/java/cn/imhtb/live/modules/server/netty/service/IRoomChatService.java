@@ -54,6 +54,7 @@ public interface IRoomChatService {
      *
      * @param msg    味精
      * @param roomId 房间id
+     * @param userId 当前用户id
      */
     void sendGiftMsg(String msg, Integer roomId, Integer userId);
 

@@ -25,7 +25,8 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         //accessDeniedException = new AccessDeniedException("Sorry you don not enough permissions to access it!");
         //response.sendError(HttpServletResponse.SC_FORBIDDEN, accessDeniedException.getMessage());
-        ApiResponse apiResponse = ApiResponse.ofError(403, "权限不足~");
+
+        ApiResponse<?> apiResponse = ApiResponse.ofError(403, "权限不足~");
         response.setContentType("application/json;charset=utf-8");
         response.getWriter().write(JSON.toJSONString(apiResponse));
     }

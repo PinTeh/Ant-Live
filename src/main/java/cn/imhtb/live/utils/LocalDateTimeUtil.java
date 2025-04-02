@@ -14,6 +14,11 @@ public class LocalDateTimeUtil {
         return duration.toMinutes();
     }
 
+    public static long subSeconds(LocalDateTime startTime, LocalDateTime endTime) {
+        Duration duration = Duration.between(startTime, endTime);
+        return duration.getSeconds();
+    }
+
     public static long subHours(LocalDateTime startTime, LocalDateTime endTime) {
         Duration duration = Duration.between(startTime, endTime);
         return duration.toHours();

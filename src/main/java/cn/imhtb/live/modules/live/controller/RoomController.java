@@ -1,10 +1,11 @@
 package cn.imhtb.live.modules.live.controller;
 
 import cn.imhtb.live.common.ApiResponse;
+import cn.imhtb.live.common.PageData;
+import cn.imhtb.live.modules.live.vo.RoomRespVo;
 import cn.imhtb.live.pojo.Room;
 import cn.imhtb.live.pojo.vo.RoomExtraInfo;
 import cn.imhtb.live.pojo.vo.request.RoomInfoSaveRequest;
-import cn.imhtb.live.pojo.vo.response.RoomResponse;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.service.IWatchService;
 import cn.imhtb.live.utils.JwtUtil;
@@ -34,13 +35,13 @@ public class RoomController {
 
     @ApiOperation("获取直播间信息")
     @GetMapping
-    public ApiResponse<RoomResponse> getRoomInfo(Integer rid) {
+    public ApiResponse<RoomRespVo> getRoomInfo(Integer rid) {
         return ApiResponse.ofSuccess(roomService.getRoomInfo(rid));
     }
 
     @ApiOperation("更新保存直播间信息")
     @PostMapping("/info/save")
-    public ApiResponse<?> saveInfo(@RequestBody RoomInfoSaveRequest request) {
+    public ApiResponse<Boolean> saveInfo(@RequestBody RoomInfoSaveRequest request) {
         return ApiResponse.ofSuccess(roomService.saveInfo(request));
     }
 
@@ -52,16 +53,18 @@ public class RoomController {
 
     @ApiOperation("获取直播间配置信息")
     @GetMapping("/setting/info")
-    public ApiResponse<?> settingInfo(HttpServletRequest request) {
+    public ApiResponse<Room> settingInfo(HttpServletRequest request) {
         Integer uid = JwtUtil.getId(request.getHeader(JwtUtil.getHeaderKey()));
         Room room = roomService.getOne(new QueryWrapper<Room>().eq("user_id", uid));
         return ApiResponse.ofSuccess(room);
     }
 
-    @ApiOperation("获取正在直播的房间")
+    @ApiOperation("获取正在直播的直播间")
     @GetMapping("/living")
-    public ApiResponse<?> livingRoom(@RequestParam(required = false) Integer cid) {
-        return ApiResponse.ofSuccess(roomService.getLivingRooms(cid));
+    public ApiResponse<PageData<RoomRespVo>> livingRoom(@RequestParam(required = false) Integer cid,
+                                                        @RequestParam(required = false, defaultValue = "1") Integer pageNo,
+                                                        @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
+        return ApiResponse.ofSuccess(roomService.getLivingRooms(cid, pageNo, pageSize));
     }
 
 }

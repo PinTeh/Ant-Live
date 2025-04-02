@@ -4,7 +4,7 @@ import cn.imhtb.live.constants.AntLiveConstant;
 import cn.imhtb.live.enums.AuthStatusEnum;
 import cn.imhtb.live.enums.BillTypeEnum;
 import cn.imhtb.live.exception.BusinessException;
-import cn.imhtb.live.exception.base.CommonErrorCode;
+import cn.imhtb.live.exception.base.UserErrorCode;
 import cn.imhtb.live.mappers.UserMapper;
 import cn.imhtb.live.modules.user.service.IUserService;
 import cn.imhtb.live.pojo.AuthInfo;
@@ -22,7 +22,6 @@ import cn.imhtb.live.utils.CommonUtil;
 import cn.imhtb.live.utils.MailUtil;
 import cn.imhtb.live.utils.SmsService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.benmanes.caffeine.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
@@ -61,26 +60,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Override
-    public User getByAccount(String account) {
-        return getOne(new LambdaQueryWrapper<User>().eq(User::getAccount, account));
-    }
-
-    @Override
-    public User login(String account, String password) {
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        if (account.contains(AntLiveConstant.AT)) {
-            wrapper.eq("email", account);
-        } else {
-            wrapper.eq("mobile", account);
-        }
-        User user = getOne(wrapper);
-        if (encoder.matches(password, user.getPassword())) {
-            return user;
-        }
-        return null;
-    }
-
-    @Override
     public boolean[] getSecurityInfo() {
         User user = getById(tokenService.getUserId());
         boolean[] checked = new boolean[3];
@@ -111,7 +90,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public boolean register(RegisterRequest request) {
         // 校验用户信息
         if (checkExistUsername(request.getUsername())) {
-            throw new BusinessException(CommonErrorCode.SERVICE_ERROR, "当前用户名已存在");
+            throw new BusinessException(UserErrorCode.ERR_USERNAME_REPEAT);
         }
 
         User user = new User();
@@ -206,6 +185,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = new User();
         BeanUtils.copyProperties(request, user);
         user.setId(userId);
+        if (StringUtils.isEmpty(user.getSignature())){
+            user.setSignature("");
+        }
         return updateById(user);
     }
 

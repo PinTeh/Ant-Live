@@ -152,7 +152,7 @@ public class TencentLiveController {
         LiveInfo liveInfo = new LiveInfo();
         liveInfo.setUserId(room.getUserId());
         liveInfo.setRoomId(room.getId());
-        liveInfo.setStatus(LiveInfoStatusEnum.NO.getCode());
+        liveInfo.setStatus(LiveInfoStatusEnum.LIVING.getCode());
         liveInfo.setStartTime(LocalDateTime.now());
         liveInfoService.save(liveInfo);
 
@@ -201,7 +201,7 @@ public class TencentLiveController {
         updateInfo.setId(liveInfo.getId());
         updateInfo.setEndTime(LocalDateTime.now());
         // 0-living 1-finished
-        updateInfo.setStatus(LiveInfoStatusEnum.YES.getCode());
+        updateInfo.setStatus(LiveInfoStatusEnum.FINISHED.getCode());
 
         //结束统计数据
         String key = String.format(RedisPrefix.LIVE_KEY_PREFIX, String.valueOf(room.getId()));

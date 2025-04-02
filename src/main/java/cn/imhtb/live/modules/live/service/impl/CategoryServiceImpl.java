@@ -1,8 +1,8 @@
-package cn.imhtb.live.modules.base.service.impl;
+package cn.imhtb.live.modules.live.service.impl;
 
 import cn.imhtb.live.common.PageData;
 import cn.imhtb.live.mappers.CategoryMapper;
-import cn.imhtb.live.modules.base.service.ICategoryService;
+import cn.imhtb.live.modules.live.service.ICategoryService;
 import cn.imhtb.live.pojo.database.Category;
 import cn.imhtb.live.pojo.vo.response.CategoryResp;
 import cn.imhtb.live.utils.CovertBeanUtil;

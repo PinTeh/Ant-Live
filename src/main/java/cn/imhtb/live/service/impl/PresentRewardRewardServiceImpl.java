@@ -7,6 +7,7 @@ import cn.imhtb.live.mappers.BillMapper;
 import cn.imhtb.live.mappers.PresentMapper;
 import cn.imhtb.live.mappers.PresentRewardMapper;
 import cn.imhtb.live.mappers.VideoMapper;
+import cn.imhtb.live.modules.live.vo.RewardReqVo;
 import cn.imhtb.live.modules.server.RoomChatServer;
 import cn.imhtb.live.modules.server.netty.service.IRoomChatService;
 import cn.imhtb.live.modules.user.service.IUserService;
@@ -27,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -38,7 +38,6 @@ import java.util.Objects;
  */
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class PresentRewardRewardServiceImpl extends ServiceImpl<PresentRewardMapper, PresentReward> implements IPresentRewardService {
 
@@ -147,4 +146,11 @@ public class PresentRewardRewardServiceImpl extends ServiceImpl<PresentRewardMap
         }
         return "未知错误";
     }
+
+    @Override
+    public void createReward(RewardReqVo rewardReqVo) {
+
+
+    }
+
 }

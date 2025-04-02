@@ -22,6 +22,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(authInterceptor())
+                // 默认拦截所有请求
                 .addPathPatterns("/**");
     }
 

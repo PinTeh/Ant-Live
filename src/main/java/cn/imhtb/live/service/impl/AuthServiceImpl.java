@@ -1,14 +1,19 @@
 package cn.imhtb.live.service.impl;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.pojo.AuthInfo;
-import cn.imhtb.live.pojo.Room;
 import cn.imhtb.live.enums.AuthStatusEnum;
 import cn.imhtb.live.enums.LiveRoomStatusEnum;
+import cn.imhtb.live.holder.UserHolder;
 import cn.imhtb.live.mappers.AuthMapper;
 import cn.imhtb.live.mappers.RoomMapper;
+import cn.imhtb.live.modules.live.vo.AuthReqVo;
+import cn.imhtb.live.modules.live.vo.AuthRespVo;
+import cn.imhtb.live.pojo.AuthInfo;
+import cn.imhtb.live.pojo.Room;
 import cn.imhtb.live.service.IAuthService;
+import cn.imhtb.live.utils.CovertBeanUtil;
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
@@ -18,6 +23,8 @@ import com.tencentcloudapi.ocr.v20181119.models.IDCardOCRResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -115,6 +122,36 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, AuthInfo> implement
         }
         authMapper.insert(authInfo);
         return ApiResponse.ofSuccess();
+    }
+
+    @Override
+    public boolean submit(AuthReqVo authReqVo) {
+        // todo 状态校验
+        AuthRespVo status = this.getStatus();
+        if (status != null){
+            Integer status1 = status.getStatus();
+            if (status1.equals(AuthStatusEnum.REJECT.getCode())){
+                return false;
+            }
+        }
+        AuthInfo authInfo = CovertBeanUtil.convert(authReqVo, AuthInfo.class);
+        authInfo.setUserId(UserHolder.getUserId());
+        authInfo.setStatus(AuthStatusEnum.NO.getCode());
+        return save(authInfo);
+    }
+
+    @Override
+    public AuthRespVo getStatus() {
+        Integer userId = UserHolder.getUserId();
+        AuthInfo authInfo = getOne(new LambdaQueryWrapper<AuthInfo>().eq(AuthInfo::getUserId, userId), false);
+        if (Objects.isNull(authInfo)){
+            return null;
+        }
+        AuthRespVo authRespVo = new AuthRespVo();
+        authRespVo.setStatus(authInfo.getStatus());
+        // todo
+        authRespVo.setStatusName("");
+        return authRespVo;
     }
 
     /**

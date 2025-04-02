@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class PresentReward {
+
     private Long id;
 
     private Integer fromId;
@@ -38,4 +39,5 @@ public class PresentReward {
 
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
+
 }

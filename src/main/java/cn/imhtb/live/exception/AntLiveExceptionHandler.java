@@ -29,7 +29,7 @@ public class AntLiveExceptionHandler {
     @ExceptionHandler(value = BusinessException.class)
     public ApiResponse<?> handleBusinessException(BusinessException e) {
         log.error("catch business exception", e);
-        return ApiResponse.ofError(CommonErrorCode.SERVICE_ERROR.getCode(), e.getMsg());
+        return ApiResponse.ofError(e.getCode(), e.getMsg());
     }
 
     /**

@@ -1,12 +1,11 @@
 package cn.imhtb.live.service;
 
+import cn.imhtb.live.common.PageData;
+import cn.imhtb.live.modules.live.vo.RoomRespVo;
 import cn.imhtb.live.pojo.Room;
 import cn.imhtb.live.pojo.vo.RoomExtraInfo;
 import cn.imhtb.live.pojo.vo.request.RoomInfoSaveRequest;
-import cn.imhtb.live.pojo.vo.response.RoomResponse;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
  * @author pinteh
@@ -31,18 +30,20 @@ public interface IRoomService extends IService<Room> {
     /**
      * 获取正在直播的房间
      *
-     * @param cid 直播分类
-     * @return {@link List}<{@link RoomResponse}>
+     * @param cid      直播分类
+     * @param pageNo   页码
+     * @param pageSize  页面大小
+     * @return {@link PageData}<{@link RoomRespVo}>
      */
-    List<RoomResponse> getLivingRooms(Integer cid);
+    PageData<RoomRespVo> getLivingRooms(Integer cid, Integer pageNo, Integer pageSize);
 
     /**
      * 获取房间信息
      *
      * @param rid 房间号
-     * @return {@link RoomResponse}
+     * @return {@link RoomRespVo}
      */
-    RoomResponse getRoomInfo(Integer rid);
+    RoomRespVo getRoomInfo(Integer rid);
 
     /**
      * 得到额外信息

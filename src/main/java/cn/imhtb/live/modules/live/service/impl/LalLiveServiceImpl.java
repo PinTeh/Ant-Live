@@ -1,5 +1,6 @@
 package cn.imhtb.live.modules.live.service.impl;
 
+import cn.hutool.crypto.digest.MD5;
 import cn.imhtb.live.config.LalLiveConfig;
 import cn.imhtb.live.enums.LiveInfoStatusEnum;
 import cn.imhtb.live.enums.LiveRoomStatusEnum;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -28,7 +30,7 @@ import java.util.Objects;
  * @since 2022/06/13
  */
 @Slf4j
-@Service
+@Service("LalLiveService")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class LalLiveServiceImpl implements ILiveService {
 
@@ -49,8 +51,15 @@ public class LalLiveServiceImpl implements ILiveService {
         if (Objects.isNull(room)) {
             throw new RuntimeException("开播失败");
         }
-        // TODO 设置密钥
-        room.setSecret("todo");
+
+        // 设置密钥
+        String digestStr = lalLiveConfig.getSecret() + room.getId();
+        String digestStrHex = MD5.create().digestHex(digestStr);
+        String pushSecret = String.format("%d?lal_secret=%s", room.getId(), digestStrHex);
+        // 更新直播间信息
+        room.setSecret(pushSecret);
+        room.setPushUrl(lalLiveConfig.getRtmpPushStream());
+        room.setPullUrl(lalLiveConfig.getFlvPullStream() + room.getId() + ".flv");
         room.setStatus(LiveRoomStatusEnum.LIVING.getCode());
         roomService.updateById(room);
 
@@ -58,16 +67,17 @@ public class LalLiveServiceImpl implements ILiveService {
         LiveInfo liveInfo = new LiveInfo();
         liveInfo.setUserId(userId);
         liveInfo.setRoomId(room.getId());
-        liveInfo.setStatus(LiveInfoStatusEnum.NO.getCode());
+        liveInfo.setStatus(LiveInfoStatusEnum.LIVING.getCode());
         liveInfo.setStartTime(LocalDateTime.now());
         liveInfoService.save(liveInfo);
 
         StartOpenLiveVo startOpenLiveVo = new StartOpenLiveVo();
         startOpenLiveVo.setPushUrl(lalLiveConfig.getRtmpPushStream());
-        startOpenLiveVo.setSecret(room.getId() + "");
+        startOpenLiveVo.setSecret(pushSecret);
         return startOpenLiveVo;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void stopLive() {
         Integer userId = tokenService.getUserId();
@@ -77,7 +87,7 @@ public class LalLiveServiceImpl implements ILiveService {
         }
 
         LiveInfo historyLiveInfo = getHistoryLiveInfo(room);
-        historyLiveInfo.setStatus(LiveInfoStatusEnum.YES.getCode());
+        historyLiveInfo.setStatus(LiveInfoStatusEnum.FINISHED.getCode());
         historyLiveInfo.setEndTime(LocalDateTime.now());
         liveInfoService.updateById(historyLiveInfo);
 
@@ -98,14 +108,11 @@ public class LalLiveServiceImpl implements ILiveService {
         LiveStatusVo build = LiveStatusVo.builder()
                 .liveStatus(room.getStatus())
                 .livePushUrl(lalLiveConfig.getRtmpPushStream())
-                // TODO
-                .livePushSecret("--")
-                .liveStartTime("2022-01-01 12:12:00")
                 .build();
 
         if (room.getStatus() == LiveRoomStatusEnum.LIVING.getCode()) {
             LiveInfo historyLiveInfo = getHistoryLiveInfo(room);
-            build.setLivePushSecret(room.getId() + "");
+            build.setLivePushSecret(room.getSecret());
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             build.setLiveStartTime(formatter.format(historyLiveInfo.getStartTime()));
         }
@@ -120,7 +127,7 @@ public class LalLiveServiceImpl implements ILiveService {
      */
     private LiveInfo getHistoryLiveInfo(Room room) {
         return liveInfoService.getOne(new LambdaQueryWrapper<LiveInfo>().eq(LiveInfo::getRoomId, room.getId())
-                        .eq(LiveInfo::getStatus, LiveInfoStatusEnum.NO.getCode())
+                        .eq(LiveInfo::getStatus, LiveInfoStatusEnum.LIVING.getCode())
                         .orderByDesc(LiveInfo::getCreateTime)
                         .last("limit 1"),
                 false);

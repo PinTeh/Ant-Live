@@ -1,5 +1,6 @@
 package cn.imhtb.live.controller;
 
+import cn.hutool.core.util.IdUtil;
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.modules.user.service.IUserService;
 import cn.imhtb.live.service.IFileUploadService;
@@ -36,12 +37,11 @@ public class UploadController {
 
     @PostMapping("/file")
     public ApiResponse<String> uploadFile(@RequestParam("file") MultipartFile file) {
-        String originalFilename = file.getOriginalFilename();
-        long now = System.currentTimeMillis() / 1000;
-        String newFilename = String.format("%s_%s.%s", FileNameUtils.getBaseName(originalFilename)
-                , now
-                , FileNameUtils.getExtension(originalFilename));
         try {
+            String originalFilename = file.getOriginalFilename();
+            long now = System.currentTimeMillis() / 1000;
+            String newFilename = String.format("%s_%s.%s", IdUtil.simpleUUID(), now
+                    , FileNameUtils.getExtension(originalFilename));
             String fileUrl = fileUploadService.uploadFileToMinio(file.getInputStream(), newFilename);
             return ApiResponse.ofSuccess(fileUrl);
         } catch (IOException e) {

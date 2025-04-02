@@ -1,9 +1,9 @@
-package cn.imhtb.live.modules.base.controller;
+package cn.imhtb.live.modules.live.controller;
 
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.common.PageData;
 import cn.imhtb.live.pojo.vo.response.CategoryResp;
-import cn.imhtb.live.modules.base.service.ICategoryService;
+import cn.imhtb.live.modules.live.service.ICategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.GetMapping;

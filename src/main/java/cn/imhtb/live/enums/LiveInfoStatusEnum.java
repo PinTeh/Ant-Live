@@ -15,8 +15,8 @@ public enum LiveInfoStatusEnum {
     /**
      * 直播信息状态描述
      */
-    NO(0, "未完成"),
-    YES(1, "完成"),
+    LIVING(0, "未完成"),
+    FINISHED(1, "完成"),
     ;
 
     private final int code;

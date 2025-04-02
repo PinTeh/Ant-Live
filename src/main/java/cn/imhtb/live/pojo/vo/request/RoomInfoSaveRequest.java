@@ -17,5 +17,7 @@ public class RoomInfoSaveRequest {
 
     private String notice;
 
+    private String introduce;
+
     private Integer cid;
 }

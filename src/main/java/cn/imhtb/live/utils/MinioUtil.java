@@ -96,8 +96,8 @@ public class MinioUtil {
      * @return 地址
      */
     public static String getSplicingObjectUrl(String bucket, String object) {
-        Boolean relative = minioConfig.getRelative();
-        if (Boolean.FALSE.equals(relative) || relative == null){
+        boolean relative = minioConfig.isRelative();
+        if (Boolean.TRUE.equals(relative)){
             return String.format("/%s/%s", bucket, object);
         }
         return String.format("%s/%s/%s", ENDPOINT, bucket, object);

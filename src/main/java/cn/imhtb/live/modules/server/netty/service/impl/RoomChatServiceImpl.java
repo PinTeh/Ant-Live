@@ -54,7 +54,7 @@ public class RoomChatServiceImpl implements IRoomChatService {
     public long getRoomUserSize(Integer roomId) {
         CopyOnWriteArraySet<Channel> channels = ROOM_ONLINE.get(roomId);
         if (channels == null){
-            return 0;
+            return 0L;
         }
         return channels.size();
     }
@@ -157,7 +157,7 @@ public class RoomChatServiceImpl implements IRoomChatService {
                 chatMsgRespDTO.setNickname("系统消息");
                 chatMsgRespDTO.setText(msg);
                 sendMessage(channel, WsMsgAssembly.buildChat(chatMsgRespDTO));
-
+                // 不发送给当前赠送的用户
                 WsChannelExtraInfoDTO extra = ALL_ONLINE.get(channel);
                 if (Objects.nonNull(extra) && userId.equals(extra.getUserId())) {
                     continue;

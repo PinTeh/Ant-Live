@@ -34,18 +34,18 @@ public class AuthInfo {
 
     private String handUrl;
 
+    private String cardNo;
+
     private String rejectReason;
 
-    private String cardNo;
+    private int status;
+
+    private int operator;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
-
-    private int status;
-
-    private int operator;
 
 }

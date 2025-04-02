@@ -1,5 +1,6 @@
 package cn.imhtb.live.service;
 
+import cn.imhtb.live.modules.live.vo.RewardReqVo;
 import cn.imhtb.live.pojo.database.PresentReward;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -19,5 +20,12 @@ public interface IPresentRewardService extends IService<PresentReward> {
      * @return boolean
      */
     String createReward(Integer presentId, Integer rvId, Integer number, Integer type);
+
+    /**
+     * 礼物赠送
+     *
+     * @param rewardReqVo *
+     */
+    void createReward(RewardReqVo rewardReqVo);
 
 }

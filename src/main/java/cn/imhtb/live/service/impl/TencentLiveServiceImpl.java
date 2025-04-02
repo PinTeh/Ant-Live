@@ -114,7 +114,7 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
             updateInfo.setId(liveInfo.getId());
             updateInfo.setEndTime(LocalDateTime.now());
             // 0-living 1-finished
-            updateInfo.setStatus(LiveInfoStatusEnum.YES.getCode());
+            updateInfo.setStatus(LiveInfoStatusEnum.FINISHED.getCode());
             liveInfoMapper.updateById(updateInfo);
         }
 

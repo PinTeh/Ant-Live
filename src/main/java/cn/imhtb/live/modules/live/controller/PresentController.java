@@ -1,8 +1,10 @@
 package cn.imhtb.live.modules.live.controller;
 
+import cn.imhtb.live.annotation.NeedToken;
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.enums.DisabledStatusEnum;
 import cn.imhtb.live.enums.PresentRewardTypeEnum;
+import cn.imhtb.live.modules.live.vo.RewardReqVo;
 import cn.imhtb.live.pojo.Present;
 import cn.imhtb.live.pojo.vo.request.SendPresentRequest;
 import cn.imhtb.live.service.IPresentRewardService;
@@ -40,6 +42,14 @@ public class PresentController {
     public ApiResponse<?> live(@RequestBody SendPresentRequest sendPresentRequest) {
         String reward = presentRewardService.createReward(sendPresentRequest.getPid(), sendPresentRequest.getRid(), sendPresentRequest.getNumber(), PresentRewardTypeEnum.LIVE.getCode());
         return StringUtils.isEmpty(reward) ? ApiResponse.ofSuccess() : ApiResponse.ofError(null, reward);
+    }
+
+    @NeedToken
+    @ApiOperation("赠送礼物")
+    @PostMapping("/reward")
+    public ApiResponse<Boolean> reward(@RequestBody RewardReqVo rewardReqVo) {
+        presentRewardService.createReward(rewardReqVo);
+        return ApiResponse.ofSuccess();
     }
 
 }

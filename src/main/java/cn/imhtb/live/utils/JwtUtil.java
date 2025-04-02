@@ -33,7 +33,8 @@ public class JwtUtil {
     /**
      * 过期延时 90min
      */
-    private static final long EXPIRE_SECONDS = 90 * 1000 * 60;
+//    private static final long EXPIRE_SECONDS = 90 * 1000 * 60;
+    private static final long EXPIRE_SECONDS = 24 * 60 * 1000 * 60;
 
     /**
      * 密钥

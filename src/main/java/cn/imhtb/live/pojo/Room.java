@@ -41,6 +41,10 @@ public class Room {
 
     private Integer categoryId;
 
+    private String pushUrl;
+
+    private String pullUrl;
+
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 

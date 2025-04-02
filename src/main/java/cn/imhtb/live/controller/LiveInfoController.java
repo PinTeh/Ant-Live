@@ -76,7 +76,7 @@ public class LiveInfoController {
             liveStat.setDanMuCount(v.getDanMuCount());
             liveStat.setPresentCount(v.getPresentCount());
             liveStat.setClickCount(v.getClickCount());
-            long sub = LocalDateTimeUtil.subMinutes(v.getStartTime(), v.getEndTime());
+            long sub = LocalDateTimeUtil.subSeconds(v.getStartTime(), v.getEndTime());
             totalTime += sub;
             liveStat.setTime(sub);
             liveStats.add(liveStat);

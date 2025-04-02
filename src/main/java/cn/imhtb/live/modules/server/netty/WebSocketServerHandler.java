@@ -8,6 +8,7 @@ import com.alibaba.fastjson.JSON;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +51,8 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
                 log.warn("服务端30秒内没有收到客户端心跳，主动关闭连接");
                 getBean().exit(ctx.channel());
             }
+        } else if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete){
+
         }
         super.userEventTriggered(ctx, evt);
     }

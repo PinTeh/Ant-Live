@@ -1,4 +1,4 @@
-package cn.imhtb.live.modules.base.service;
+package cn.imhtb.live.modules.live.service;
 
 import cn.imhtb.live.common.PageData;
 import cn.imhtb.live.pojo.database.Category;

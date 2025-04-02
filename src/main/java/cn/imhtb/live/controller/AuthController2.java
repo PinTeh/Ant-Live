@@ -16,14 +16,15 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthController2 {
 
     private final IAuthService authService;
 
-    public AuthController(IAuthService authService) {
+    public AuthController2(IAuthService authService) {
         this.authService = authService;
     }
 
+    @Deprecated
     @PostMapping()
     public ApiResponse<?> save(@RequestBody AuthRequest authRequest, HttpServletRequest request) {
         Integer uid = JwtUtil.getId(request);

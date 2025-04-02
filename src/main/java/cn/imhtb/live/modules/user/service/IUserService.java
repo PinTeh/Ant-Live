@@ -13,16 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IUserService extends IService<User> {
 
     /**
-     * 通过账户获取用户
-     *
-     * @param account 账户
-     * @return {@link User}
-     */
-    User getByAccount(String account);
-
-    User login(String account, String password);
-
-    /**
      * 获取安全认证信息
      *
      * @return {@link boolean[]}
@@ -30,9 +20,10 @@ public interface IUserService extends IService<User> {
     boolean[] getSecurityInfo();
 
     /**
+     * 更新用户状态
      *
-     * @param ids
-     * @param status
+     * @param ids    用户id集合
+     * @param status 状态码
      */
     void updateStatusByIds(Integer[] ids, Integer status);
 

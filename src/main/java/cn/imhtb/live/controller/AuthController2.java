@@ -3,7 +3,7 @@ package cn.imhtb.live.controller;
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.pojo.AuthInfo;
 import cn.imhtb.live.service.IAuthService;
-import cn.imhtb.live.utils.JwtUtil;
+import cn.imhtb.live.common.utils.JwtUtil;
 import cn.imhtb.live.pojo.vo.request.AuthRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.BeanUtils;

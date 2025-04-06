@@ -83,7 +83,11 @@ public class RoomChatServiceImpl implements IRoomChatService {
 //            AttrUtil.setAttr(channel, AttrUtil.USER_ID, userId);
         }
 
-        this.sendMessage(channel, WsMsgAssembly.buildWelcome("欢迎进入直播间~"));
+//        this.sendMessage(channel, WsMsgAssembly.buildWelcome("欢迎进入直播间~"));
+        ChatMsgRespDTO chatMsgRespDTO = new ChatMsgRespDTO();
+        chatMsgRespDTO.setNickname("系统消息");
+        chatMsgRespDTO.setText("欢迎进入直播间~");
+        this.sendMessage(channel, WsMsgAssembly.buildChat(chatMsgRespDTO));
     }
 
     private WsChannelExtraInfoDTO getChannelExtraInfo(Channel channel) {

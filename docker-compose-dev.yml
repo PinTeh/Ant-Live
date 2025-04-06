@@ -1,0 +1,97 @@
+version: '3.1'
+services:
+  ant-live:
+    build: .
+    image: ant-live:latest
+    container_name: ant-live
+    ports:
+      - "8088:8088"
+    environment:
+      - 'TZ=Asia/Shanghai'
+      - 'SPRING_REDIS_HOST=redis'
+      - 'SPRING_REDIS_PORT=6379'
+      - 'SPRING_REDIS_PASSWORD=123456'
+      - 'SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/ant-live?allowMultiQueries=true&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true'
+      - 'SPRING_DATASOURCE_USERNAME=root'
+      - 'SPRING_DATASOURCE_PASSWORD=123456'
+      - 'MINIO_ENDPOINT=${MINIO_ENDPOINT}'
+      - 'MINIO_IP=${MINIO_IP}'
+      - 'MINIO_PORT=${MINIO_PORT}'
+      - 'MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}'
+      - 'MINIO_SECRET_KEY=${MINIO_SECRET_KEY}'
+      - 'SPRING_PROFILES_ACTIVE=docker'
+    depends_on:
+      - mysql
+      - redis
+      - minio
+    networks:
+      backend:
+      frontend:
+        ipv4_address: 172.25.0.6
+  mysql:
+    image: mysql/mysql-server:latest
+    container_name: ant-live-mysql
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: 'ant-live'
+      MYSQL_ROOT_USER: 'root'
+      MYSQL_ROOT_PASSWORD: '123456'
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - '/opt/dev/docker/mysql/data:/var/lib/mysql'
+      - '/opt/dev/docker/mysql/init:/docker-entrypoint-initdb.d/'
+    networks:
+      - backend
+  minio:
+    image: minio/minio:latest
+    container_name: ant-live-minio
+    restart: always
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio_pass
+    volumes:
+      - '/opt/dev/docker/minio/data:/data'
+      - '/opt/dev/docker/minio/config:/root/.minio/'
+    command: server --console-address ":9001" /data
+    networks:
+      backend:
+        ipv4_address: 172.26.0.6
+  redis:
+    image: redis:latest
+    container_name: ant-live-redis
+    restart: always
+    ports:
+      - '6379:6379'
+    volumes:
+      - '/opt/dev/docker/redis/data:/data'
+      - '/opt/dev/docker/redis/redis.conf:/etc/redis/redis.conf'
+    command: redis-server --appendonly yes --requirepass 123456
+    networks:
+      - backend
+  ant-live-web:
+    image: nginx:1.21-alpine
+    container_name: ant-live-web
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - '/opt/dev/docker/nginx/html:/usr/share/nginx/html'
+      - '/opt/dev/docker/nginx/conf/nginx.conf:/etc/nginx/nginx.conf'
+    networks:
+      frontend:
+      backend:
+networks:
+  backend:
+    ipam:
+      config:
+        - subnet: "172.26.0.0/24"
+  frontend:
+    ipam:
+      config:
+        - subnet: "172.25.0.0/24"

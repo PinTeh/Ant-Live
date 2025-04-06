@@ -3,7 +3,7 @@ package cn.imhtb.live.modules.server.netty;
 import cn.imhtb.live.modules.server.netty.domain.req.WsMsgReqDTO;
 import cn.imhtb.live.modules.server.netty.enums.WsReqTypeEnum;
 import cn.imhtb.live.modules.server.netty.service.IRoomChatService;
-import cn.imhtb.live.utils.SpringContextUtil;
+import cn.imhtb.live.common.utils.SpringContextUtil;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;

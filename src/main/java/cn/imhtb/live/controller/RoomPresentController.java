@@ -3,7 +3,7 @@ package cn.imhtb.live.controller;
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.pojo.database.PresentReward;
 import cn.imhtb.live.service.IPresentRewardService;
-import cn.imhtb.live.utils.JwtUtil;
+import cn.imhtb.live.common.utils.JwtUtil;
 import cn.imhtb.live.pojo.vo.response.PresentRewardResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

@@ -1,6 +1,7 @@
 package cn.imhtb.live.controller;
 
 import cn.imhtb.live.common.ApiResponse;
+import cn.imhtb.live.common.utils.*;
 import cn.imhtb.live.pojo.LiveInfo;
 import cn.imhtb.live.pojo.Room;
 import cn.imhtb.live.pojo.database.LiveDetect;
@@ -8,8 +9,8 @@ import cn.imhtb.live.pojo.database.SysPush;
 import cn.imhtb.live.pojo.database.SysPushLog;
 import cn.imhtb.live.pojo.tencent.ShotRuleResponse;
 import cn.imhtb.live.pojo.tencent.StreamResponse;
-import cn.imhtb.live.enums.LiveInfoStatusEnum;
-import cn.imhtb.live.enums.LiveRoomStatusEnum;
+import cn.imhtb.live.common.enums.LiveInfoStatusEnum;
+import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
 import cn.imhtb.live.modules.server.RedisPrefix;
 import cn.imhtb.live.service.*;
 import cn.imhtb.live.service.impl.TencentLiveServiceImpl;

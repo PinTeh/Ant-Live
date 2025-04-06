@@ -1,14 +1,14 @@
 package cn.imhtb.live.controller;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.config.AlipayConfig;
+import cn.imhtb.live.common.config.AlipayConfig;
 import cn.imhtb.live.pojo.Bill;
 import cn.imhtb.live.pojo.database.Withdrawal;
 import cn.imhtb.live.pojo.vo.request.WithdrawalRequest;
 import cn.imhtb.live.service.IAlipayService;
 import cn.imhtb.live.service.IBillService;
 import cn.imhtb.live.service.IWithdrawalService;
-import cn.imhtb.live.utils.JwtUtil;
+import cn.imhtb.live.common.utils.JwtUtil;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;

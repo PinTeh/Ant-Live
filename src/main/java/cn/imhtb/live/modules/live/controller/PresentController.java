@@ -1,9 +1,9 @@
 package cn.imhtb.live.modules.live.controller;
 
-import cn.imhtb.live.annotation.NeedToken;
+import cn.imhtb.live.common.annotation.NeedToken;
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.enums.DisabledStatusEnum;
-import cn.imhtb.live.enums.PresentRewardTypeEnum;
+import cn.imhtb.live.common.enums.DisabledStatusEnum;
+import cn.imhtb.live.common.enums.PresentRewardTypeEnum;
 import cn.imhtb.live.modules.live.vo.RewardReqVo;
 import cn.imhtb.live.pojo.Present;
 import cn.imhtb.live.pojo.vo.request.SendPresentRequest;

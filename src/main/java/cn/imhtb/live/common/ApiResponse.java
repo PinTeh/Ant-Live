@@ -1,7 +1,7 @@
 package cn.imhtb.live.common;
 
-import cn.imhtb.live.exception.base.CommonErrorCode;
-import cn.imhtb.live.exception.base.IErrorCode;
+import cn.imhtb.live.common.exception.base.CommonErrorCode;
+import cn.imhtb.live.common.exception.base.IErrorCode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

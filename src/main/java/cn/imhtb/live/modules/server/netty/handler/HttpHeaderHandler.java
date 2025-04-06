@@ -1,7 +1,7 @@
 package cn.imhtb.live.modules.server.netty.handler;
 
 import cn.imhtb.live.modules.server.netty.AttrUtil;
-import cn.imhtb.live.utils.JwtUtil;
+import cn.imhtb.live.common.utils.JwtUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.codec.http.FullHttpRequest;

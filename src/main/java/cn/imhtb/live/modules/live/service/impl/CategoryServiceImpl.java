@@ -5,7 +5,7 @@ import cn.imhtb.live.mappers.CategoryMapper;
 import cn.imhtb.live.modules.live.service.ICategoryService;
 import cn.imhtb.live.pojo.database.Category;
 import cn.imhtb.live.pojo.vo.response.CategoryResp;
-import cn.imhtb.live.utils.CovertBeanUtil;
+import cn.imhtb.live.common.utils.CovertBeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

@@ -1,7 +1,7 @@
 package cn.imhtb.live.start;
 
-import cn.imhtb.live.config.MinioConfig;
-import cn.imhtb.live.utils.MinioUtil;
+import cn.imhtb.live.common.config.MinioConfig;
+import cn.imhtb.live.common.utils.MinioUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

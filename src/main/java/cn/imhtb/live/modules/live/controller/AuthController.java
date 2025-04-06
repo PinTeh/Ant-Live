@@ -5,7 +5,7 @@ package cn.imhtb.live.modules.live.controller;
  * @date 2024/9/13
  */
 
-import cn.imhtb.live.annotation.NeedToken;
+import cn.imhtb.live.common.annotation.NeedToken;
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.modules.live.vo.AuthReqVo;
 import cn.imhtb.live.service.IAuthService;

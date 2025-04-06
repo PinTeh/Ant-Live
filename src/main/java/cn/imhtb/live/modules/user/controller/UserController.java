@@ -1,13 +1,13 @@
 package cn.imhtb.live.modules.user.controller;
 
-import cn.imhtb.live.annotation.NeedToken;
+import cn.imhtb.live.common.annotation.NeedToken;
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.modules.user.service.IUserService;
 import cn.imhtb.live.pojo.User;
 import cn.imhtb.live.pojo.vo.request.BindExtraInfoRequestVO;
 import cn.imhtb.live.pojo.vo.request.RegisterRequest;
 import cn.imhtb.live.pojo.vo.request.UserInfoUpdateRequest;
-import cn.imhtb.live.utils.JwtUtil;
+import cn.imhtb.live.common.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

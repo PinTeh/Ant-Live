@@ -1,9 +1,9 @@
 package cn.imhtb.live.service.impl;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.enums.AuthStatusEnum;
-import cn.imhtb.live.enums.LiveRoomStatusEnum;
-import cn.imhtb.live.holder.UserHolder;
+import cn.imhtb.live.common.enums.AuthStatusEnum;
+import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
+import cn.imhtb.live.common.holder.UserHolder;
 import cn.imhtb.live.mappers.AuthMapper;
 import cn.imhtb.live.mappers.RoomMapper;
 import cn.imhtb.live.modules.live.vo.AuthReqVo;
@@ -11,7 +11,7 @@ import cn.imhtb.live.modules.live.vo.AuthRespVo;
 import cn.imhtb.live.pojo.AuthInfo;
 import cn.imhtb.live.pojo.Room;
 import cn.imhtb.live.service.IAuthService;
-import cn.imhtb.live.utils.CovertBeanUtil;
+import cn.imhtb.live.common.utils.CovertBeanUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

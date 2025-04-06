@@ -7,7 +7,7 @@ import cn.imhtb.live.pojo.database.StatisticView;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.service.IStatisticSpeakService;
 import cn.imhtb.live.service.IStatisticViewService;
-import cn.imhtb.live.utils.JwtUtil;
+import cn.imhtb.live.common.utils.JwtUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

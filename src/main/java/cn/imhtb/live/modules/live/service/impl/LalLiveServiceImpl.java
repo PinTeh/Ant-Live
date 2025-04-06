@@ -1,9 +1,9 @@
 package cn.imhtb.live.modules.live.service.impl;
 
 import cn.hutool.crypto.digest.MD5;
-import cn.imhtb.live.config.LalLiveConfig;
-import cn.imhtb.live.enums.LiveInfoStatusEnum;
-import cn.imhtb.live.enums.LiveRoomStatusEnum;
+import cn.imhtb.live.common.config.LalLiveConfig;
+import cn.imhtb.live.common.enums.LiveInfoStatusEnum;
+import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
 import cn.imhtb.live.modules.live.service.ILiveService;
 import cn.imhtb.live.pojo.LiveInfo;
 import cn.imhtb.live.pojo.LiveStatusVo;

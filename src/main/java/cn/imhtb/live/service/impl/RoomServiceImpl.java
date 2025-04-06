@@ -1,10 +1,10 @@
 package cn.imhtb.live.service.impl;
 
 import cn.imhtb.live.common.PageData;
-import cn.imhtb.live.enums.DisabledStatusEnum;
-import cn.imhtb.live.enums.LiveRoomStatusEnum;
-import cn.imhtb.live.enums.WatchTypeEnum;
-import cn.imhtb.live.exception.UnAuthException;
+import cn.imhtb.live.common.enums.DisabledStatusEnum;
+import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
+import cn.imhtb.live.common.enums.WatchTypeEnum;
+import cn.imhtb.live.common.exception.UnAuthException;
 import cn.imhtb.live.mappers.RoomMapper;
 import cn.imhtb.live.modules.live.service.ICategoryService;
 import cn.imhtb.live.modules.user.service.IUserService;

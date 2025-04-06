@@ -772,3 +772,36 @@ INSERT INTO `withdrawal` (`id`, `identity`, `identity_name`, `mark`, `type`, `us
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+DROP TABLE IF EXISTS `tb_wallet`;
+CREATE TABLE `tb_wallet`
+(
+    `id`          int unsigned NOT NULL AUTO_INCREMENT,
+    `user_id`     int unsigned NOT NULL COMMENT '关联用户id',
+    `balance`     decimal(10, 2)        DEFAULT NULL COMMENT '余额',
+    `currency`    varchar(64)           DEFAULT NULL COMMENT '币种',
+    `status`      int          NOT NULL DEFAULT 0 COMMENT '状态 0-正常 1-异常',
+    `create_time` datetime              DEFAULT NULL,
+    `update_time` datetime              DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE INDEX `uk_user_id` (`user_id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8mb4 COMMENT ='钱包表';
+
+DROP TABLE IF EXISTS `tb_wallet_log`;
+CREATE TABLE `tb_wallet_log`
+(
+    `id`          int(10) unsigned NOT NULL AUTO_INCREMENT,
+    `wallet_id`   int(10) unsigned NOT NULL COMMENT '关联钱包id',
+    `balance`     decimal(10, 2) DEFAULT NULL COMMENT '余额',
+    `fee`         varchar(64)    DEFAULT NULL COMMENT '变换金额',
+    `source_uuid` varchar(64)    DEFAULT NULL COMMENT '业务来源id',
+    `source_type` varchar(64)    DEFAULT NULL COMMENT '业务来源类型',
+    `action_type` int(5)         DEFAULT NULL COMMENT '操作类型',
+    `create_time` datetime       DEFAULT NULL,
+    `update_time` datetime       DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8mb4 COMMENT ='钱包记录表';

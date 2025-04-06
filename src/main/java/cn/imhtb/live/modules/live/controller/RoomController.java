@@ -8,7 +8,7 @@ import cn.imhtb.live.pojo.vo.RoomExtraInfo;
 import cn.imhtb.live.pojo.vo.request.RoomInfoSaveRequest;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.service.IWatchService;
-import cn.imhtb.live.utils.JwtUtil;
+import cn.imhtb.live.common.utils.JwtUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

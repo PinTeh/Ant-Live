@@ -1,10 +1,10 @@
 package cn.imhtb.live.modules.user.service.impl;
 
-import cn.imhtb.live.constants.AntLiveConstant;
-import cn.imhtb.live.enums.AuthStatusEnum;
-import cn.imhtb.live.enums.BillTypeEnum;
-import cn.imhtb.live.exception.BusinessException;
-import cn.imhtb.live.exception.base.UserErrorCode;
+import cn.imhtb.live.common.constants.AntLiveConstant;
+import cn.imhtb.live.common.enums.AuthStatusEnum;
+import cn.imhtb.live.common.enums.BillTypeEnum;
+import cn.imhtb.live.common.exception.BusinessException;
+import cn.imhtb.live.common.exception.base.UserErrorCode;
 import cn.imhtb.live.mappers.UserMapper;
 import cn.imhtb.live.modules.user.service.IUserService;
 import cn.imhtb.live.pojo.AuthInfo;
@@ -18,9 +18,9 @@ import cn.imhtb.live.service.IAuthService;
 import cn.imhtb.live.service.IBillService;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.service.ITokenService;
-import cn.imhtb.live.utils.CommonUtil;
-import cn.imhtb.live.utils.MailUtil;
-import cn.imhtb.live.utils.SmsService;
+import cn.imhtb.live.common.utils.CommonUtil;
+import cn.imhtb.live.common.utils.MailUtil;
+import cn.imhtb.live.common.utils.SmsService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.benmanes.caffeine.cache.Cache;

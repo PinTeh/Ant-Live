@@ -1,8 +1,8 @@
 package cn.imhtb.live.modules.live.service.impl;
 
-import cn.imhtb.live.exception.BusinessException;
-import cn.imhtb.live.exception.base.CommonErrorCode;
-import cn.imhtb.live.holder.UserHolder;
+import cn.imhtb.live.common.exception.BusinessException;
+import cn.imhtb.live.common.exception.base.CommonErrorCode;
+import cn.imhtb.live.common.holder.UserHolder;
 import cn.imhtb.live.modules.live.service.ILiveRewardService;
 import cn.imhtb.live.modules.live.service.IPresentService;
 import cn.imhtb.live.modules.live.vo.RewardReqVo;

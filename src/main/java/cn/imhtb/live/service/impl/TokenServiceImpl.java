@@ -1,8 +1,8 @@
 package cn.imhtb.live.service.impl;
 
-import cn.imhtb.live.exception.UnAuthException;
+import cn.imhtb.live.common.exception.UnAuthException;
 import cn.imhtb.live.service.ITokenService;
-import cn.imhtb.live.utils.JwtUtil;
+import cn.imhtb.live.common.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;

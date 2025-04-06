@@ -1,7 +1,7 @@
 package cn.imhtb.live.service.impl;
 
 import cn.imhtb.live.common.PageData;
-import cn.imhtb.live.enums.WatchTypeEnum;
+import cn.imhtb.live.common.enums.WatchTypeEnum;
 import cn.imhtb.live.mappers.WatchMapper;
 import cn.imhtb.live.modules.user.service.IUserService;
 import cn.imhtb.live.pojo.Room;

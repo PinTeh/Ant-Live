@@ -5,7 +5,7 @@ import cn.imhtb.live.pojo.database.StatisticView;
 import cn.imhtb.live.modules.server.RedisPrefix;
 import cn.imhtb.live.service.IStatisticSpeakService;
 import cn.imhtb.live.service.IStatisticViewService;
-import cn.imhtb.live.utils.RedisUtil;
+import cn.imhtb.live.common.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;

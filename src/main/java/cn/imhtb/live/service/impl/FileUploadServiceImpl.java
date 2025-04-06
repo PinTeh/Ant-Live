@@ -1,7 +1,7 @@
 package cn.imhtb.live.service.impl;
 
 import cn.imhtb.live.service.IFileUploadService;
-import cn.imhtb.live.utils.MinioUtil;
+import cn.imhtb.live.common.utils.MinioUtil;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.model.PutObjectResult;
 import org.springframework.beans.factory.annotation.Autowired;

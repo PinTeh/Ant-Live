@@ -23,8 +23,9 @@ public class ChatController {
 
     @ApiOperation("发送消息")
     @PostMapping("/sendMsg")
-    public void sendChatMsg(@RequestBody @Valid ChatMsgReq chatMsgReq) {
+    public ApiResponse<String> sendChatMsg(@RequestBody @Valid ChatMsgReq chatMsgReq) {
         roomChatService.sendChatMsg(chatMsgReq);
+        return ApiResponse.ofSuccess();
     }
 
     @ApiOperation("获取房间人气")

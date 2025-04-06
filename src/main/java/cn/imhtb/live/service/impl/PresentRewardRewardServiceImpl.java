@@ -1,8 +1,8 @@
 package cn.imhtb.live.service.impl;
 
-import cn.imhtb.live.enums.BillMarkEnum;
-import cn.imhtb.live.enums.BillTypeEnum;
-import cn.imhtb.live.enums.PresentRewardTypeEnum;
+import cn.imhtb.live.common.enums.BillMarkEnum;
+import cn.imhtb.live.common.enums.BillTypeEnum;
+import cn.imhtb.live.common.enums.PresentRewardTypeEnum;
 import cn.imhtb.live.mappers.BillMapper;
 import cn.imhtb.live.mappers.PresentMapper;
 import cn.imhtb.live.mappers.PresentRewardMapper;
@@ -20,8 +20,8 @@ import cn.imhtb.live.pojo.database.Video;
 import cn.imhtb.live.service.IPresentRewardService;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.service.ITokenService;
-import cn.imhtb.live.utils.CommonUtil;
-import cn.imhtb.live.utils.RedisUtil;
+import cn.imhtb.live.common.utils.CommonUtil;
+import cn.imhtb.live.common.utils.RedisUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package cn.imhtb.live.controller.admin;
 
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.pojo.Room;
-import cn.imhtb.live.enums.LiveRoomStatusEnum;
+import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
 import cn.imhtb.live.service.IBillService;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.modules.user.service.IUserService;

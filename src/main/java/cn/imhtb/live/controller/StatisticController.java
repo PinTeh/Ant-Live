@@ -1,7 +1,7 @@
 package cn.imhtb.live.controller;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.pojo.Room;
+import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.pojo.database.StatisticSpeak;
 import cn.imhtb.live.pojo.database.StatisticView;
 import cn.imhtb.live.service.IRoomService;

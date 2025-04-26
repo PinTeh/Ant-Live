@@ -3,7 +3,7 @@ package cn.imhtb.live.service;
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.modules.live.vo.AuthReqVo;
 import cn.imhtb.live.modules.live.vo.AuthRespVo;
-import cn.imhtb.live.pojo.AuthInfo;
+import cn.imhtb.live.pojo.database.AuthInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 public interface IAuthService extends IService<AuthInfo> {

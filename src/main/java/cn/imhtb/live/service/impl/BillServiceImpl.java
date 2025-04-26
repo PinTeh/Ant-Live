@@ -1,7 +1,7 @@
 package cn.imhtb.live.service.impl;
 
 import cn.imhtb.live.mappers.BillMapper;
-import cn.imhtb.live.pojo.Bill;
+import cn.imhtb.live.pojo.database.Bill;
 import cn.imhtb.live.pojo.vo.response.BillTotalResponse;
 import cn.imhtb.live.service.IBillService;
 import cn.imhtb.live.service.ITokenService;

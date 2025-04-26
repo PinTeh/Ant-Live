@@ -2,6 +2,7 @@ package cn.imhtb.live.modules.live.controller;
 
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.common.PageData;
+import cn.imhtb.live.common.annotation.IgnoreToken;
 import cn.imhtb.live.pojo.vo.response.CategoryResp;
 import cn.imhtb.live.modules.live.service.ICategoryService;
 import io.swagger.annotations.Api;
@@ -26,6 +27,7 @@ public class CategoryController {
     @Resource
     private ICategoryService categoryService;
 
+    @IgnoreToken
     @ApiOperation("获取直播分类")
     @GetMapping("/query")
     public ApiResponse<PageData<CategoryResp>> queryCategoryPage(@RequestParam(required = false, defaultValue = "10") Integer limit,

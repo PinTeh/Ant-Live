@@ -2,7 +2,9 @@ package cn.imhtb.live.common;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -13,6 +15,8 @@ import java.util.List;
  * @date 2023/2/19
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @ApiModel("分页数据")
 public class PageData<T> {
 

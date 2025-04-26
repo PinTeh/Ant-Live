@@ -7,14 +7,15 @@ import cn.imhtb.live.mappers.BillMapper;
 import cn.imhtb.live.mappers.PresentMapper;
 import cn.imhtb.live.mappers.PresentRewardMapper;
 import cn.imhtb.live.mappers.VideoMapper;
+import cn.imhtb.live.modules.live.service.IPresentService;
 import cn.imhtb.live.modules.live.vo.RewardReqVo;
 import cn.imhtb.live.modules.server.RoomChatServer;
 import cn.imhtb.live.modules.server.netty.service.IRoomChatService;
 import cn.imhtb.live.modules.user.service.IUserService;
-import cn.imhtb.live.pojo.Bill;
-import cn.imhtb.live.pojo.Present;
-import cn.imhtb.live.pojo.Room;
-import cn.imhtb.live.pojo.User;
+import cn.imhtb.live.pojo.database.Bill;
+import cn.imhtb.live.pojo.database.Present;
+import cn.imhtb.live.pojo.database.Room;
+import cn.imhtb.live.pojo.database.User;
 import cn.imhtb.live.pojo.database.PresentReward;
 import cn.imhtb.live.pojo.database.Video;
 import cn.imhtb.live.service.IPresentRewardService;
@@ -51,6 +52,7 @@ public class PresentRewardRewardServiceImpl extends ServiceImpl<PresentRewardMap
     private final RedisUtil redisUtil;
     private final ITokenService tokenService;
     private final IRoomChatService roomChatService;
+    private final IPresentService presentService;
 
 
     @Override
@@ -97,7 +99,7 @@ public class PresentRewardRewardServiceImpl extends ServiceImpl<PresentRewardMap
 //                        new WebMessage.P(present.getId(), present.getName(), present.getIcon(), number));
 //                roomChatServer.sendSystemPresentMessage(webMessage.toJson(), room.getId());
                 String msgFormat = "%s赠送了%s * %d";
-                roomChatService.sendGiftMsg(String.format(msgFormat, fromUser.getNickname(), present.getName(), number), room.getId(), fromUser.getId());
+                roomChatService.sendGiftMsg(String.format(msgFormat, fromUser.getNickname(), present.getName(), number), room.getId(), fromUser.getId(), null);
             } catch (Exception e) {
                 log.error("RoomChatServer error", e);
             }
@@ -149,8 +151,19 @@ public class PresentRewardRewardServiceImpl extends ServiceImpl<PresentRewardMap
 
     @Override
     public void createReward(RewardReqVo rewardReqVo) {
+        Integer userId = tokenService.getUserId();
+        Present present = presentService.getById(rewardReqVo.getPresentId());
+        if (present == null){
+            throw new RuntimeException("礼物不存在");
+        }
+        User user = userService.getById(userId);
+        Room room = roomService.getById(rewardReqVo.getRoomId());
+        // 1. TODO 判断金额
 
-
+        // 2.
+        String msgFormat = "%s赠送了%s * %d";
+        String text = String.format(msgFormat, user.getNickname(), present.getName(), rewardReqVo.getNumber());
+        roomChatService.sendGiftMsg(text, room.getId(), user.getId(), rewardReqVo.getPresentId());
     }
 
 }

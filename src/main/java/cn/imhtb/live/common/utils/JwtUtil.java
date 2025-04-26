@@ -1,16 +1,12 @@
 package cn.imhtb.live.common.utils;
 
 import cn.imhtb.live.common.constants.JwtConstant;
-import cn.imhtb.live.pojo.User;
 import cn.imhtb.live.common.exception.UnAuthException;
 import com.alipay.api.internal.util.StringUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.bouncycastle.util.encoders.Base64;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
@@ -41,29 +37,8 @@ public class JwtUtil {
      */
     private static final String SECRET = "+/UElOVEVILUFOVC1MSVZF";
 
-    /**
-     * 创建token
-     */
-    public static String createToken(User user) {
-        //更多校验
-        if (user == null) {
-            return null;
-        }
-
-        String token = Jwts.builder().setSubject(SUBJECT)
-                .setId(String.valueOf(user.getId()))
-                .claim("username", user.getNickname())
-                .claim("imageUrl", "ttt")
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_SECONDS))
-                .signWith(SignatureAlgorithm.HS256, SECRET).compact();
-
-        return JwtConstant.TOKEN_PREFIX + token;
-
-    }
 
     public static String createTokenByParams(Integer id, String nickName, String account) {
-
         String token = Jwts.builder().setSubject(SUBJECT)
                 .setId(String.valueOf(id))
                 .claim("username", nickName)
@@ -75,15 +50,32 @@ public class JwtUtil {
         return JwtConstant.TOKEN_PREFIX + token;
     }
 
-    public static SecretKey generalKey() {
-        byte[] encodedKey = Base64.decode(SECRET);
-        return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
+    public static String create(Integer userId){
+        String token = Jwts.builder()
+                .setId(String.valueOf(userId))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_SECONDS))
+                .signWith(SignatureAlgorithm.HS256, SECRET)
+                .compact();
+        return String.format("%s%s", JwtConstant.TOKEN_PREFIX, token);
     }
+
+    public static Integer verifyGetUserId(String token) {
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(SECRET)
+                    .parseClaimsJws(token.replace(JwtConstant.TOKEN_PREFIX, ""))
+                    .getBody();
+            return Integer.parseInt(claims.getId());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     /**
      * 验证token
      */
-    public static Claims verifyJwt(String token) {
+    public static Claims verify(String token) {
         try {
             return Jwts.parser()
                     .setSigningKey(SECRET)

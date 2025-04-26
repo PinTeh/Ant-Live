@@ -5,7 +5,6 @@ package cn.imhtb.live.modules.live.controller;
  * @date 2024/9/13
  */
 
-import cn.imhtb.live.common.annotation.NeedToken;
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.modules.live.vo.AuthReqVo;
 import cn.imhtb.live.service.IAuthService;
@@ -28,14 +27,12 @@ public class AuthController {
 
     @ApiOperation("提交身份认证")
     @PostMapping("/submit")
-    @NeedToken
     public ApiResponse<?> save(@RequestBody AuthReqVo authReqVo) {
         return ApiResponse.ofSuccess(authService.submit(authReqVo));
     }
 
     @ApiOperation("获取身份认证状态")
     @PostMapping("/getStatus")
-    @NeedToken
     public ApiResponse<?> getStatus() {
         return ApiResponse.ofSuccess(authService.getStatus());
     }

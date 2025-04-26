@@ -12,10 +12,10 @@ import javax.validation.constraints.NotNull;
 @Data
 public class RelationSaveRequest {
 
-    @NotNull
-    private Integer rid;
+    @NotNull(message = "直播间id不能为空")
+    @ApiModelProperty("直播间id")
+    private Integer roomId;
 
-    @NotNull
     @ApiModelProperty("操作类型, 1 关注 2 取消关注 3 历史记录")
     private Integer act;
 

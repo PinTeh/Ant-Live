@@ -1,6 +1,6 @@
 package cn.imhtb.live.mappers;
 
-import cn.imhtb.live.pojo.Bill;
+import cn.imhtb.live.pojo.database.Bill;
 import cn.imhtb.live.pojo.vo.response.BillTotalResponse;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Select;

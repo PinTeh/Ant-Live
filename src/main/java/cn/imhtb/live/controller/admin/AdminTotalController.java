@@ -1,12 +1,11 @@
 package cn.imhtb.live.controller.admin;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.pojo.Room;
+import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
 import cn.imhtb.live.service.IBillService;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.modules.user.service.IUserService;
-import cn.imhtb.live.service.IVideoService;
 import cn.imhtb.live.pojo.vo.response.BillTotalResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -39,15 +38,12 @@ public class AdminTotalController {
 
     private final IRoomService roomService;
 
-    private final IVideoService videoService;
-
     private final IBillService billService;
 
-    public AdminTotalController(IUserService userService, IBillService billService, IRoomService roomService, IVideoService videoService) {
+    public AdminTotalController(IUserService userService, IBillService billService, IRoomService roomService) {
         this.userService = userService;
         this.billService = billService;
         this.roomService = roomService;
-        this.videoService = videoService;
     }
 
     @GetMapping("/all/count")
@@ -55,7 +51,6 @@ public class AdminTotalController {
         Map<String, Integer> map = new HashMap<>();
         map.put("user", (int) userService.count());
         map.put("room", (int) roomService.count());
-        map.put("video", (int) videoService.count());
         map.put("income", billService.countIncome());
         map.put("outlay", billService.countOutlay());
         map.put("bill", billService.countBill());

@@ -1,6 +1,7 @@
 package cn.imhtb.live.modules.server.netty.assembly;
 
 import cn.imhtb.live.modules.server.netty.domain.resp.ChatMsgRespDTO;
+import cn.imhtb.live.modules.server.netty.domain.resp.GiftMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.domain.resp.WsMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.enums.WsRespMethodEnum;
 
@@ -10,6 +11,9 @@ import cn.imhtb.live.modules.server.netty.enums.WsRespMethodEnum;
  */
 public class WsMsgAssembly {
 
+    /**
+     * 构建欢迎信息
+     */
     public static WsMsgRespDTO<String> buildWelcome(String message){
         WsMsgRespDTO<String> wsMsgRespDTO = new WsMsgRespDTO<>();
         wsMsgRespDTO.setMethod(WsRespMethodEnum.WELCOME.getMethod());
@@ -17,6 +21,9 @@ public class WsMsgAssembly {
         return wsMsgRespDTO;
     }
 
+    /**
+     * 构建聊天信息
+     */
     public static WsMsgRespDTO<ChatMsgRespDTO> buildChat(ChatMsgRespDTO chatMsgRespDTO){
         WsMsgRespDTO<ChatMsgRespDTO> wsMsgRespDTO = new WsMsgRespDTO<>();
         wsMsgRespDTO.setMethod(WsRespMethodEnum.CHAT.getMethod());
@@ -24,8 +31,11 @@ public class WsMsgAssembly {
         return wsMsgRespDTO;
     }
 
-    public static WsMsgRespDTO<String> buildGift(String message){
-        WsMsgRespDTO<String> wsMsgRespDTO = new WsMsgRespDTO<>();
+    /**
+     * 构建礼物信息
+     */
+    public static WsMsgRespDTO<GiftMsgRespDTO> buildGift(GiftMsgRespDTO message){
+        WsMsgRespDTO<GiftMsgRespDTO> wsMsgRespDTO = new WsMsgRespDTO<>();
         wsMsgRespDTO.setMethod(WsRespMethodEnum.GIFT.getMethod());
         wsMsgRespDTO.setData(message);
         return wsMsgRespDTO;

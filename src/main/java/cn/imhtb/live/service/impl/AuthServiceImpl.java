@@ -4,25 +4,20 @@ import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.common.enums.AuthStatusEnum;
 import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
 import cn.imhtb.live.common.holder.UserHolder;
+import cn.imhtb.live.common.utils.CovertBeanUtil;
 import cn.imhtb.live.mappers.AuthMapper;
 import cn.imhtb.live.mappers.RoomMapper;
 import cn.imhtb.live.modules.live.vo.AuthReqVo;
 import cn.imhtb.live.modules.live.vo.AuthRespVo;
-import cn.imhtb.live.pojo.AuthInfo;
-import cn.imhtb.live.pojo.Room;
+import cn.imhtb.live.pojo.database.AuthInfo;
+import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.service.IAuthService;
-import cn.imhtb.live.common.utils.CovertBeanUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.tencentcloudapi.common.exception.TencentCloudSDKException;
-import com.tencentcloudapi.ocr.v20181119.OcrClient;
-import com.tencentcloudapi.ocr.v20181119.models.IDCardOCRRequest;
-import com.tencentcloudapi.ocr.v20181119.models.IDCardOCRResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 
@@ -34,12 +29,10 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, AuthInfo> implement
 
     private final RoomMapper roomMapper;
 
-    private final OcrClient ocrClient;
 
-    public AuthServiceImpl(AuthMapper authMapper, RoomMapper roomMapper, OcrClient ocrClient) {
+    public AuthServiceImpl(AuthMapper authMapper, RoomMapper roomMapper) {
         this.authMapper = authMapper;
         this.roomMapper = roomMapper;
-        this.ocrClient = ocrClient;
     }
 
     @Override
@@ -72,55 +65,6 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, AuthInfo> implement
 
     @Override
     public ApiResponse saveAndCheck(AuthInfo authInfo) {
-        //正面
-        String params = "{\"ImageUrl\":\"" + authInfo.getPositiveUrl() + "\"}";
-        IDCardOCRRequest req = IDCardOCRRequest.fromJsonString(params, IDCardOCRRequest.class);
-        try {
-            IDCardOCRResponse response = ocrClient.IDCardOCR(req);
-            log.info("自动审核:" + JSON.toJSONString(response));
-            String idNum = response.getIdNum();
-            String name = response.getName();
-            String advancedInfo = response.getAdvancedInfo();
-            String ret = handleAdvanceInfo(advancedInfo);
-            if (!StringUtils.isEmpty(ret)) {
-                log.info("自动否决");
-                authInfo.setStatus(AuthStatusEnum.REJECT.getCode());
-                authInfo.setRejectReason(ret);
-                authMapper.insert(authInfo);
-                return ApiResponse.ofSuccess();
-            }
-            // 自动核对信息
-            if (idNum.equals(authInfo.getCardNo()) && name.equals(authInfo.getRealName())) {
-                log.info("自动审核通过");
-                authInfo.setStatus(AuthStatusEnum.AUTO_PASS.getCode());
-            } else {
-                log.info("自动否决");
-                authInfo.setStatus(AuthStatusEnum.REJECT.getCode());
-                authInfo.setRejectReason("自动否决");
-            }
-        } catch (TencentCloudSDKException e) {
-            e.printStackTrace();
-        }
-
-        // 反面
-        params = "{\"ImageUrl\":\"" + authInfo.getReverseUrl() + "\"}";
-        IDCardOCRRequest ocrRequest = IDCardOCRRequest.fromJsonString(params, IDCardOCRRequest.class);
-        try {
-            IDCardOCRResponse response = ocrClient.IDCardOCR(ocrRequest);
-            String advancedInfo = response.getAdvancedInfo();
-            log.info("高级信息:" + advancedInfo);
-            String ret = handleAdvanceInfo(advancedInfo);
-            if (!StringUtils.isEmpty(ret)) {
-                log.info("自动否决:" + ret);
-                authInfo.setStatus(AuthStatusEnum.REJECT.getCode());
-                authInfo.setRejectReason(ret);
-                authMapper.insert(authInfo);
-                return ApiResponse.ofSuccess();
-            }
-        } catch (TencentCloudSDKException e) {
-            e.printStackTrace();
-        }
-        authMapper.insert(authInfo);
         return ApiResponse.ofSuccess();
     }
 

@@ -1,8 +1,8 @@
 package cn.imhtb.live.controller;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.pojo.LiveInfo;
-import cn.imhtb.live.pojo.Room;
+import cn.imhtb.live.pojo.database.LiveInfo;
+import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.service.ILiveInfoService;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.common.utils.JwtUtil;

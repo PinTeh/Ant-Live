@@ -1,6 +1,6 @@
 package cn.imhtb.live.pojo.vo.response;
 
-import cn.imhtb.live.pojo.User;
+import cn.imhtb.live.pojo.database.User;
 import cn.imhtb.live.pojo.vo.FrontMenuItem;
 import lombok.AllArgsConstructor;
 import lombok.Data;

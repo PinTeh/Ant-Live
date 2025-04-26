@@ -6,10 +6,11 @@ import cn.imhtb.live.modules.server.netty.domain.WsChannelExtraInfoDTO;
 import cn.imhtb.live.modules.server.netty.domain.req.ChatMsgReq;
 import cn.imhtb.live.modules.server.netty.domain.req.WsEnterReqDTO;
 import cn.imhtb.live.modules.server.netty.domain.resp.ChatMsgRespDTO;
+import cn.imhtb.live.modules.server.netty.domain.resp.GiftMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.domain.resp.WsMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.service.IRoomChatService;
 import cn.imhtb.live.modules.user.service.IUserService;
-import cn.imhtb.live.pojo.User;
+import cn.imhtb.live.pojo.database.User;
 import cn.imhtb.live.service.ITokenService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -17,6 +18,7 @@ import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author pinteh
  * @date 2023/6/4
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class RoomChatServiceImpl implements IRoomChatService {
@@ -61,6 +64,7 @@ public class RoomChatServiceImpl implements IRoomChatService {
 
     @Override
     public void enter(Channel channel, String data) {
+        log.info("chanel = {} , 进入房间:{}", channel.id(), data);
         WsEnterReqDTO wsEnterReqDTO = JSON.parseObject(data, WsEnterReqDTO.class);
         Integer roomId = wsEnterReqDTO.getRoomId();
         if (Objects.isNull(roomId)) {
@@ -98,6 +102,8 @@ public class RoomChatServiceImpl implements IRoomChatService {
 
     @Override
     public void exit(Channel channel) {
+        log.info("chanel = {}，关闭", channel.id());
+
         channel.close();
         // 获取当前通道的附加信息
         WsChannelExtraInfoDTO channelExtraInfoDto = ALL_ONLINE.get(channel);
@@ -152,21 +158,25 @@ public class RoomChatServiceImpl implements IRoomChatService {
     }
 
     @Override
-    public void sendGiftMsg(String msg, Integer roomId, Integer userId) {
+    public void sendGiftMsg(String msg, Integer roomId, Integer userId, Integer giftId) {
         CopyOnWriteArraySet<Channel> channels = ROOM_ONLINE.get(roomId);
         if (Objects.nonNull(channels)) {
             for (Channel channel : channels) {
                 ChatMsgRespDTO chatMsgRespDTO = new ChatMsgRespDTO();
-                chatMsgRespDTO.setFromUserId(userId);
+//                chatMsgRespDTO.setFromUserId(userId);
                 chatMsgRespDTO.setNickname("系统消息");
                 chatMsgRespDTO.setText(msg);
                 sendMessage(channel, WsMsgAssembly.buildChat(chatMsgRespDTO));
                 // 不发送给当前赠送的用户
-                WsChannelExtraInfoDTO extra = ALL_ONLINE.get(channel);
-                if (Objects.nonNull(extra) && userId.equals(extra.getUserId())) {
-                    continue;
-                }
-                sendMessage(channel, WsMsgAssembly.buildGift(msg));
+//                WsChannelExtraInfoDTO extra = ALL_ONLINE.get(channel);
+//                if (Objects.nonNull(extra) && userId.equals(extra.getUserId())) {
+//                    continue;
+//                }
+                sendMessage(channel, WsMsgAssembly.buildGift(GiftMsgRespDTO.builder()
+                                .giftName("")
+                                .giftId(giftId)
+                                .text(msg)
+                                .build()));
             }
         }
     }

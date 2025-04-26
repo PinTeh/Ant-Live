@@ -332,24 +332,32 @@ COMMIT;
 -- Table structure for present
 -- ----------------------------
 DROP TABLE IF EXISTS `present`;
-CREATE TABLE `present` (
-                           `id` int NOT NULL AUTO_INCREMENT,
-                           `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-                           `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                           `price` decimal(10,2) NOT NULL,
-                           `create_time` datetime DEFAULT NULL,
-                           `update_time` datetime DEFAULT NULL,
-                           `sort` int DEFAULT '0',
-                           `disabled` int DEFAULT '0',
-                           PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+CREATE TABLE `present`
+(
+    `id`          int            NOT NULL AUTO_INCREMENT,
+    `name`        varchar(255)   NOT NULL,
+    `icon`        varchar(255)   NOT NULL,
+    `price`       decimal(10, 2) NOT NULL,
+    `description` varchar(255) DEFAULT NULL,
+    `create_time` datetime     DEFAULT NULL,
+    `update_time` datetime     DEFAULT NULL,
+    `sort`        int          DEFAULT 99,
+    `disabled`    int          DEFAULT 0,
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 5
+  DEFAULT CHARSET = utf8mb4;
 
 -- ----------------------------
 -- Records of present
 -- ----------------------------
 BEGIN;
-INSERT INTO `present` (`id`, `name`, `icon`, `price`, `create_time`, `update_time`, `sort`, `disabled`) VALUES (1, '火箭', 'http://image.imhtb.cn/飞机.png', 10.00, '2020-02-26 18:20:48', '2020-05-25 22:34:46', 0, 0);
-INSERT INTO `present` (`id`, `name`, `icon`, `price`, `create_time`, `update_time`, `sort`, `disabled`) VALUES (2, '飞机', 'http://image.imhtb.cn/飞机1.png', 88000.00, '2020-03-02 10:01:35', '2020-05-25 22:34:39', 3, 0);
+INSERT INTO `present` (`id`, `name`, `icon`, `price`, `description`, `create_time`, `update_time`, `sort`, `disabled`)
+VALUES (1, '火箭', 'http://image.imhtb.cn/飞机.png', 10.00, '爱她就送她一个火箭', '2020-02-26 18:20:48',
+        '2020-05-25 22:34:46', 1, 0);
+INSERT INTO `present` (`id`, `name`, `icon`, `price`, `description`, `create_time`, `update_time`, `sort`, `disabled`)
+VALUES (2, '飞机', 'http://image.imhtb.cn/飞机1.png', 88.00, '爱她就送她一个飞机', '2020-03-02 10:01:35',
+        '2020-05-25 22:34:39', 2, 0);
 COMMIT;
 
 -- ----------------------------

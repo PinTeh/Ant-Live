@@ -48,10 +48,11 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
             IdleStateEvent event = (IdleStateEvent) evt;
             // 服务端在乎的是客户端有没有发过来心跳，所以这里关注读空闲
             if(event.state() == IdleState.READER_IDLE) {
-                log.warn("服务端30秒内没有收到客户端心跳，主动关闭连接");
+//                log.warn("{}, 服务端30秒内没有收到客户端心跳，主动关闭连接", ctx.channel().id());
                 getBean().exit(ctx.channel());
             }
         } else if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete){
+            // 握手完成
 
         }
         super.userEventTriggered(ctx, evt);
@@ -73,6 +74,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<TextWebS
                 getBean().exit(channelHandlerContext.channel());
                 break;
             case HEARTBEAT:
+//                log.info("收到心跳, {}", channelHandlerContext.channel().id());
                 break;
             default:
                 log.warn("未知消息类型, {}", wsMsgReqDTO.getMsgType());

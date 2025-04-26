@@ -28,6 +28,9 @@ public class RoomRespVo {
     @ApiModelProperty("直播间状态")
     private Integer status;
 
+    @ApiModelProperty("直播间简介")
+    private String introduce;
+
     @ApiModelProperty("主播信息")
     private UserInfoVo userInfo;
 

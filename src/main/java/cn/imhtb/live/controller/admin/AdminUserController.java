@@ -1,7 +1,7 @@
 package cn.imhtb.live.controller.admin;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.pojo.User;
+import cn.imhtb.live.pojo.database.User;
 import cn.imhtb.live.common.enums.DisabledStatusEnum;
 import cn.imhtb.live.modules.user.service.IUserService;
 import cn.imhtb.live.pojo.vo.request.IdsRequest;

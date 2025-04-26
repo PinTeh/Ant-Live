@@ -1,6 +1,7 @@
 package cn.imhtb.live.modules.server.netty.web;
 
 import cn.imhtb.live.common.ApiResponse;
+import cn.imhtb.live.common.annotation.IgnoreToken;
 import cn.imhtb.live.modules.server.netty.domain.req.ChatMsgReq;
 import cn.imhtb.live.modules.server.netty.service.IRoomChatService;
 import io.swagger.annotations.ApiOperation;
@@ -28,6 +29,7 @@ public class ChatController {
         return ApiResponse.ofSuccess();
     }
 
+    @IgnoreToken
     @ApiOperation("获取房间人气")
     @GetMapping("/getPopularity")
     public ApiResponse<Long> getPopularity(@RequestParam Integer roomId) {

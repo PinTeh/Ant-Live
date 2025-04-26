@@ -2,7 +2,6 @@ package cn.imhtb.live.service;
 
 import cn.imhtb.live.common.PageData;
 import cn.imhtb.live.pojo.database.Watch;
-import cn.imhtb.live.pojo.vo.request.RelationSaveRequest;
 import cn.imhtb.live.pojo.vo.response.WatchResponse;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,28 +12,49 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IWatchService extends IService<Watch> {
 
     /**
-     * 保存关系
+     * 获取用户关注列表
      *
-     * @param request 请求
-     * @return {@link Boolean}
+     * @param userId 用户ID
+     * @param type 类型
+     * @param limit 每页数量
+     * @param page 页码
+     * @return 分页数据
      */
-    Boolean saveRelation(RelationSaveRequest request);
+    PageData<WatchResponse> listWatches(Integer userId, Integer type, Integer limit, Integer page);
 
     /**
-     * 列表
+     * 判断用户是否关注了指定房间
      *
-     * @param type  类型
-     * @param limit 限制
-     * @param page  页面
-     * @return {@link PageData}<{@link WatchResponse}>
+     * @param userId 用户ID
+     * @param roomId 房间ID
+     * @return 如果用户关注了指定房间，则返回true，否则返回false
      */
-    PageData<WatchResponse> listWatches(Integer type, Integer limit, Integer page);
+    Boolean follow(Integer userId, Integer roomId);
 
     /**
-     * 清除历史
+     * 取消关注
      *
-     * @return {@link Boolean}
+     * @param userId 用户ID
+     * @param roomId 房间ID
+     * @return 是否取消关注成功
      */
-    Boolean clearHistory();
+    Boolean unFollow(Integer userId, Integer roomId);
+
+    /**
+     * 清除指定用户的浏览历史记录
+     *
+     * @param userId 用户ID
+     * @return 是否成功清除历史记录，true表示成功，false表示失败
+     */
+    Boolean clearHistory(Integer userId);
+
+    /**
+     * 保存用户在指定房间内的历史记录
+     *
+     * @param userId 用户ID
+     * @param roomId 房间ID
+     * @return 是否保存成功
+     */
+    Boolean saveHistory(Integer userId, Integer roomId);
 
 }

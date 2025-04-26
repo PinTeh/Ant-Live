@@ -1,7 +1,7 @@
 package cn.imhtb.live.controller.admin;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.pojo.AuthInfo;
+import cn.imhtb.live.pojo.database.AuthInfo;
 import cn.imhtb.live.common.enums.AuthStatusEnum;
 import cn.imhtb.live.service.IAuthService;
 import cn.imhtb.live.pojo.vo.request.IdsRequest;

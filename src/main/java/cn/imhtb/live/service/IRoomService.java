@@ -2,8 +2,8 @@ package cn.imhtb.live.service;
 
 import cn.imhtb.live.common.PageData;
 import cn.imhtb.live.modules.live.vo.RoomRespVo;
-import cn.imhtb.live.pojo.Room;
-import cn.imhtb.live.pojo.vo.RoomExtraInfo;
+import cn.imhtb.live.pojo.database.Room;
+import cn.imhtb.live.pojo.vo.RoomExtraInfoResp;
 import cn.imhtb.live.pojo.vo.request.RoomInfoSaveRequest;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -40,17 +40,17 @@ public interface IRoomService extends IService<Room> {
     /**
      * 获取房间信息
      *
-     * @param rid 房间号
+     * @param roomId 房间号
      * @return {@link RoomRespVo}
      */
-    RoomRespVo getRoomInfo(Integer rid);
+    RoomRespVo getRoomInfo(Integer roomId);
 
     /**
      * 得到额外信息
      *
      * @param rid 房间号码
-     * @return {@link RoomExtraInfo}
+     * @return {@link RoomExtraInfoResp}
      */
-    RoomExtraInfo getExtraInfo(Integer rid);
+    RoomExtraInfoResp getExtraInfo(Integer userId, Integer rid);
 
 }

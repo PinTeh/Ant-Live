@@ -4,17 +4,17 @@ import cn.imhtb.live.common.PageData;
 import cn.imhtb.live.common.enums.DisabledStatusEnum;
 import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
 import cn.imhtb.live.common.enums.WatchTypeEnum;
-import cn.imhtb.live.common.exception.UnAuthException;
+import cn.imhtb.live.common.holder.UserHolder;
 import cn.imhtb.live.mappers.RoomMapper;
 import cn.imhtb.live.modules.live.service.ICategoryService;
+import cn.imhtb.live.modules.live.vo.RoomRespVo;
 import cn.imhtb.live.modules.user.service.IUserService;
-import cn.imhtb.live.pojo.Room;
-import cn.imhtb.live.pojo.User;
+import cn.imhtb.live.pojo.database.Room;
+import cn.imhtb.live.pojo.database.User;
 import cn.imhtb.live.pojo.database.Category;
 import cn.imhtb.live.pojo.database.Watch;
-import cn.imhtb.live.pojo.vo.RoomExtraInfo;
+import cn.imhtb.live.pojo.vo.RoomExtraInfoResp;
 import cn.imhtb.live.pojo.vo.request.RoomInfoSaveRequest;
-import cn.imhtb.live.modules.live.vo.RoomRespVo;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.service.ITokenService;
 import cn.imhtb.live.service.IWatchService;
@@ -42,10 +42,9 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IR
 
     @Override
     public void updateCover(String coverUrl) {
-        Integer userId = tokenService.getUserId();
         Room room = new Room();
         room.setCover(coverUrl);
-        update(room, new LambdaQueryWrapper<Room>().eq(Room::getUserId, userId));
+        update(room, new LambdaQueryWrapper<Room>().eq(Room::getUserId, UserHolder.getUserId()));
     }
 
     @Override
@@ -83,8 +82,8 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IR
     }
 
     @Override
-    public RoomRespVo getRoomInfo(Integer rid) {
-        Room room = getById(rid);
+    public RoomRespVo getRoomInfo(Integer roomId) {
+        Room room = getById(roomId);
         if (room == null){
             return null;
         }
@@ -92,23 +91,14 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IR
     }
 
     @Override
-    public RoomExtraInfo getExtraInfo(Integer rid) {
-        RoomExtraInfo roomExtraInfo = new RoomExtraInfo();
-        roomExtraInfo.setFollow(false);
-        try {
-            Integer userId = tokenService.getUserId();
-            long count = watchService.count(new LambdaQueryWrapper<Watch>()
-                    .eq(Watch::getRoomId, rid)
-                    .eq(Watch::getUserId, userId)
-                    .eq(Watch::getWatchType, WatchTypeEnum.FOLLOW.getCode()));
-            if (count > 0){
-                roomExtraInfo.setFollow(true);
-            }
-        } catch (UnAuthException e) {
-            // 未登录时，不影响正常进入直播间流程
-            roomExtraInfo.setFollow(false);
-        }
-        return roomExtraInfo;
+    public RoomExtraInfoResp getExtraInfo(Integer userId, Integer rid) {
+        RoomExtraInfoResp resp = new RoomExtraInfoResp();
+        long count = watchService.count(new LambdaQueryWrapper<Watch>()
+                .eq(Watch::getRoomId, rid)
+                .eq(Watch::getUserId, userId)
+                .eq(Watch::getWatchType, WatchTypeEnum.FOLLOW.getCode()));
+        resp.setFollow(count > 0);
+        return resp;
     }
 
     private RoomRespVo packageRoomResponse(Room room) {
@@ -120,6 +110,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IR
         response.setTitle(room.getTitle());
         response.setPullUrl(room.getPullUrl());
         response.setCover(room.getCover());
+        response.setIntroduce(room.getIntroduce());
         if (user != null) {
             response.setUserInfo(new RoomRespVo.UserInfoVo(user.getId(), user.getNickname(), user.getAvatar()));
         }

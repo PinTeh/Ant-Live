@@ -2,13 +2,14 @@ package cn.imhtb.live.modules.live.controller;
 
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.common.PageData;
+import cn.imhtb.live.common.annotation.IgnoreToken;
+import cn.imhtb.live.common.holder.UserHolder;
+import cn.imhtb.live.common.utils.JwtUtil;
 import cn.imhtb.live.modules.live.vo.RoomRespVo;
-import cn.imhtb.live.pojo.Room;
-import cn.imhtb.live.pojo.vo.RoomExtraInfo;
+import cn.imhtb.live.pojo.database.Room;
+import cn.imhtb.live.pojo.vo.RoomExtraInfoResp;
 import cn.imhtb.live.pojo.vo.request.RoomInfoSaveRequest;
 import cn.imhtb.live.service.IRoomService;
-import cn.imhtb.live.service.IWatchService;
-import cn.imhtb.live.common.utils.JwtUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,12 +32,12 @@ import javax.servlet.http.HttpServletRequest;
 public class RoomController {
 
     private final IRoomService roomService;
-    private final IWatchService watchService;
 
+    @IgnoreToken
     @ApiOperation("获取直播间信息")
-    @GetMapping
-    public ApiResponse<RoomRespVo> getRoomInfo(Integer rid) {
-        return ApiResponse.ofSuccess(roomService.getRoomInfo(rid));
+    @GetMapping("/detail")
+    public ApiResponse<RoomRespVo> getRoomInfo(@RequestParam Integer roomId) {
+        return ApiResponse.ofSuccess(roomService.getRoomInfo(roomId));
     }
 
     @ApiOperation("更新保存直播间信息")
@@ -47,8 +48,8 @@ public class RoomController {
 
     @ApiOperation("获取直播间关联额外信息")
     @GetMapping("/extra/info")
-    public ApiResponse<RoomExtraInfo> extraInfo(Integer rid) {
-        return ApiResponse.ofSuccess(roomService.getExtraInfo(rid));
+    public ApiResponse<RoomExtraInfoResp> extraInfo(Integer roomId) {
+        return ApiResponse.ofSuccess(roomService.getExtraInfo(UserHolder.getUserId(), roomId));
     }
 
     @ApiOperation("获取直播间配置信息")
@@ -59,12 +60,13 @@ public class RoomController {
         return ApiResponse.ofSuccess(room);
     }
 
+    @IgnoreToken
     @ApiOperation("获取正在直播的直播间")
     @GetMapping("/living")
-    public ApiResponse<PageData<RoomRespVo>> livingRoom(@RequestParam(required = false) Integer cid,
+    public ApiResponse<PageData<RoomRespVo>> livingRoom(@RequestParam(required = false) Integer categoryId,
                                                         @RequestParam(required = false, defaultValue = "1") Integer pageNo,
                                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
-        return ApiResponse.ofSuccess(roomService.getLivingRooms(cid, pageNo, pageSize));
+        return ApiResponse.ofSuccess(roomService.getLivingRooms(categoryId, pageNo, pageSize));
     }
 
 }

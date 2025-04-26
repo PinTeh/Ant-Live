@@ -1,6 +1,6 @@
 package cn.imhtb.live.modules.server;
 
-import cn.imhtb.live.pojo.User;
+import cn.imhtb.live.pojo.database.User;
 import com.alibaba.fastjson.JSON;
 import lombok.*;
 

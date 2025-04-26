@@ -1,6 +1,5 @@
 package cn.imhtb.live.modules.wallet.controller;
 
-import cn.imhtb.live.common.annotation.NeedToken;
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.common.PageData;
 import cn.imhtb.live.common.holder.UserHolder;
@@ -32,7 +31,6 @@ public class WalletController {
     private IWalletLogService walletLogService;
 
     @ApiOperation("获取钱包")
-    @NeedToken
     @GetMapping("/getBalance")
     public ApiResponse<Wallet> getBalance(){
         Integer userId = UserHolder.getUserId();
@@ -41,7 +39,6 @@ public class WalletController {
     }
 
     @ApiOperation("获取钱包最近的变化记录")
-    @NeedToken
     @GetMapping("/listRecentWalletLogs")
     public ApiResponse<?> listRecentWalletLogs(){
         Integer userId = UserHolder.getUserId();
@@ -50,7 +47,6 @@ public class WalletController {
     }
 
     @ApiOperation("获取钱包变化记录")
-    @NeedToken
     @GetMapping("/listWalletLogs")
     public ApiResponse<?> listWalletLogs(@RequestParam Integer pageNo, @RequestParam Integer pageSize){
         Integer userId = UserHolder.getUserId();

@@ -1,14 +1,16 @@
 package cn.imhtb.live.modules.live.controller;
 
-import cn.imhtb.live.common.annotation.NeedToken;
+import cn.hutool.core.bean.BeanUtil;
 import cn.imhtb.live.common.ApiResponse;
+import cn.imhtb.live.common.annotation.IgnoreToken;
 import cn.imhtb.live.common.enums.DisabledStatusEnum;
 import cn.imhtb.live.common.enums.PresentRewardTypeEnum;
+import cn.imhtb.live.modules.live.service.IPresentService;
+import cn.imhtb.live.modules.live.vo.PresentVo;
 import cn.imhtb.live.modules.live.vo.RewardReqVo;
-import cn.imhtb.live.pojo.Present;
+import cn.imhtb.live.pojo.database.Present;
 import cn.imhtb.live.pojo.vo.request.SendPresentRequest;
 import cn.imhtb.live.service.IPresentRewardService;
-import cn.imhtb.live.modules.live.service.IPresentService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author PinTeh
@@ -29,12 +34,14 @@ public class PresentController {
     private final IPresentService presentService;
     private final IPresentRewardService presentRewardService;
 
+    @IgnoreToken
     @ApiOperation("获取礼物列表")
     @GetMapping("/list")
-    public ApiResponse<?> list() {
-        return ApiResponse.ofSuccess(presentService.list(new LambdaQueryWrapper<Present>()
+    public ApiResponse<List<PresentVo>> list() {
+        List<Present> presentList = presentService.list(new LambdaQueryWrapper<Present>()
                 .eq(Present::getDisabled, DisabledStatusEnum.YES.getCode())
-                .orderByDesc(Present::getSort)));
+                .orderByAsc(Present::getSort));
+        return ApiResponse.ofSuccess(BeanUtil.copyToList(presentList, PresentVo.class));
     }
 
     @ApiOperation("赠送礼物")
@@ -44,10 +51,9 @@ public class PresentController {
         return StringUtils.isEmpty(reward) ? ApiResponse.ofSuccess() : ApiResponse.ofError(null, reward);
     }
 
-    @NeedToken
     @ApiOperation("赠送礼物")
     @PostMapping("/reward")
-    public ApiResponse<Boolean> reward(@RequestBody RewardReqVo rewardReqVo) {
+    public ApiResponse<Boolean> reward(@RequestBody @Valid RewardReqVo rewardReqVo) {
         presentRewardService.createReward(rewardReqVo);
         return ApiResponse.ofSuccess();
     }

@@ -1,6 +1,6 @@
 package cn.imhtb.live.modules.server;
 
-import cn.imhtb.live.pojo.User;
+import cn.imhtb.live.pojo.database.User;
 import cn.imhtb.live.modules.user.service.IUserService;
 import cn.imhtb.live.common.utils.JwtUtil;
 import cn.imhtb.live.common.utils.RedisUtil;

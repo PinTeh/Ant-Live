@@ -7,6 +7,11 @@ import java.util.UUID;
  */
 public class CommonUtil {
 
+    /**
+     * 随机获取验证码
+     *
+     * @return 验证码
+     */
     public static int getRandomCode() {
         return (int) ((Math.random() * 9 + 1) * 100000);
     }

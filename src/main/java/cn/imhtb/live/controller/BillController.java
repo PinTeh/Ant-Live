@@ -2,7 +2,7 @@ package cn.imhtb.live.controller;
 
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.common.config.AlipayConfig;
-import cn.imhtb.live.pojo.Bill;
+import cn.imhtb.live.pojo.database.Bill;
 import cn.imhtb.live.pojo.database.Withdrawal;
 import cn.imhtb.live.pojo.vo.request.WithdrawalRequest;
 import cn.imhtb.live.service.IAlipayService;
@@ -135,7 +135,7 @@ public class BillController {
     public ApiResponse recharge(String num, HttpServletRequest request) throws Exception {
         String no = UUID.randomUUID().toString().replaceAll("-", "").substring(10);
         String token = request.getHeader(JwtUtil.getHeaderKey());
-        Claims claims = JwtUtil.verifyJwt(token);
+        Claims claims = JwtUtil.verify(token);
         if (claims == null) {
             return null;
         }

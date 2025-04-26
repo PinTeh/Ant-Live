@@ -1,17 +1,15 @@
 package cn.imhtb.live.service.impl;
 
-import cn.imhtb.live.pojo.LiveInfo;
-import cn.imhtb.live.pojo.Room;
-import cn.imhtb.live.pojo.database.BanRecord;
 import cn.imhtb.live.common.enums.LiveInfoStatusEnum;
 import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
 import cn.imhtb.live.mappers.BanRecordMapper;
 import cn.imhtb.live.mappers.LiveInfoMapper;
 import cn.imhtb.live.mappers.RoomMapper;
+import cn.imhtb.live.pojo.database.LiveInfo;
+import cn.imhtb.live.pojo.database.Room;
+import cn.imhtb.live.pojo.database.BanRecord;
 import cn.imhtb.live.service.ITencentLiveService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.tencentcloudapi.common.exception.TencentCloudSDKException;
-import com.tencentcloudapi.live.v20180801.LiveClient;
 import com.tencentcloudapi.live.v20180801.models.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,10 +37,7 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
 
     private final LiveInfoMapper liveInfoMapper;
 
-    private final LiveClient client;
-
-    public TencentLiveServiceImpl(LiveClient liveClient, BanRecordMapper banRecordMapper, RoomMapper roomMapper, LiveInfoMapper liveInfoMapper) {
-        this.client = liveClient;
+    public TencentLiveServiceImpl( BanRecordMapper banRecordMapper, RoomMapper roomMapper, LiveInfoMapper liveInfoMapper) {
         this.banRecordMapper = banRecordMapper;
         this.roomMapper = roomMapper;
         this.liveInfoMapper = liveInfoMapper;
@@ -145,8 +140,8 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
         }
         ForbidLiveStreamResponse resp = null;
         try {
-            resp = client.ForbidLiveStream(forbidLiveStreamRequest);
-        } catch (TencentCloudSDKException e) {
+//            resp = client.ForbidLiveStream(forbidLiveStreamRequest);
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -177,8 +172,8 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
         resumeLiveStreamRequest.setStreamName(String.valueOf(rid));
         ResumeLiveStreamResponse response = null;
         try {
-            response = client.ResumeLiveStream(resumeLiveStreamRequest);
-        } catch (TencentCloudSDKException e) {
+//            response = client.ResumeLiveStream(resumeLiveStreamRequest);
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -204,8 +199,8 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
         request.setPageNum(Long.valueOf(page));
         request.setPageSize(Long.valueOf(limit));
         try {
-            return client.DescribeLiveForbidStreamList(request);
-        } catch (TencentCloudSDKException e) {
+//            return client.DescribeLiveForbidStreamList(request);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -216,10 +211,11 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
         String params = "{}";
         DescribeLiveSnapshotTemplatesRequest req = DescribeLiveSnapshotTemplatesRequest.fromJsonString(params, DescribeLiveSnapshotTemplatesRequest.class);
         try {
-            DescribeLiveSnapshotTemplatesResponse response = client.DescribeLiveSnapshotTemplates(req);
+//            DescribeLiveSnapshotTemplatesResponse response = client.DescribeLiveSnapshotTemplates(req);
+            DescribeLiveSnapshotTemplatesResponse response = null;
             System.out.println(DescribeLiveSnapshotTemplatesRequest.toJsonString(response));
             return response;
-        } catch (TencentCloudSDKException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -228,9 +224,10 @@ public class TencentLiveServiceImpl implements ITencentLiveService {
     @Override
     public void snapshotTemplatesUpdate(ModifyLiveSnapshotTemplateRequest request) {
         try {
-            ModifyLiveSnapshotTemplateResponse response = client.ModifyLiveSnapshotTemplate(request);
+//            ModifyLiveSnapshotTemplateResponse response = client.ModifyLiveSnapshotTemplate(request);
+            ModifyLiveSnapshotTemplateResponse response = null;
             log.info("修改截图模板:{}", ModifyLiveSnapshotTemplateResponse.toJsonString(response));
-        } catch (TencentCloudSDKException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

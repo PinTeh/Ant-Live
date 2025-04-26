@@ -1,6 +1,6 @@
 package cn.imhtb.live.service.impl;
 
-import cn.imhtb.live.pojo.LiveInfo;
+import cn.imhtb.live.pojo.database.LiveInfo;
 import cn.imhtb.live.mappers.LiveInfoMapper;
 import cn.imhtb.live.service.ILiveInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;

@@ -1,7 +1,7 @@
 package cn.imhtb.live.controller.admin;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.pojo.Room;
+import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.pojo.database.BanRecord;
 import cn.imhtb.live.pojo.database.LiveDetect;
 import cn.imhtb.live.service.IBanRecordService;

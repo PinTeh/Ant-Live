@@ -1,7 +1,7 @@
 package cn.imhtb.live.service.impl;
 
 import cn.imhtb.live.common.config.AlipayConfig;
-import cn.imhtb.live.pojo.Bill;
+import cn.imhtb.live.pojo.database.Bill;
 import cn.imhtb.live.pojo.database.Withdrawal;
 import cn.imhtb.live.common.enums.PayPlatformEnum;
 import cn.imhtb.live.mappers.BillMapper;

@@ -1,5 +1,6 @@
 package cn.imhtb.live.pojo;
 
+import cn.imhtb.live.pojo.database.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

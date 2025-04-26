@@ -25,7 +25,7 @@ public class TokenServiceImpl implements ITokenService {
         HttpServletRequest request = this.getRequest();
         String token = request.getHeader(JwtUtil.getHeaderKey());
         if (token != null) {
-            return JwtUtil.verifyJwt(token);
+            return JwtUtil.verify(token);
         }
         throw new UnAuthException("无法获取到token，请重新登录后尝试");
     }

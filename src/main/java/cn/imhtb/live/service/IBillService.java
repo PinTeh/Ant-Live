@@ -1,6 +1,6 @@
 package cn.imhtb.live.service;
 
-import cn.imhtb.live.pojo.Bill;
+import cn.imhtb.live.pojo.database.Bill;
 import cn.imhtb.live.pojo.vo.response.BillTotalResponse;
 import com.baomidou.mybatisplus.extension.service.IService;
 

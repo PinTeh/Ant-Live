@@ -27,7 +27,7 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <knife4j.version>2.0.9</knife4j.version>
         <guava.version>31.0.1-jre</guava.version>
-        <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
+        <mybatis-plus.version>3.5.7</mybatis-plus.version>
         <alipay-sdk.version>4.22.67.ALL</alipay-sdk.version>
         <druid.version>1.2.11</druid.version>
         <fastjson.version>2.0.0</fastjson.version>
@@ -191,6 +191,15 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.45.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
         </dependency>
     </dependencies>
 

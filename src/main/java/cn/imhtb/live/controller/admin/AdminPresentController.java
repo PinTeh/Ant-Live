@@ -1,7 +1,7 @@
 package cn.imhtb.live.controller.admin;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.pojo.Present;
+import cn.imhtb.live.pojo.database.Present;
 import cn.imhtb.live.modules.live.service.IPresentService;
 import cn.imhtb.live.pojo.vo.request.PresentRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;

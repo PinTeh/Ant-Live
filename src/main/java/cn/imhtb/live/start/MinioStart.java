@@ -25,7 +25,6 @@ public class MinioStart implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Executors.newSingleThreadExecutor().execute(()->{
-            log.info("start to minio init");
             MinioUtil.init();
             log.info("minio init finished, config = {}", minioConfig);
         });

@@ -3,7 +3,7 @@ package cn.imhtb.live.modules.user.service.impl;
 import cn.imhtb.live.modules.user.service.IUserRoleService;
 import cn.imhtb.live.modules.user.service.IUserService;
 import cn.imhtb.live.pojo.AntLiveUserBo;
-import cn.imhtb.live.pojo.User;
+import cn.imhtb.live.pojo.database.User;
 import cn.imhtb.live.pojo.database.Role;
 import cn.imhtb.live.pojo.database.UserRole;
 import cn.imhtb.live.service.IBillService;

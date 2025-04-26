@@ -1,6 +1,6 @@
 package cn.imhtb.live.modules.live.service;
 
-import cn.imhtb.live.pojo.Present;
+import cn.imhtb.live.pojo.database.Present;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

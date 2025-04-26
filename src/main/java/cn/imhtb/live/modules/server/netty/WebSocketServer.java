@@ -52,6 +52,7 @@ public class WebSocketServer {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline pipeline = socketChannel.pipeline();
+                        // 配置心跳检测处理器
                         pipeline.addLast(new IdleStateHandler(30, 0,0));
                         pipeline.addLast(new HttpServerCodec());
                         pipeline.addLast(new ChunkedWriteHandler());

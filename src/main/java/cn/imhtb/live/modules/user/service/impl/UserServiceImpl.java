@@ -1,77 +1,38 @@
 package cn.imhtb.live.modules.user.service.impl;
 
 import cn.imhtb.live.common.constants.AntLiveConstant;
-import cn.imhtb.live.common.enums.AuthStatusEnum;
-import cn.imhtb.live.common.enums.BillTypeEnum;
 import cn.imhtb.live.common.exception.BusinessException;
 import cn.imhtb.live.common.exception.base.UserErrorCode;
+import cn.imhtb.live.common.holder.UserHolder;
 import cn.imhtb.live.mappers.UserMapper;
+import cn.imhtb.live.modules.user.model.req.UserExtraReq;
+import cn.imhtb.live.modules.user.model.req.UserInfoUpdateReq;
+import cn.imhtb.live.modules.user.model.req.UserRegisterReq;
 import cn.imhtb.live.modules.user.service.IUserService;
-import cn.imhtb.live.pojo.AuthInfo;
-import cn.imhtb.live.pojo.Bill;
-import cn.imhtb.live.pojo.Room;
-import cn.imhtb.live.pojo.User;
-import cn.imhtb.live.pojo.vo.request.BindExtraInfoRequestVO;
-import cn.imhtb.live.pojo.vo.request.RegisterRequest;
-import cn.imhtb.live.pojo.vo.request.UserInfoUpdateRequest;
-import cn.imhtb.live.service.IAuthService;
-import cn.imhtb.live.service.IBillService;
-import cn.imhtb.live.service.IRoomService;
-import cn.imhtb.live.service.ITokenService;
-import cn.imhtb.live.common.utils.CommonUtil;
-import cn.imhtb.live.common.utils.MailUtil;
-import cn.imhtb.live.common.utils.SmsService;
+import cn.imhtb.live.pojo.database.User;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.benmanes.caffeine.cache.Cache;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 
 /**
  * @author pinteh
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
-
-    @Resource
-    private Cache<String, String> cache;
-    @Resource
-    private IAuthService authService;
-    @Resource
-    private IRoomService roomService;
-    @Resource
-    private IBillService billService;
-    @Resource
-    private SmsService smsService;
-    @Resource
-    private MailUtil mailUtils;
-    @Resource
-    private ITokenService tokenService;
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    @Override
-    public boolean[] getSecurityInfo() {
-        User user = getById(tokenService.getUserId());
-        boolean[] checked = new boolean[3];
-        checked[0] = StringUtils.isNotEmpty(user.getEmail());
-        checked[1] = StringUtils.isNotEmpty(user.getMobile());
-        // 获取身份认证状态
-        long count = authService.count(new LambdaQueryWrapper<AuthInfo>()
-                .eq(AuthInfo::getUserId, user.getId())
-                .eq(AuthInfo::getStatus, AuthStatusEnum.PASS.getCode()));
-        checked[2] = (count != 0);
-        return checked;
-    }
+    private final Cache<String, String> cache;
 
     @Override
     public void updateStatusByIds(Integer[] ids, Integer status) {
@@ -87,7 +48,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public boolean register(RegisterRequest request) {
+    public boolean register(UserRegisterReq request) {
         // 校验用户信息
         if (checkExistUsername(request.getUsername())) {
             throw new BusinessException(UserErrorCode.ERR_USERNAME_REPEAT);
@@ -102,6 +63,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         log.info("user register info, userId = {}", user.getId());
 
         // 初始化部分数据
+        // TODO 后续推荐这部分数据用懒加载的方式进行初始化
         initializeUserRegisterData(user.getId());
         return true;
     }
@@ -112,15 +74,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      * @param userId 用户标识
      */
     private void initializeUserRegisterData(Integer userId) {
-        roomService.save(Room.builder().userId(userId).build());
-        billService.save(Bill.builder()
-                .userId(userId)
-                .orderNo(CommonUtil.getOrderNo())
-                .balance(BigDecimal.ZERO)
-                .billChange(BigDecimal.ZERO)
-                .type(BillTypeEnum.INCOME.getCode())
-                .mark("初始化账单")
-                .build());
+//        roomService.save(Room.builder().userId(userId).build());
+//        billService.save(Bill.builder()
+//                .userId(userId)
+//                .orderNo(CommonUtil.getOrderNo())
+//                .balance(BigDecimal.ZERO)
+//                .billChange(BigDecimal.ZERO)
+//                .type(BillTypeEnum.INCOME.getCode())
+//                .mark("初始化账单")
+//                .build());
     }
 
     /**
@@ -139,40 +101,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public boolean generateVerifyCode(String account) {
-        int verifyCode = CommonUtil.getRandomCode();
-        if (account.contains(AntLiveConstant.AT)) {
-            String key = getCacheKey(AntLiveConstant.EMAIL, account);
-            cache.put(key, String.valueOf(verifyCode));
-            mailUtils.sendSimpleMessage(account, "直播注册验证码", "您的动态验证码为：" + verifyCode + "，有效时间为2分钟，如非本人操作，请忽略本短信！");
-        } else if (account.length() == AntLiveConstant.MOBILE_LENGTH) {
-            String key = getCacheKey(AntLiveConstant.MOBILE, account);
-            cache.put(key, String.valueOf(verifyCode));
-            ArrayList<String> params = new ArrayList<>();
-            params.add(String.valueOf(verifyCode));
-            smsService.txSmsSend(account, params, "verifyCode");
-        } else {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean bindExtraInfo(BindExtraInfoRequestVO bindExtraInfoRequestVO) {
-        Integer userId = tokenService.getUserId();
+    public boolean bindUserExtra(UserExtraReq userExtraReq) {
         // todo
-        User user = getById(userId);
+        User user = getById(UserHolder.getUserId());
         String account = user.getAccount();
-        String verifyCode = cache.getIfPresent(getCacheKey(bindExtraInfoRequestVO.getType(), account));
-        if (StringUtils.equalsIgnoreCase(verifyCode, bindExtraInfoRequestVO.getVerifyCode())) {
+        String verifyCode = cache.getIfPresent(getCacheKey(userExtraReq.getType(), account));
+        if (StringUtils.equalsIgnoreCase(verifyCode, userExtraReq.getVerifyCode())) {
             return false;
         }
-        switch (bindExtraInfoRequestVO.getType()) {
+        switch (userExtraReq.getType()) {
             case AntLiveConstant.EMAIL:
-                user.setEmail(bindExtraInfoRequestVO.getVal());
+                user.setEmail(userExtraReq.getVal());
                 break;
             case AntLiveConstant.MOBILE:
-                user.setMobile(bindExtraInfoRequestVO.getVal());
+                user.setMobile(userExtraReq.getVal());
                 break;
             default:
         }
@@ -180,11 +122,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     }
 
     @Override
-    public boolean updateUserInfo(UserInfoUpdateRequest request) {
-        Integer userId = tokenService.getUserId();
+    public boolean updateUserInfo(UserInfoUpdateReq request) {
         User user = new User();
         BeanUtils.copyProperties(request, user);
-        user.setId(userId);
+        user.setId(UserHolder.getUserId());
         if (StringUtils.isEmpty(user.getSignature())){
             user.setSignature("");
         }
@@ -193,14 +134,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public User getUserInfo() {
-        return getById(tokenService.getUserId());
+        return getById(UserHolder.getUserId());
     }
 
     @Override
     public void updateAvatar(String avatarUrl) {
-        Integer userId = tokenService.getUserId();
         User user = new User();
-        user.setId(userId);
+        user.setId(UserHolder.getUserId());
         user.setAvatar(avatarUrl);
         updateById(user);
     }

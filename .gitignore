@@ -41,3 +41,4 @@ application-prod.yml
 .DS_Store
 log-live*.log
 ～./
+conf/docker/

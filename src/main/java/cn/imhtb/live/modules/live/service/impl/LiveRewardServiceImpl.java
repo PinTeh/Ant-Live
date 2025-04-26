@@ -6,7 +6,7 @@ import cn.imhtb.live.common.holder.UserHolder;
 import cn.imhtb.live.modules.live.service.ILiveRewardService;
 import cn.imhtb.live.modules.live.service.IPresentService;
 import cn.imhtb.live.modules.live.vo.RewardReqVo;
-import cn.imhtb.live.pojo.Present;
+import cn.imhtb.live.pojo.database.Present;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

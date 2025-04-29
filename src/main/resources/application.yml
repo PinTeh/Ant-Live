@@ -2,6 +2,7 @@ server:
   port: 9000
 
 spring:
+  # 数据库配置必填
   datasource:
     username: root
     password: 123456
@@ -13,7 +14,22 @@ spring:
       initial-size: 5
       min-idle: 5
       max-active: 20
-
+  # redis配置必填
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    password: 123456
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+    timeout: 5000
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 4096MB
+      max-request-size: 4096MB
   mail:
     host: smtp.qq.com
     username: xxx@qq.com
@@ -21,37 +37,22 @@ spring:
     default-encoding: UTF-8
     port: 465
     protocol: smtps
-
-  redis:
-    database: 0
-    host: xxxx
-    port: 9379
-    password: xxx
-    jedis:
-      pool:
-        max-active: 8
-        max-idle: 8
-    timeout: 5000
-
-  servlet:
-    multipart:
-      enabled: true
-      max-file-size: 4096MB
-      max-request-size: 4096MB
-
 tencent:
+  # 腾讯云sms短信服务，非必填
   sms:
     appid: 000
     appkey: 000
     templateId: 000
     templateNoticeId: 000
     smsSign: 000
+  # 腾讯云直播服务，非必填
   live:
     liveDomain: live.imhtb.cn
     playDomain: play.imhtb.cn
     appName: live
     secretId: 000
     secretKey: 000
+  # 腾讯云对象存储服务，非必填
   cos:
     bucketName: 000
     path: https://xxx.cos.ap-chengdu.myqcloud.com/

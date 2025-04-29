@@ -17,7 +17,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -45,10 +43,10 @@ import java.util.Map;
 @RequestMapping("/tencent/live")
 public class TencentLiveController {
 
-    @Value("${tencent.live.domain}")
+    @Value("${tencent.live.domain:}")
     private String domain;
 
-    @Value("${tencent.live.appName}")
+    @Value("${tencent.live.appName:}")
     private String appName;
 
     private final MailUtils mailUtils;

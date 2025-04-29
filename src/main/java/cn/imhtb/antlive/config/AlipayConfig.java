@@ -16,7 +16,7 @@ import java.io.IOException;
  * @author PinTeh
  */
 @Slf4j
-@Configuration
+//@Configuration
 public class AlipayConfig {
 
     private static String path = "Q:\\Learning\\Live\\BackEnd\\AntLive\\src\\main\\resources\\static\\";

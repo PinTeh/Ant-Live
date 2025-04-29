@@ -28,7 +28,7 @@ Ant Live 是一个直播平台。集成了一系列杂七杂八的功能😁，�
 
 ## 如有问题可以联系
 
-![qrcode](http://image.imhtb.cn/qrCode.jpg)
+![qrcode](http://image.imhtb.cn/qrCode2.png)
 
 
 ### Preview

@@ -6,6 +6,8 @@ import cn.imhtb.live.modules.server.netty.domain.resp.WsMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.enums.WsRespMethodEnum;
 
 /**
+ * 消息组装
+ *
  * @author pinteh
  * @date 2023/6/13
  */

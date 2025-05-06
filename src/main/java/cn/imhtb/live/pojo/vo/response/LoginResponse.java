@@ -1,7 +1,7 @@
 package cn.imhtb.live.pojo.vo.response;
 
 import cn.imhtb.live.pojo.database.User;
-import cn.imhtb.live.pojo.vo.FrontMenuItem;
+import cn.imhtb.live.pojo.vo.FrontMenuItemResp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ public class LoginResponse {
 
     private User user;
 
-    private List<FrontMenuItem> menu;
+    private List<FrontMenuItemResp> menu;
 
     public LoginResponse(String token, User user) {
         this.token = token;

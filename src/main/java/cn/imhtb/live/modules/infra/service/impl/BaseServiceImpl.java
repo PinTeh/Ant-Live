@@ -109,6 +109,15 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T, L, Q, D, U> ex
     }
 
     @SuppressWarnings("all")
+    private Class<Q> getQueryClass(){
+        if (this.queryClass == null){
+            Class<?> typeArgument = ClassUtil.getTypeArgument(getClass(), 3);
+            this.queryClass = (Class<Q>) typeArgument;
+        }
+        return this.queryClass;
+    }
+
+    @SuppressWarnings("all")
     private Class<D> getDetailClass(){
         if (this.detailClass == null){
             Class<?> typeArgument = ClassUtil.getTypeArgument(getClass(), 4);

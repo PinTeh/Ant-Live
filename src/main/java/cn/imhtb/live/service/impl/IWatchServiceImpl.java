@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -101,6 +102,9 @@ public class IWatchServiceImpl extends ServiceImpl<WatchMapper, Watch> implement
             WatchResponse response = new WatchResponse();
             response.setId(watches.get(i).getId());
             Room room = roomMapper.selectById(watches.get(i).getRoomId());
+            if (Objects.isNull(room)){
+                continue;
+            }
             response.setCover(room.getCover());
             response.setName(nickNames.get(i));
             response.setTitle(room.getTitle());

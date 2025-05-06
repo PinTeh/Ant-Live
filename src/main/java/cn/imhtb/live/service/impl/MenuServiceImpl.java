@@ -1,61 +1,63 @@
 package cn.imhtb.live.service.impl;
 
 import cn.imhtb.live.common.ApiResponse;
-import cn.imhtb.live.pojo.database.Menu;
-import cn.imhtb.live.pojo.database.RoleMenu;
 import cn.imhtb.live.mappers.MenuMapper;
 import cn.imhtb.live.mappers.RoleMenuMapper;
-import cn.imhtb.live.service.IMenuService;
-import cn.imhtb.live.pojo.vo.FrontMenuItem;
+import cn.imhtb.live.pojo.database.Menu;
+import cn.imhtb.live.pojo.database.RoleMenu;
+import cn.imhtb.live.pojo.vo.FrontMenuItemResp;
 import cn.imhtb.live.pojo.vo.request.RoleMenuUpdateRequest;
+import cn.imhtb.live.service.IMenuService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
 
     private final MenuMapper menuMapper;
-
     private final RoleMenuMapper roleMenuMapper;
 
-    public MenuServiceImpl(MenuMapper menuMapper, RoleMenuMapper roleMenuMapper) {
-        this.menuMapper = menuMapper;
-        this.roleMenuMapper = roleMenuMapper;
-    }
-
     @Override
-    //@Cacheable("menus")
-    public List<FrontMenuItem> listMenus(Integer pid, Integer hidden) {
-        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", pid).eq(hidden != null, "hidden", hidden).orderByAsc("sort"));
+    public List<FrontMenuItemResp> listMenus(Integer pid, Integer hidden) {
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<Menu>()
+                .eq(pid != null, Menu::getPid, pid)
+                .eq(hidden != null, Menu::getHidden, hidden)
+                .orderByAsc(Menu::getSort);
+        List<Menu> menus = menuMapper.selectList(queryWrapper);
         return listMenusTree(menus, null, hidden);
     }
 
     @Override
-    //@Cacheable(cacheNames = "menu",key = "#roleId")
-    public List<FrontMenuItem> listMenusByRole(Integer roleId, Integer pid) {
-        List<RoleMenu> roleMenus = roleMenuMapper.selectList(new QueryWrapper<RoleMenu>().eq("role_id", roleId));
-        List<Menu> menus = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", pid).eq("hidden", 0).orderByAsc("sort"));
+    public List<FrontMenuItemResp> listMenusByRole(Integer roleId, Integer pid) {
+        LambdaQueryWrapper<RoleMenu> roleWrapper = new LambdaQueryWrapper<RoleMenu>().eq(RoleMenu::getRoleId, roleId);
+        List<RoleMenu> roleMenus = roleMenuMapper.selectList(roleWrapper);
+        LambdaQueryWrapper<Menu> menuWrapper = new LambdaQueryWrapper<Menu>().eq(Menu::getPid, pid).eq(Menu::getHidden, 0).orderByAsc(Menu::getSort);
+        List<Menu> menus = menuMapper.selectList(menuWrapper);
         List<Integer> menuIds = roleMenus.stream().map(RoleMenu::getMenuId).collect(Collectors.toList());
         return listMenusTree(menus, menuIds, 0);
     }
 
     @Override
-    //@Cacheable(cacheNames = "menu",key = "#roleIds.toArray()")
-    public List<FrontMenuItem> listMenusByRoleIds(List<Integer> roleIds, Integer pid) {
-        List<FrontMenuItem> list = new ArrayList<>();
-        roleIds.forEach(roleId -> {
+    public List<FrontMenuItemResp> listMenusByRoleIds(List<Integer> roleIds, Integer pid) {
+        List<FrontMenuItemResp> list = new ArrayList<>();
+        for (Integer roleId : roleIds) {
             list.addAll(listMenusByRole(roleId, pid));
-        });
-        List<FrontMenuItem> ret = new ArrayList<>(new LinkedHashSet<>(list));
-        return ret.stream().sorted(Comparator.comparing(FrontMenuItem::getSort)).collect(Collectors.toList());
+        }
+        List<FrontMenuItemResp> ret = new ArrayList<>(new LinkedHashSet<>(list));
+        return ret.stream().sorted(Comparator.comparing(FrontMenuItemResp::getSort)).collect(Collectors.toList());
     }
 
     @Override
-    //@CacheEvict(cacheNames = "menu")
     public ApiResponse updateRoleMenu(RoleMenuUpdateRequest request) {
         Integer roleId = request.getRoleId();
         List<Integer> currentMenuIds = request.getMenuIds();
@@ -80,29 +82,26 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
         return ApiResponse.ofSuccess();
     }
 
-    private List<FrontMenuItem> listMenusTree(List<Menu> menus, List<Integer> menuIds, Integer hidden) {
-        List<FrontMenuItem> list = new LinkedList<>();
-        menus.forEach(v -> {
-            if (v != null) {
-                List<Menu> childList = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", v.getId()).eq(hidden != null, "hidden", hidden).orderByAsc("sort"));
-
-                if (menuIds == null || menuIds.contains(v.getId())) {
-                    FrontMenuItem menuItem = new FrontMenuItem();
-                    menuItem.setId(v.getId());
-                    menuItem.setLabel(v.getTitle());
-                    menuItem.setIndex(v.getMenuIndex());
-                    menuItem.setIcon(v.getIcon());
-                    menuItem.setPath(v.getPath());
-                    menuItem.setHidden(v.getHidden());
-                    menuItem.setSort(v.getSort());
-                    menuItem.setPid(v.getPid());
-                    if (childList != null && childList.size() != 0) {
-                        menuItem.setChildren(listMenusTree(childList, menuIds, hidden));
-                    }
-                    list.add(menuItem);
+    private List<FrontMenuItemResp> listMenusTree(List<Menu> menus, List<Integer> menuIds, Integer hidden) {
+        List<FrontMenuItemResp> list = new LinkedList<>();
+        for (Menu menu : menus) {
+            List<Menu> childList = menuMapper.selectList(new QueryWrapper<Menu>().eq("pid", menu.getId()).eq(hidden != null, "hidden", hidden).orderByAsc("sort"));
+            if (menuIds == null || menuIds.contains(menu.getId())) {
+                FrontMenuItemResp menuItem = new FrontMenuItemResp();
+                menuItem.setId(menu.getId());
+                menuItem.setLabel(menu.getTitle());
+                menuItem.setIndex(menu.getMenuIndex());
+                menuItem.setIcon(menu.getIcon());
+                menuItem.setPath(menu.getPath());
+                menuItem.setHidden(menu.getHidden());
+                menuItem.setSort(menu.getSort());
+                menuItem.setPid(menu.getPid());
+                if (childList != null && !childList.isEmpty()) {
+                    menuItem.setChildren(listMenusTree(childList, menuIds, hidden));
                 }
+                list.add(menuItem);
             }
-        });
+        }
         return list;
     }
 

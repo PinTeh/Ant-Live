@@ -788,6 +788,8 @@ CREATE TABLE `tb_wallet`
     `user_id`     int unsigned NOT NULL COMMENT '关联用户id',
     `balance`     decimal(10, 2)        DEFAULT NULL COMMENT '余额',
     `currency`    varchar(64)           DEFAULT NULL COMMENT '币种',
+    `sign`        varchar(64)           DEFAULT NULL COMMENT '签名',
+    `version`     int          NOT NULL DEFAULT 0 COMMENT '版本号',
     `status`      int          NOT NULL DEFAULT 0 COMMENT '状态 0-正常 1-异常',
     `create_time` datetime              DEFAULT NULL,
     `update_time` datetime              DEFAULT NULL,

@@ -7,7 +7,7 @@ import cn.imhtb.live.pojo.database.LiveInfo;
 import cn.imhtb.live.pojo.LiveStatusVo;
 import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.pojo.StartOpenLiveVo;
-import cn.imhtb.live.service.ILiveInfoService;
+import cn.imhtb.live.modules.live.service.ILiveInfoService;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.service.ITokenService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;

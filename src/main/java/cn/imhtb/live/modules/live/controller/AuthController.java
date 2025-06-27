@@ -1,13 +1,8 @@
 package cn.imhtb.live.modules.live.controller;
 
-/**
- * @author pinteh
- * @date 2024/9/13
- */
-
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.modules.live.vo.AuthReqVo;
-import cn.imhtb.live.service.IAuthService;
+import cn.imhtb.live.modules.user.service.IAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +12,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 认证接口
+ *
+ * @author pinteh
+ * @date 2024/9/13
+ */
 @Api(tags = "认证接口")
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -27,7 +28,7 @@ public class AuthController {
 
     @ApiOperation("提交身份认证")
     @PostMapping("/submit")
-    public ApiResponse<?> save(@RequestBody AuthReqVo authReqVo) {
+    public ApiResponse<Boolean> save(@RequestBody AuthReqVo authReqVo) {
         return ApiResponse.ofSuccess(authService.submit(authReqVo));
     }
 

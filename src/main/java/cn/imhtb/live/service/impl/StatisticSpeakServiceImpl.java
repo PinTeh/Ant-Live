@@ -14,15 +14,4 @@ import java.util.List;
  */
 @Service
 public class StatisticSpeakServiceImpl extends ServiceImpl<StatisticSpeakMapper, StatisticSpeak> implements IStatisticSpeakService {
-
-    private final StatisticSpeakMapper statisticSpeakMapper;
-
-    public StatisticSpeakServiceImpl(StatisticSpeakMapper statisticSpeakMapper) {
-        this.statisticSpeakMapper = statisticSpeakMapper;
-    }
-
-    @Override
-    public List<StatisticSpeak> listInDateRange(int days, Integer rid) {
-        return statisticSpeakMapper.listInDateRange(days, rid);
-    }
 }

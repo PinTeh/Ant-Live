@@ -21,4 +21,12 @@ public interface IWalletService extends IService<Wallet> {
 
     boolean increase(Integer userId, BigDecimal fee);
 
+    /**
+     * 模拟充值
+     * @param userId 用户标识
+     * @param count 充值数量
+     * @return 充值结果
+     */
+    Boolean rechargeMock(Integer userId, String count);
+
 }

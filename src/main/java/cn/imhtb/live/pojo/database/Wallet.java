@@ -24,6 +24,12 @@ public class Wallet {
     @ApiModelProperty("余额")
     private BigDecimal balance;
 
+    @ApiModelProperty("版本号")
+    private Integer version;
+
+    @ApiModelProperty("签名")
+    private String sign;
+
     @ApiModelProperty("钱包状态")
     private Integer status;
 

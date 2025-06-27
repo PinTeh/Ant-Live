@@ -9,7 +9,7 @@ import cn.imhtb.live.pojo.database.LiveInfo;
 import cn.imhtb.live.pojo.LiveStatusVo;
 import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.pojo.StartOpenLiveVo;
-import cn.imhtb.live.service.ILiveInfoService;
+import cn.imhtb.live.modules.live.service.ILiveInfoService;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.service.ITokenService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -24,7 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
- * lal直播服务impl
+ * lal直播服务实现
  *
  * @author pinteh
  * @since 2022/06/13

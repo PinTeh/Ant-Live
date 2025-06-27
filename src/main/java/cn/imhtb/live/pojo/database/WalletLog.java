@@ -19,6 +19,8 @@ public class WalletLog {
 
     private Integer walletId;
 
+    private BigDecimal balance;
+
     private BigDecimal fee;
 
     private Integer actionType;

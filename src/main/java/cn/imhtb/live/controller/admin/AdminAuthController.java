@@ -3,11 +3,12 @@ package cn.imhtb.live.controller.admin;
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.pojo.database.AuthInfo;
 import cn.imhtb.live.common.enums.AuthStatusEnum;
-import cn.imhtb.live.service.IAuthService;
+import cn.imhtb.live.modules.user.service.IAuthService;
 import cn.imhtb.live.pojo.vo.request.IdsRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import io.swagger.annotations.Api;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +18,11 @@ import java.util.Arrays;
  * @author PinTeh
  * @date 2020/5/9
  */
+@Api(tags = "认证管理接口")
 @RestController
 @RequestMapping("/admin/auth")
 @PreAuthorize("hasAnyRole('ROLE_ROOT','ROLE_AUTH','ROLE_LIVE')")
 public class AdminAuthController {
-
 
     private final IAuthService authService;
 

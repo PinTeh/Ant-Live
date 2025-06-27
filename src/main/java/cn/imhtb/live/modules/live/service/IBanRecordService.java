@@ -1,4 +1,4 @@
-package cn.imhtb.live.service;
+package cn.imhtb.live.modules.live.service;
 
 import cn.imhtb.live.pojo.database.BanRecord;
 import com.baomidou.mybatisplus.extension.service.IService;

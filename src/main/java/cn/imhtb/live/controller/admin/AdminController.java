@@ -5,7 +5,7 @@ import cn.imhtb.live.pojo.database.Bill;
 import cn.imhtb.live.pojo.database.LiveInfo;
 import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.service.IBillService;
-import cn.imhtb.live.service.ILiveInfoService;
+import cn.imhtb.live.modules.live.service.ILiveInfoService;
 import cn.imhtb.live.service.IRoomService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

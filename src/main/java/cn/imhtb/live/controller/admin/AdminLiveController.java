@@ -4,7 +4,7 @@ import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.pojo.database.BanRecord;
 import cn.imhtb.live.pojo.database.LiveDetect;
-import cn.imhtb.live.service.IBanRecordService;
+import cn.imhtb.live.modules.live.service.IBanRecordService;
 import cn.imhtb.live.service.ILiveDetectService;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.service.ITencentLiveService;

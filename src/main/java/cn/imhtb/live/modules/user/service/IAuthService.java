@@ -1,6 +1,5 @@
-package cn.imhtb.live.service;
+package cn.imhtb.live.modules.user.service;
 
-import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.modules.live.vo.AuthReqVo;
 import cn.imhtb.live.modules.live.vo.AuthRespVo;
 import cn.imhtb.live.pojo.database.AuthInfo;
@@ -9,8 +8,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IAuthService extends IService<AuthInfo> {
 
     void updateStatusByIds(Integer[] ids, Integer status);
-
-    ApiResponse saveAndCheck(AuthInfo authInfo);
 
     /**
      * 提交身份认证

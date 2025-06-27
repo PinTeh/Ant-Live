@@ -19,12 +19,16 @@ import java.util.List;
 @Builder
 public class UserInfoVo {
 
+    @ApiModelProperty("用户id")
     private Integer userId;
 
+    @ApiModelProperty("用户名")
     private String username;
 
+    @ApiModelProperty("昵称")
     private String nickName;
 
+    @ApiModelProperty("头像")
     private String avatar;
 
     @ApiModelProperty("开心果余额")
@@ -42,9 +46,10 @@ public class UserInfoVo {
     @ApiModelProperty("密码")
     private String password;
 
-    @ApiModelProperty("是否进行实名认证")
+    @ApiModelProperty("是否已实名认证")
     private Boolean hasAuth;
 
+    @ApiModelProperty("角色列表")
     private List<Integer> roleIds;
 
 }

@@ -81,8 +81,8 @@ public class CovertBeanUtil {
         /**
          * 回调
          *
-         * @param t
-         * @param s
+         * @param t 目标类
+         * @param s 源类
          */
         void callBack(S t, T s);
     }

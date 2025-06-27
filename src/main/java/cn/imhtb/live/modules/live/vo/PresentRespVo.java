@@ -12,7 +12,7 @@ import java.math.BigDecimal;
  */
 @Data
 @ApiModel("礼物")
-public class PresentVo {
+public class PresentRespVo {
 
     @ApiModelProperty(value = "礼物id")
     private Integer id;

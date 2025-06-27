@@ -6,7 +6,7 @@ import cn.imhtb.live.common.annotation.IgnoreToken;
 import cn.imhtb.live.common.enums.DisabledStatusEnum;
 import cn.imhtb.live.common.enums.PresentRewardTypeEnum;
 import cn.imhtb.live.modules.live.service.IPresentService;
-import cn.imhtb.live.modules.live.vo.PresentVo;
+import cn.imhtb.live.modules.live.vo.PresentRespVo;
 import cn.imhtb.live.modules.live.vo.RewardReqVo;
 import cn.imhtb.live.pojo.database.Present;
 import cn.imhtb.live.pojo.vo.request.SendPresentRequest;
@@ -37,11 +37,11 @@ public class PresentController {
     @IgnoreToken
     @ApiOperation("获取礼物列表")
     @GetMapping("/list")
-    public ApiResponse<List<PresentVo>> list() {
+    public ApiResponse<List<PresentRespVo>> list() {
         List<Present> presentList = presentService.list(new LambdaQueryWrapper<Present>()
                 .eq(Present::getDisabled, DisabledStatusEnum.YES.getCode())
                 .orderByAsc(Present::getSort));
-        return ApiResponse.ofSuccess(BeanUtil.copyToList(presentList, PresentVo.class));
+        return ApiResponse.ofSuccess(BeanUtil.copyToList(presentList, PresentRespVo.class));
     }
 
     @ApiOperation("赠送礼物")

@@ -1,6 +1,5 @@
-package cn.imhtb.live.service.impl;
+package cn.imhtb.live.modules.user.service.impl;
 
-import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.common.enums.AuthStatusEnum;
 import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
 import cn.imhtb.live.common.holder.UserHolder;
@@ -11,8 +10,7 @@ import cn.imhtb.live.modules.live.vo.AuthReqVo;
 import cn.imhtb.live.modules.live.vo.AuthRespVo;
 import cn.imhtb.live.pojo.database.AuthInfo;
 import cn.imhtb.live.pojo.database.Room;
-import cn.imhtb.live.service.IAuthService;
-import com.alibaba.fastjson.JSON;
+import cn.imhtb.live.modules.user.service.IAuthService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -63,10 +61,6 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, AuthInfo> implement
         }
     }
 
-    @Override
-    public ApiResponse saveAndCheck(AuthInfo authInfo) {
-        return ApiResponse.ofSuccess();
-    }
 
     @Override
     public boolean submit(AuthReqVo authReqVo) {
@@ -98,57 +92,4 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, AuthInfo> implement
         return authRespVo;
     }
 
-    /**
-     * WarnInfos，告警信息，Code 告警码列表和释义：
-     * -9100 身份证有效日期不合法告警，
-     * -9101 身份证边框不完整告警，
-     * -9102 身份证复印件告警，
-     * -9103 身份证翻拍告警，
-     * -9105 身份证框内遮挡告警，
-     * -9104 临时身份证告警，
-     * -9106 身份证 PS 告警。
-     */
-    private String handleAdvanceInfo(String advanceInfo) {
-        StringBuilder ret = new StringBuilder();
-        OcrAdvanceInfo ocrAdvanceInfo = JSON.parseObject(advanceInfo, OcrAdvanceInfo.class);
-        Integer[] warnInfos = ocrAdvanceInfo.getWarnInfos();
-        if (warnInfos != null) {
-            for (Integer warnInfo : warnInfos) {
-                switch (warnInfo) {
-                    case -9100:
-                        ret.append("身份证有效日期不合法");
-                        break;
-                    case -9101:
-                        ret.append("身份证边框不完整");
-                        break;
-                    case -9102:
-                        ret.append("身份证复印件告警");
-                        break;
-                    case -9103:
-                        ret.append("身份证翻拍告警");
-                        break;
-                    case -9104:
-                        ret.append("临时身份证告警");
-                        break;
-                    case -9105:
-                        ret.append("身份证框内遮挡告警");
-                        break;
-                    case -9106:
-                        ret.append("身份证 PS 告警");
-                        break;
-                }
-            }
-        }
-        return ret.toString();
-    }
-
-
-    static class OcrAdvanceInfo {
-        private Integer[] warnInfos;
-
-        public Integer[] getWarnInfos() {
-            return warnInfos;
-        }
-
-    }
 }

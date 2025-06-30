@@ -7,6 +7,8 @@
     <contextName>${contextName}</contextName>
     <property name="LOG_HOME" value="${logPath}/${contextName}" />
     <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %X{reqId} %X{serverIp} %X{serverName} %-5level %logger{100} - %msg%n" />
+    <property name="LOG_PATTERN_COLOR" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%5p) %magenta(${PID}) [%16.16t] %cyan(%-40.40logger{39}): %msg%n" />
+    <property name="LOG_PATTERN_CONSOLE" value="%green(%d{yyyy-MM-dd HH:mm:ss.SSS}) %highlight(%-5level) %yellow(%logger{100}): %msg%n" />
 
     <appender name="WARN"  class="ch.qos.logback.core.rolling.RollingFileAppender">
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -51,7 +53,7 @@
     </appender>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>${LOG_PATTERN}</pattern>
+            <pattern>${LOG_PATTERN_CONSOLE}</pattern>
             <charset class="java.nio.charset.Charset">UTF-8</charset>
         </encoder>
     </appender>

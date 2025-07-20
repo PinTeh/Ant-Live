@@ -26,11 +26,13 @@ public class Category implements Serializable {
 
     private String name;
 
+    private String icon;
+
     private Integer sort;
 
-    @TableLogic
-    private Integer disabled;
+    private Integer status;
 
+    @TableLogic
     private Integer isDeleted;
 
     @TableField(fill = FieldFill.INSERT)

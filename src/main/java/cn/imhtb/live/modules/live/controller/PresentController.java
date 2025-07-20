@@ -1,17 +1,16 @@
 package cn.imhtb.live.modules.live.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.imhtb.live.common.ApiResponse;
+import cn.imhtb.live.common.PageData;
 import cn.imhtb.live.common.annotation.IgnoreToken;
-import cn.imhtb.live.common.enums.DisabledStatusEnum;
 import cn.imhtb.live.common.enums.PresentRewardTypeEnum;
+import cn.imhtb.live.modules.infra.model.PageQuery;
+import cn.imhtb.live.modules.live.service.ILiveGiftService;
 import cn.imhtb.live.modules.live.service.IPresentService;
 import cn.imhtb.live.modules.live.vo.PresentRespVo;
 import cn.imhtb.live.modules.live.vo.RewardReqVo;
-import cn.imhtb.live.pojo.database.Present;
 import cn.imhtb.live.pojo.vo.request.SendPresentRequest;
 import cn.imhtb.live.service.IPresentRewardService;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -33,15 +32,13 @@ public class PresentController {
 
     private final IPresentService presentService;
     private final IPresentRewardService presentRewardService;
+    private final ILiveGiftService liveGiftService;
 
     @IgnoreToken
     @ApiOperation("获取礼物列表")
     @GetMapping("/list")
     public ApiResponse<List<PresentRespVo>> list() {
-        List<Present> presentList = presentService.list(new LambdaQueryWrapper<Present>()
-                .eq(Present::getDisabled, DisabledStatusEnum.YES.getCode())
-                .orderByAsc(Present::getSort));
-        return ApiResponse.ofSuccess(BeanUtil.copyToList(presentList, PresentRespVo.class));
+        return ApiResponse.ofSuccess(liveGiftService.list());
     }
 
     @ApiOperation("赠送礼物")
@@ -54,8 +51,14 @@ public class PresentController {
     @ApiOperation("赠送礼物")
     @PostMapping("/reward")
     public ApiResponse<Boolean> reward(@RequestBody @Valid RewardReqVo rewardReqVo) {
-        presentRewardService.createReward(rewardReqVo);
-        return ApiResponse.ofSuccess();
+        liveGiftService.createReward(rewardReqVo);
+        return ApiResponse.ofSuccess(true);
+    }
+
+    @ApiOperation("获取赠送礼物记录")
+    @PostMapping("/reward/records")
+    public ApiResponse<PageData<?>> rewardRecords(@RequestBody PageQuery pageQuery) {
+        return ApiResponse.ofSuccess(liveGiftService.rewardList(pageQuery.getPageNo(), pageQuery.getPageSize()));
     }
 
 }

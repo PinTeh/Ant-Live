@@ -11,12 +11,12 @@ import lombok.Getter;
  */
 @Getter
 @AllArgsConstructor
-public enum DisabledStatusEnum {
+public enum StatusEnum {
     /**
      * 可用状态描述
      */
-    YES(0, "可使用"),
-    NO(1, "不可使用");
+    YES(0, "可用"),
+    NO(-1, "不可用");
 
     private final int code;
     private final String desc;

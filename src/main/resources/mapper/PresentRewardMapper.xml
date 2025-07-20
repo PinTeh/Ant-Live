@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.imhtb.live.mappers.PresentRewardMapper">
+
+    <!-- 自定义方法对应的 SQL -->
+    <select id="pageRewardRespVo" resultType="cn.imhtb.live.modules.live.vo.RewardRespVo">
+        SELECT
+            pr.id,
+            pr.from_id,
+            pr.to_id,
+            pr.room_id,
+            pr.video_id,
+            pr.present_id,
+            pr.number,
+            pr.unit_price,
+            pr.total_price,
+            pr.create_time,
+            p.name AS present_name,
+            p.icon AS present_icon,
+            u.nickname AS from_user_nickname,
+            u.avatar AS from_user_avatar
+        FROM present_reward pr
+            LEFT JOIN present p ON pr.present_id = p.id
+        LEFT JOIN `user` u ON u.id = pr.from_id ${ew.customSqlSegment}
+    </select>
+
+</mapper>

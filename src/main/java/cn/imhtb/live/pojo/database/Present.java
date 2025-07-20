@@ -34,6 +34,9 @@ public class Present {
     @ApiModelProperty(value = "礼物排序")
     private Integer sort;
 
+    @ApiModelProperty(value = "状态")
+    private Integer status;
+
     @ApiModelProperty(value = "是否禁用")
     private Integer disabled;
 

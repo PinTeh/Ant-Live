@@ -33,6 +33,10 @@ public class SystemUserDetail {
 
     private int disabled;
 
+    private Integer status;
+
     private LocalDateTime createTime;
+
+    private LocalDateTime updateTime;
 
 }

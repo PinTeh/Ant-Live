@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class SystemUserQuery {
 
+    @QueryFiled(type = QueryType.EQ)
     private String id;
 
     @ApiModelProperty(value = "用户名")

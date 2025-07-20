@@ -36,10 +36,10 @@ public class LiveInfo {
 
     private Integer userId;
 
-    private String clickCount;
+    private Long clickCount;
 
-    private String danMuCount;
+    private Long messageCount;
 
-    private String presentCount;
+    private Long presentCount;
 
 }

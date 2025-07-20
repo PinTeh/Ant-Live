@@ -13,11 +13,13 @@ public class SystemCategoryUpdate {
 
     private Integer parentId;
 
+    private String icon;
+
     private String name;
 
     private Integer sort;
 
-    private Integer disabled;
+    private Integer status;
 
     private Integer isDeleted;
 

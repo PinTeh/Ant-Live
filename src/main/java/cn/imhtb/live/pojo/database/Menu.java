@@ -27,12 +27,14 @@ public class Menu {
 
     private Integer sort;
 
+    private Integer status;
+
     private Integer hidden;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
-    @TableField(fill = FieldFill.UPDATE)
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
 
 }

@@ -2,7 +2,7 @@ package cn.imhtb.live.controller.admin;
 
 import cn.imhtb.live.common.ApiResponse;
 import cn.imhtb.live.pojo.database.User;
-import cn.imhtb.live.common.enums.DisabledStatusEnum;
+import cn.imhtb.live.common.enums.StatusEnum;
 import cn.imhtb.live.modules.user.service.IUserService;
 import cn.imhtb.live.pojo.vo.request.IdsRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -46,9 +46,9 @@ public class AdminUserController {
                                  @PathVariable(name = "type") String type) {
         Integer[] ids = request.getIds();
         if ("block".equals(type)) {
-            userService.updateStatusByIds(ids, DisabledStatusEnum.NO.getCode());
+            userService.updateStatusByIds(ids, StatusEnum.NO.getCode());
         } else if ("unblock".equals(type)) {
-            userService.updateStatusByIds(ids, DisabledStatusEnum.YES.getCode());
+            userService.updateStatusByIds(ids, StatusEnum.YES.getCode());
         }
         return ApiResponse.ofSuccess();
     }

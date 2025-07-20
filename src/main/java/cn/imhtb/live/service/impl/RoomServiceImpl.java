@@ -1,7 +1,7 @@
 package cn.imhtb.live.service.impl;
 
 import cn.imhtb.live.common.PageData;
-import cn.imhtb.live.common.enums.DisabledStatusEnum;
+import cn.imhtb.live.common.enums.StatusEnum;
 import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
 import cn.imhtb.live.common.enums.WatchTypeEnum;
 import cn.imhtb.live.common.holder.UserHolder;
@@ -69,7 +69,7 @@ public class RoomServiceImpl extends ServiceImpl<RoomMapper, Room> implements IR
         Page<Room> page = this.page(new Page<>(pageNo, pageSize), new LambdaQueryWrapper<Room>()
                 .eq(cid != null, Room::getCategoryId, cid)
                 .eq(Room::getStatus, LiveRoomStatusEnum.LIVING.getCode())
-                .eq(Room::getDisabled, DisabledStatusEnum.YES.getCode()));
+                .eq(Room::getDisabled, StatusEnum.YES.getCode()));
 
         List<RoomRespVo> collect = page.getRecords().stream()
                 .map(this::packageRoomResponse)

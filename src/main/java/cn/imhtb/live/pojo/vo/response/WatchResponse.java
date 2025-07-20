@@ -19,4 +19,6 @@ public class WatchResponse {
 
     private Integer roomId;
 
+    private Integer liveStatus;
+
 }

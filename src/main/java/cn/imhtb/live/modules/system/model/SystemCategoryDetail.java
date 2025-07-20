@@ -17,9 +17,11 @@ public class SystemCategoryDetail {
 
     private String name;
 
+    private String icon;
+
     private Integer sort;
 
-    private Integer disabled;
+    private Integer status;
 
     private Integer isDeleted;
 

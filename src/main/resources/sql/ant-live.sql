@@ -172,24 +172,31 @@ COMMIT;
 -- Table structure for category
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
-CREATE TABLE `category` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                            `sort` int DEFAULT NULL,
-                            `disabled` int DEFAULT NULL,
-                            `is_deleted` int Not NULL DEFAULT 0,
-                            `create_time` datetime DEFAULT NULL,
-                            `update_time` datetime DEFAULT NULL,
-                            `parent_id` int DEFAULT NULL,
-                            PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+CREATE TABLE `category`
+(
+    `id`          int NOT NULL AUTO_INCREMENT,
+    `name`        varchar(255) DEFAULT NULL,
+    `icon`        varchar(1024) DEFAULT NULL,
+    `sort`        int NOT NULL DEFAULT 0,
+    `status`      int NOT NULL DEFAULT 0,
+    `is_deleted`  int NOT NULL DEFAULT 0,
+    `create_time` datetime     DEFAULT NULL,
+    `update_time` datetime     DEFAULT NULL,
+    `parent_id`   int          DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 3
+  DEFAULT CHARSET = utf8mb3
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of category
 -- ----------------------------
 BEGIN;
-INSERT INTO `category` (`id`, `name`, `sort`, `disabled`, `is_deleted`, `create_time`, `update_time`, `parent_id`) VALUES (1, '游戏直播', 1, 0, 0, '2020-04-19 01:33:15', '2020-04-19 01:33:17', NULL);
-INSERT INTO `category` (`id`, `name`, `sort`, `disabled`, `is_deleted`, `create_time`, `update_time`, `parent_id`) VALUES (2, '娱乐直播', 1, 0, 0, '2020-04-19 01:33:35', '2020-04-19 01:33:37', NULL);
+INSERT INTO `category` (`id`, `name`, `sort`, `status`, `is_deleted`, `create_time`, `update_time`, `parent_id`)
+VALUES (1, '游戏直播', 1, 0, 0, '2020-04-19 01:33:15', '2020-04-19 01:33:17', NULL);
+INSERT INTO `category` (`id`, `name`, `sort`, `status`, `is_deleted`, `create_time`, `update_time`, `parent_id`)
+VALUES (2, '娱乐直播', 2, 0, 0, '2020-04-19 01:33:35', '2020-04-19 01:33:37', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -229,74 +236,48 @@ COMMIT;
 -- Table structure for live_info
 -- ----------------------------
 DROP TABLE IF EXISTS `live_info`;
-CREATE TABLE `live_info` (
-                             `id` int NOT NULL AUTO_INCREMENT,
-                             `start_time` datetime DEFAULT NULL,
-                             `end_time` datetime DEFAULT NULL,
-                             `room_id` int DEFAULT NULL,
-                             `user_id` int DEFAULT NULL,
-                             `create_time` datetime DEFAULT NULL,
-                             `update_time` datetime DEFAULT NULL,
-                             `status` int DEFAULT NULL,
-                             `click_count` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                             `dan_mu_count` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                             `present_count` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                             PRIMARY KEY (`id`) USING BTREE,
-                             KEY `FK_ROOM_INFO_ROOM_ID` (`room_id`) USING BTREE,
-                             CONSTRAINT `FK_ROOM_INFO_ROOM_ID` FOREIGN KEY (`room_id`) REFERENCES `room` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
-
--- ----------------------------
--- Records of live_info
--- ----------------------------
-BEGIN;
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (8, '2020-03-05 18:00:30', '2020-03-05 18:04:41', 1, 10001, '2020-03-05 18:00:30', '2020-03-05 18:04:41', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (9, '2020-03-05 18:05:37', '2020-03-05 18:14:08', 1, 10001, '2020-03-05 18:05:37', '2020-03-05 18:14:08', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (10, '2020-03-18 16:48:33', '2020-03-18 16:49:29', 1, 10001, '2020-03-18 16:48:33', '2020-03-18 16:49:29', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (11, '2020-03-18 16:50:57', '2020-03-18 16:51:18', 1, 10001, '2020-03-18 16:50:57', '2020-03-18 16:51:18', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (12, '2020-03-18 17:43:38', '2020-03-18 17:53:17', 1, 10001, '2020-03-18 17:43:38', '2020-03-18 17:53:17', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (13, '2020-05-10 23:52:49', '2020-05-10 23:54:41', 1, 10001, '2020-05-10 23:52:49', '2020-05-10 23:54:41', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (14, '2020-05-10 23:55:33', '2020-05-10 23:58:12', 1, 10001, '2020-05-10 23:55:33', '2020-05-10 23:58:12', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (15, '2020-05-13 16:28:40', '2020-05-13 16:32:12', 1, 10001, '2020-05-13 16:28:40', '2020-05-13 16:32:12', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (16, '2020-05-13 16:36:12', '2020-05-13 16:38:19', 1, 10001, '2020-05-13 16:36:12', '2020-05-13 16:38:19', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (17, '2020-05-13 16:54:04', '2020-05-13 17:02:34', 1, 10001, '2020-05-13 16:54:04', '2020-05-13 17:02:34', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (18, '2020-05-13 17:12:31', '2020-05-13 17:16:51', 1, 10001, '2020-05-13 17:12:31', '2020-05-13 17:16:51', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (19, '2020-05-13 17:17:25', '2020-05-13 17:19:32', 1, 10001, '2020-05-13 17:17:25', '2020-05-13 17:19:32', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (20, '2020-05-13 17:20:47', '2020-05-13 17:22:32', 1, 10001, '2020-05-13 17:20:47', '2020-05-13 17:22:32', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (21, '2020-05-13 17:27:37', '2020-05-13 17:30:14', 1, 10001, '2020-05-13 17:27:37', '2020-05-13 17:30:14', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (22, '2020-05-13 17:34:48', '2020-05-13 17:37:32', 1, 10001, '2020-05-13 17:34:48', '2020-05-13 17:37:32', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (23, '2020-05-13 17:40:28', '2020-05-13 17:45:28', 1, 10001, '2020-05-13 17:40:28', '2020-05-13 17:45:28', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (24, '2020-05-13 17:53:46', '2020-05-13 17:54:20', 1, 10001, '2020-05-13 17:53:46', '2020-05-13 17:54:20', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (25, '2020-05-13 18:10:54', '2020-05-13 18:11:36', 1, 10001, '2020-05-13 18:10:54', '2020-05-13 18:11:36', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (26, '2020-05-13 18:13:22', '2020-05-13 18:13:59', 1, 10001, '2020-05-13 18:13:22', '2020-05-13 18:13:59', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (27, '2020-05-13 18:15:06', '2020-05-13 18:15:15', 1, 10001, '2020-05-13 18:15:06', '2020-05-13 18:15:15', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (28, '2020-05-13 18:15:55', '2020-05-13 18:16:02', 1, 10001, '2020-05-13 18:15:55', '2020-05-13 18:16:02', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (29, '2020-05-13 18:17:21', '2020-05-13 18:17:51', 1, 10001, '2020-05-13 18:17:21', '2020-05-13 18:17:51', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (30, '2020-05-13 18:23:32', '2020-05-13 18:23:43', 1, 10001, '2020-05-13 18:23:32', '2020-05-13 18:23:43', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (31, '2020-05-17 10:56:34', '2020-05-17 10:59:52', 1, 10001, '2020-05-17 10:56:34', '2020-05-17 10:59:52', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (32, '2020-05-19 09:22:12', '2020-05-19 09:23:01', 1, 10001, '2020-05-19 09:22:12', '2020-05-19 09:23:01', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (33, '2020-05-20 15:55:07', '2020-05-20 15:57:59', 1, 10001, '2020-05-20 15:55:07', '2020-05-20 15:57:59', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (34, '2020-05-20 15:58:41', '2020-05-20 15:59:36', 1, 10001, '2020-05-20 15:58:41', '2020-05-20 15:59:36', 1, NULL, NULL, NULL);
-INSERT INTO `live_info` (`id`, `start_time`, `end_time`, `room_id`, `user_id`, `create_time`, `update_time`, `status`, `click_count`, `dan_mu_count`, `present_count`) VALUES (35, '2020-05-20 16:59:16', '2020-05-20 16:59:30', 1, 10001, '2020-05-20 16:59:16', '2020-05-20 16:59:30', 1, NULL, NULL, NULL);
-COMMIT;
+CREATE TABLE `live_info`
+(
+    `id`            int NOT NULL AUTO_INCREMENT,
+    `start_time`    datetime DEFAULT NULL,
+    `end_time`      datetime DEFAULT NULL,
+    `room_id`       int      DEFAULT NULL,
+    `user_id`       int      DEFAULT NULL,
+    `create_time`   datetime DEFAULT NULL,
+    `update_time`   datetime DEFAULT NULL,
+    `status`        int      DEFAULT NULL,
+    `click_count`   int      DEFAULT 0,
+    `message_count` int      DEFAULT 0,
+    `present_count` int      DEFAULT 0,
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `FK_ROOM_INFO_ROOM_ID` (`room_id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 36
+  DEFAULT CHARSET = utf8mb3
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for menu
 -- ----------------------------
 DROP TABLE IF EXISTS `menu`;
-CREATE TABLE `menu` (
-                        `id` int NOT NULL AUTO_INCREMENT,
-                        `menu_index` int DEFAULT NULL,
-                        `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                        `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                        `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-                        `pid` int DEFAULT '0',
-                        `sort` int DEFAULT NULL,
-                        `hidden` int DEFAULT NULL,
-                        `create_time` datetime DEFAULT NULL,
-                        `update_time` datetime DEFAULT NULL,
-                        PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb3 ROW_FORMAT=DYNAMIC;
+CREATE TABLE `menu`
+(
+    `id`          int NOT NULL AUTO_INCREMENT,
+    `menu_index`  int          DEFAULT NULL,
+    `icon`        varchar(255) DEFAULT NULL,
+    `path`        varchar(255) DEFAULT NULL,
+    `title`       varchar(255) DEFAULT NULL,
+    `pid`         int          DEFAULT '0',
+    `status`      int          DEFAULT '0',
+    `sort`        int          DEFAULT NULL,
+    `hidden`      int          DEFAULT NULL,
+    `create_time` datetime     DEFAULT NULL,
+    `update_time` datetime     DEFAULT NULL,
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 25
+  DEFAULT CHARSET = utf8mb3
+  ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of menu
@@ -815,3 +796,41 @@ CREATE TABLE `tb_wallet_log`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARSET = utf8mb4 COMMENT ='钱包记录表';
+
+
+CREATE TABLE `sys_dict`
+(
+    `id`          int NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+    `type`        varchar(255) DEFAULT NULL COMMENT '类型',
+    `type_name`   varchar(255) DEFAULT NULL COMMENT '类型名称',
+    `label`       varchar(255) DEFAULT NULL COMMENT '标签',
+    `value`       varchar(255) DEFAULT NULL COMMENT '值',
+    `status`      int          DEFAULT NULL COMMENT '状态',
+    `sort`        int          DEFAULT NULL COMMENT '排序',
+    `description` varchar(255) DEFAULT NULL COMMENT '描述',
+    `create_time` datetime     DEFAULT NULL COMMENT '创建时间',
+    `update_time` datetime     DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  AUTO_INCREMENT = 1
+  DEFAULT CHARSET = utf8mb4 COMMENT ='字典表';
+
+DROP TABLE IF EXISTS `message`;
+CREATE TABLE `message`
+(
+    `id`           bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `room_id`      bigint(20)          NOT NULL COMMENT '会话表id',
+    `from_uid`     bigint(20)          NOT NULL COMMENT '消息发送者uid',
+    `content`      varchar(1024)            DEFAULT NULL COMMENT '消息内容',
+    `reply_msg_id` bigint(20)          NULL DEFAULT NULL COMMENT '回复的消息内容',
+    `status`       int(11)             NOT NULL COMMENT '消息状态 0正常 -1删除',
+    `type`         int(11)             NULL DEFAULT 1 COMMENT '消息类型 1正常文本 2.撤回消息',
+    `extra`        json                     DEFAULT NULL COMMENT '扩展信息',
+    `create_time`  datetime         NOT NULL COMMENT '创建时间',
+    `update_time`  datetime         NOT NULL COMMENT '修改时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX `idx_room_id` (`room_id`) USING BTREE,
+    INDEX `idx_from_uid` (`from_uid`) USING BTREE
+) ENGINE = InnoDB
+  CHARACTER SET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci COMMENT = '消息表';

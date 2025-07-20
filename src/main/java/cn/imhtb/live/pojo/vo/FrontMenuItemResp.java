@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,6 +34,9 @@ public class FrontMenuItemResp implements Serializable {
     @ApiModelProperty(value = "是否隐藏")
     private Integer hidden;
 
+    @ApiModelProperty(value = "状态")
+    private Integer status;
+
     @ApiModelProperty(value = "排序")
     private Integer sort;
 
@@ -41,5 +45,8 @@ public class FrontMenuItemResp implements Serializable {
 
     @ApiModelProperty(value = "子菜单")
     private List<FrontMenuItemResp> children;
+
+    @ApiModelProperty(value = "创建时间")
+    private LocalDateTime createTime;
 
 }

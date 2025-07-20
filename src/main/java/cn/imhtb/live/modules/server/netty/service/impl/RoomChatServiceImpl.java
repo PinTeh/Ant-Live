@@ -1,5 +1,6 @@
 package cn.imhtb.live.modules.server.netty.service.impl;
 
+import cn.imhtb.live.mappers.MessageMapper;
 import cn.imhtb.live.modules.server.netty.AttrUtil;
 import cn.imhtb.live.modules.server.netty.assembly.WsMsgAssembly;
 import cn.imhtb.live.modules.server.netty.domain.WsChannelExtraInfoDTO;
@@ -10,6 +11,7 @@ import cn.imhtb.live.modules.server.netty.domain.resp.GiftMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.domain.resp.WsMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.service.IRoomChatService;
 import cn.imhtb.live.modules.user.service.IUserService;
+import cn.imhtb.live.pojo.database.Message;
 import cn.imhtb.live.pojo.database.User;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
@@ -36,6 +38,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class RoomChatServiceImpl implements IRoomChatService {
 
     private final IUserService userService;
+
+    private final MessageMapper messageMapper;
 
     /**
      * 所有的会话信息维护
@@ -153,6 +157,14 @@ public class RoomChatServiceImpl implements IRoomChatService {
                 sendMessage(channel, WsMsgAssembly.buildChat(chatMsgRespDTO));
             }
         }
+        // 保存消息
+        Message message = new Message();
+        message.setRoomId(roomId);
+        message.setFromUid(userId);
+        message.setContent(chatMsgReq.getText());
+        message.setStatus(0);
+        message.setType(1);
+        messageMapper.insert(message);
     }
 
     @Override

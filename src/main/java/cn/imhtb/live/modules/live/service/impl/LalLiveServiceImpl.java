@@ -4,12 +4,14 @@ import cn.hutool.crypto.digest.MD5;
 import cn.imhtb.live.common.config.LalLiveConfig;
 import cn.imhtb.live.common.enums.LiveInfoStatusEnum;
 import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
-import cn.imhtb.live.modules.live.service.ILiveService;
-import cn.imhtb.live.pojo.database.LiveInfo;
-import cn.imhtb.live.pojo.LiveStatusVo;
-import cn.imhtb.live.pojo.database.Room;
-import cn.imhtb.live.pojo.StartOpenLiveVo;
+import cn.imhtb.live.mappers.MessageMapper;
 import cn.imhtb.live.modules.live.service.ILiveInfoService;
+import cn.imhtb.live.modules.live.service.ILiveService;
+import cn.imhtb.live.pojo.LiveStatusVo;
+import cn.imhtb.live.pojo.StartOpenLiveVo;
+import cn.imhtb.live.pojo.database.LiveInfo;
+import cn.imhtb.live.pojo.database.Message;
+import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.service.IRoomService;
 import cn.imhtb.live.service.ITokenService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -38,6 +40,7 @@ public class LalLiveServiceImpl implements ILiveService {
     private final ITokenService tokenService;
     private final LalLiveConfig lalLiveConfig;
     private final ILiveInfoService liveInfoService;
+    private final MessageMapper messageMapper;
 
     @Override
     public String getName() {
@@ -89,6 +92,12 @@ public class LalLiveServiceImpl implements ILiveService {
         LiveInfo historyLiveInfo = getHistoryLiveInfo(room);
         historyLiveInfo.setStatus(LiveInfoStatusEnum.FINISHED.getCode());
         historyLiveInfo.setEndTime(LocalDateTime.now());
+
+        LambdaQueryWrapper<Message> wrapper = new LambdaQueryWrapper<Message>().eq(Message::getRoomId, room.getId())
+                .ge(Message::getCreateTime, historyLiveInfo.getStartTime())
+                .le(Message::getCreateTime, historyLiveInfo.getEndTime());
+        Long messageCount = messageMapper.selectCount(wrapper);
+        historyLiveInfo.setMessageCount(messageCount);
         liveInfoService.updateById(historyLiveInfo);
 
         room.setStatus(LiveRoomStatusEnum.STOP.getCode());

@@ -27,6 +27,8 @@ public class SystemMenuUpdate {
 
     private Integer hidden;
 
+    private Integer status;
+
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;

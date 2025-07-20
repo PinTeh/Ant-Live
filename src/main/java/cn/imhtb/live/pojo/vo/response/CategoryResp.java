@@ -11,6 +11,8 @@ public class CategoryResp {
 
     private String name;
 
+    private String icon;
+
     private int sort;
 
 }

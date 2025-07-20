@@ -109,6 +109,7 @@ public class IWatchServiceImpl extends ServiceImpl<WatchMapper, Watch> implement
             response.setName(nickNames.get(i));
             response.setTitle(room.getTitle());
             response.setRoomId(room.getId());
+            response.setLiveStatus(room.getStatus());
             list.add(response);
         }
         return list;

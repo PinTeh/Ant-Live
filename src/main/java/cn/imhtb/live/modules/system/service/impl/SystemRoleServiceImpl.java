@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -51,6 +52,38 @@ public class SystemRoleServiceImpl extends BaseServiceImpl<RoleMapper, Role, Sys
                 .eq(hidden != null, "hidden", hidden)
                 .orderByAsc("sort"));
         return listMenusTree(menus, null, hidden);
+    }
+
+    @Override
+    public boolean removeRoleMenus(List<Integer> menuIds, Integer roleId) {
+        if (CollectionUtils.isEmpty(menuIds)){
+            return false;
+        }
+        LambdaQueryWrapper<RoleMenu> wrapper = new LambdaQueryWrapper<RoleMenu>()
+                .eq(RoleMenu::getRoleId, roleId)
+                .in(RoleMenu::getMenuId, menuIds);
+        return roleMenuMapper.delete(wrapper) > 0;
+    }
+
+    @Override
+    public boolean saveRoleMenus(List<Integer> menuIds, Integer roleId) {
+        if (CollectionUtils.isEmpty(menuIds)){
+            return false;
+        }
+        for (Integer menuId : menuIds) {
+            LambdaQueryWrapper<RoleMenu> wrapper = new LambdaQueryWrapper<RoleMenu>()
+                    .eq(RoleMenu::getRoleId, roleId)
+                    .eq(RoleMenu::getMenuId, menuId);
+            Long count = roleMenuMapper.selectCount(wrapper);
+            if (count > 0){
+                continue;
+            }
+            RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setRoleId(roleId);
+            roleMenu.setMenuId(menuId);
+            roleMenuMapper.insert(roleMenu);
+        }
+        return true;
     }
 
     private List<FrontMenuItemResp> listMenusTree(List<Menu> menus, List<Integer> menuIds, Integer hidden) {

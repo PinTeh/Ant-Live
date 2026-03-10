@@ -2,8 +2,10 @@ package cn.imhtb.live.pojo.database;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
  * @date 2020/4/30
  */
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class RoleMenu implements Serializable {
 

@@ -18,4 +18,8 @@ public interface ISystemRoleService extends IBaseService<SystemRoleDetail, Syste
 
     List<FrontMenuItemResp> listMenus(Integer pid, Integer hidden);
 
+    boolean removeRoleMenus(List<Integer> menuIds, Integer roleId);
+
+    boolean saveRoleMenus(List<Integer> menuIds, Integer roleId);
+
 }

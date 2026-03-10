@@ -2,7 +2,7 @@
 <p align="center">基于SpringBoot开发的直播平台</p>
 <p align="center">
     <img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt="license">
-    <img style="margin: 0 4px;" src="https://img.shields.io/badge/EuBackend-0.0.1-blue" alt="EuBackend">
+    <img style="margin: 0 4px;" src="https://img.shields.io/badge/AntLive-0.0.1-blue" alt="EuBackend">
 </p>
 
 <strong>Ant Live</strong>是一套全部开源的前后端分离 Java EE 企业级快速开发平台，基于Java常见的技术栈`SpringBoot`、`MySQL`、`MyBatisPlus`等框架，实现一个直播平台，包括用户端直播推拉流、后台管理功能，给刚入门的开发人员学习参考。

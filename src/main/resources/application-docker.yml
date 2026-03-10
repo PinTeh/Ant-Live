@@ -1,0 +1,89 @@
+server:
+  port: 8088
+
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://localhost:3306/ant-live?characterEncoding=utf-8&serverTimezone=GMT%2b8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      max-wait: 60000
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+
+  mail:
+    host: smtp.qq.com
+    username: xxx@qq.com
+    password: xxx
+    default-encoding: UTF-8
+    port: 465
+    protocol: smtps
+
+  redis:
+    database: 0
+    host: xxxx
+    port: 6379
+    password: xxx
+    jedis:
+      pool:
+        max-active: 8
+        max-idle: 8
+    timeout: 5000
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 4096MB
+      max-request-size: 4096MB
+
+tencent:
+  sms:
+    appid: 000
+    appKey: 000
+    templateId: 000
+    templateNoticeId: 000
+    smsSign: 000
+  live:
+    domain: live.imhtb.cn
+    appName: live
+    secretId: 000
+    secretKey: 000
+  cos:
+    bucketName: 000
+    path: https://xxx.cos.ap-chengdu.myqcloud.com/
+
+mybatis-plus:
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+      logic-not-delete-value: 0
+      logic-delete-value: 1
+
+alipay:
+  path: Q:/Learning/Live/BackEnd/AntLive/src/main/resources/static/
+
+minio:
+  endpoint: ${minio_endpoint}
+  ip: ${minio_ip}
+  port: ${minio_port}
+  accessKey: ${minio_access_key}
+  secretKey: ${minio_secret_key}
+  bucketName: live.file.bucket
+
+dromara:
+  x-file-storage:
+    default-platform: huawei-obs-1 # 默认使用的存储平台
+    thumbnail-suffix: ".min.jpg" # 缩略图后缀
+    minio:
+      - platform: minio-1
+        enable-storage: true
+        access-key: ${minio_access_key}
+        secret-key: ${minio_secret_key}
+        end-point: ${minio_endpoint}
+        bucket-name: live.file.bucket
+        domain: http://localhost:9000/live.file.bucket/ # 访问域名，注意“/”结尾，例如：http://minio.abc.com/abc/
+        base-path:  # 基础路径 xx/

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.imhtb.live.mappers.MessageMapper">
+
+    <resultMap id="BaseResultMap" type="cn.imhtb.live.pojo.database.Message">
+            <id property="id" column="id" />
+            <result property="roomId" column="room_id" />
+            <result property="fromUid" column="from_uid" />
+            <result property="content" column="content" />
+            <result property="replyMsgId" column="reply_msg_id" />
+            <result property="status" column="status" />
+            <result property="type" column="type" />
+            <result property="extra" column="extra" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,room_id,from_uid,content,reply_msg_id,`status`,
+        type,extra,create_time,update_time
+    </sql>
+    <select id="pageDetail" resultType="cn.imhtb.live.modules.system.model.SystemMessageDetail">
+        select m.id,
+               m.room_id,
+               m.from_uid,
+               m.content,
+               m.reply_msg_id,
+               m.`status`,
+               m.type,
+               m.extra,
+               m.create_time,
+               m.update_time,
+               u1.nickname as from_user_nickname,
+               u2.nickname as room_user_nickname
+        from message m
+                 inner join room r on r.id = m.room_id
+                 left join user u1 on m.from_uid = u1.id
+                 left join user u2 on r.user_id = u2.id
+            ${ew.customSqlSegment}
+    </select>
+</mapper>

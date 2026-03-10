@@ -1,0 +1,38 @@
+[[AntLive]]
+= Ant Live
+Author: PinTeh <794409767@qq.com>
+Version: 1.0
+:toc: left
+:toclevels: 4
+:toc-title: 目录
+:sectnums:
+:sectnumlevels: 4
+
+
+== 技术点
+. SpringBoot
+. Guava
+
+
+== 配置启动
+
+=== 腾讯云
+==== live直播
+. 访问管理\访问密钥\API密钥管理
+.. SecretId
+.. SecretKey
+
+==== cos对象存储
+. 对象存储\密钥管理
+.. SecretId
+.. SecretKey
+
+. 对象存储\存储桶列表\存储桶
+.. bucketName(存储桶名称)
+.. path(访问域名)
+
+
+
+== 更新日志
+- [x] 移除邮箱、手机注册，修改为用户名注册
+- [] 移除邮箱、手机注册，修改为用户名注册

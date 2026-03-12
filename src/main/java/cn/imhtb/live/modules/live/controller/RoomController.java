@@ -6,6 +6,8 @@ import cn.imhtb.live.common.annotation.IgnoreToken;
 import cn.imhtb.live.common.holder.UserHolder;
 import cn.imhtb.live.common.utils.JwtUtil;
 import cn.imhtb.live.modules.live.vo.RoomRespVo;
+import cn.imhtb.live.modules.live.service.IRoomIntimacyRankService;
+import cn.imhtb.live.modules.live.vo.RoomIntimacyRankRespVo;
 import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.pojo.vo.RoomExtraInfoResp;
 import cn.imhtb.live.pojo.vo.request.RoomInfoSaveRequest;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 /**
@@ -32,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 public class RoomController {
 
     private final IRoomService roomService;
+    private final IRoomIntimacyRankService roomIntimacyRankService;
 
     @IgnoreToken
     @ApiOperation("获取直播间信息")
@@ -67,6 +71,13 @@ public class RoomController {
                                                         @RequestParam(required = false, defaultValue = "1") Integer pageNo,
                                                         @RequestParam(required = false, defaultValue = "10") Integer pageSize) {
         return ApiResponse.ofSuccess(roomService.getLivingRooms(categoryId, pageNo, pageSize));
+    }
+
+    @IgnoreToken
+    @ApiOperation("获取直播间亲密榜前十")
+    @GetMapping("/intimacy/rank")
+    public ApiResponse<List<RoomIntimacyRankRespVo>> intimacyRank(@RequestParam Integer roomId) {
+        return ApiResponse.ofSuccess(roomIntimacyRankService.getTopRanks(roomId));
     }
 
 }

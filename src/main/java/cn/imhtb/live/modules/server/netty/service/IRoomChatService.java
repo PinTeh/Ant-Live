@@ -59,4 +59,11 @@ public interface IRoomChatService {
      */
     void sendGiftMsg(String msg, Integer roomId, Integer userId, Integer giftId);
 
+    /**
+     * 广播直播间亲密榜
+     *
+     * @param roomId 房间id
+     */
+    void broadcastIntimacyRank(Integer roomId);
+
 }

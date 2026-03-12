@@ -7,6 +7,7 @@ import cn.imhtb.live.common.exception.BusinessException;
 import cn.imhtb.live.common.holder.UserHolder;
 import cn.imhtb.live.mappers.*;
 import cn.imhtb.live.modules.live.service.ILiveGiftService;
+import cn.imhtb.live.modules.live.service.IRoomIntimacyRankService;
 import cn.imhtb.live.modules.live.vo.PresentRespVo;
 import cn.imhtb.live.modules.live.vo.RewardReqVo;
 import cn.imhtb.live.modules.live.vo.RewardRespVo;
@@ -39,6 +40,7 @@ public class LiveGiftServiceImpl implements ILiveGiftService {
     private final PresentMapper presentMapper;
     private final IRoomChatService roomChatService;
     private final PresentRewardMapper presentRewardMapper;
+    private final IRoomIntimacyRankService roomIntimacyRankService;
 
     @Override
     public List<PresentRespVo> list() {
@@ -83,6 +85,7 @@ public class LiveGiftServiceImpl implements ILiveGiftService {
         presentReward.setNumber(req.getNumber());
         presentReward.setTotalPrice(totalPrice);
         presentRewardMapper.insert(presentReward);
+        roomIntimacyRankService.addGiftIntimacy(room.getId(), userId, totalPrice);
         // 发送ws消息
         String msgFormat = "%s赠送了%s * %d";
         String text = String.format(msgFormat, user.getNickname(), present.getName(), req.getNumber());

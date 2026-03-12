@@ -781,3 +781,15 @@ INSERT INTO `withdrawal` (`id`, `identity`, `identity_name`, `mark`, `type`, `us
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
+CREATE TABLE IF NOT EXISTS `room_intimacy_rank`
+(
+    `id`             bigint NOT NULL AUTO_INCREMENT,
+    `room_id`        int NOT NULL,
+    `user_id`        int NOT NULL,
+    `intimacy_value` decimal(12,2) NOT NULL DEFAULT '0.00',
+    `create_time`    datetime DEFAULT CURRENT_TIMESTAMP,
+    `update_time`    datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uk_room_user` (`room_id`, `user_id`),
+    KEY `idx_room_intimacy_room` (`room_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='直播间亲密榜';

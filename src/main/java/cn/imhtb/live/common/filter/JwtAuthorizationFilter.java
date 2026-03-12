@@ -1,8 +1,8 @@
-package cn.imhtb.antlive.filter;
+package cn.imhtb.live.common.filter;
 
-import cn.imhtb.antlive.common.JwtConstants;
-import cn.imhtb.antlive.service.impl.UserDetailsServiceImpl;
-import cn.imhtb.antlive.utils.JwtUtils;
+import cn.imhtb.live.common.constants.JwtConstant;
+import cn.imhtb.live.common.utils.JwtUtil;
+import cn.imhtb.live.modules.user.service.impl.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import lombok.extern.slf4j.Slf4j;
@@ -39,8 +39,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
 
-        String token = request.getHeader(JwtConstants.TOKEN_HEADER);
-        if (token == null || !token.startsWith(JwtConstants.TOKEN_PREFIX)) {
+        String token = request.getHeader(JwtConstant.TOKEN_HEADER);
+        if (token == null || !token.startsWith(JwtConstant.TOKEN_PREFIX)) {
             SecurityContextHolder.clearContext();
         } else {
             UsernamePasswordAuthenticationToken authentication = getAuthentication(token);
@@ -54,8 +54,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
      */
     private UsernamePasswordAuthenticationToken getAuthentication(String authorization) {
         try {
-            String username = JwtUtils.getUsernameByToken(authorization);
-            if (!StringUtils.isEmpty(username)) {
+            String username = JwtUtil.getUsernameByToken(authorization);
+            if (StringUtils.hasLength(username)) {
                 // 这里我们是又从数据库拿了一遍,避免用户的角色信息有变
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, null, userDetails.getAuthorities());

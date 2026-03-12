@@ -1,9 +1,12 @@
 package cn.imhtb.live.modules.server.netty.assembly;
 
+import cn.imhtb.live.modules.live.vo.RoomIntimacyRankRespVo;
 import cn.imhtb.live.modules.server.netty.domain.resp.ChatMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.domain.resp.GiftMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.domain.resp.WsMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.enums.WsRespMethodEnum;
+
+import java.util.List;
 
 /**
  * 消息组装
@@ -40,6 +43,16 @@ public class WsMsgAssembly {
         WsMsgRespDTO<GiftMsgRespDTO> wsMsgRespDTO = new WsMsgRespDTO<>();
         wsMsgRespDTO.setMethod(WsRespMethodEnum.GIFT.getMethod());
         wsMsgRespDTO.setData(message);
+        return wsMsgRespDTO;
+    }
+
+    /**
+     * 构建亲密榜信息
+     */
+    public static WsMsgRespDTO<List<RoomIntimacyRankRespVo>> buildIntimacyRank(List<RoomIntimacyRankRespVo> ranks){
+        WsMsgRespDTO<List<RoomIntimacyRankRespVo>> wsMsgRespDTO = new WsMsgRespDTO<>();
+        wsMsgRespDTO.setMethod(WsRespMethodEnum.INTIMACY_RANK.getMethod());
+        wsMsgRespDTO.setData(ranks);
         return wsMsgRespDTO;
     }
 

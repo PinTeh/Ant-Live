@@ -1,6 +1,9 @@
-package cn.imhtb.antlive.entity;
+package cn.imhtb.live.pojo.database;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 public class Room {
 
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     private Integer userId;
@@ -38,7 +41,9 @@ public class Room {
 
     private Integer categoryId;
 
-    private String playUrl;
+    private String pushUrl;
+
+    private String pullUrl;
 
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

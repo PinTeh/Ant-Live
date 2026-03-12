@@ -1,6 +1,8 @@
 package cn.imhtb.live.modules.server.netty.service.impl;
 
 import cn.imhtb.live.mappers.MessageMapper;
+import cn.imhtb.live.modules.live.service.IRoomIntimacyRankService;
+import cn.imhtb.live.modules.live.vo.RoomIntimacyRankRespVo;
 import cn.imhtb.live.modules.server.netty.AttrUtil;
 import cn.imhtb.live.modules.server.netty.assembly.WsMsgAssembly;
 import cn.imhtb.live.modules.server.netty.domain.WsChannelExtraInfoDTO;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -40,6 +43,8 @@ public class RoomChatServiceImpl implements IRoomChatService {
     private final IUserService userService;
 
     private final MessageMapper messageMapper;
+
+    private final IRoomIntimacyRankService roomIntimacyRankService;
 
     /**
      * 所有的会话信息维护
@@ -143,7 +148,6 @@ public class RoomChatServiceImpl implements IRoomChatService {
 
     @Override
     public void sendChatMsg(ChatMsgReq chatMsgReq) {
-        // todo
         User userInfo = userService.getUserInfo();
         Integer userId = userInfo.getId();
         Integer roomId = chatMsgReq.getRoomId();
@@ -165,6 +169,8 @@ public class RoomChatServiceImpl implements IRoomChatService {
         message.setStatus(0);
         message.setType(1);
         messageMapper.insert(message);
+        roomIntimacyRankService.addChatIntimacy(roomId, userId);
+        broadcastIntimacyRank(roomId);
     }
 
     @Override
@@ -188,6 +194,19 @@ public class RoomChatServiceImpl implements IRoomChatService {
                                 .text(msg)
                                 .build()));
             }
+        }
+        broadcastIntimacyRank(roomId);
+    }
+
+    @Override
+    public void broadcastIntimacyRank(Integer roomId) {
+        CopyOnWriteArraySet<Channel> channels = ONLINE_ROOM.get(roomId);
+        if (Objects.isNull(channels) || channels.isEmpty()) {
+            return;
+        }
+       List<RoomIntimacyRankRespVo> ranks = roomIntimacyRankService.getTopRanks(roomId);
+        for (Channel channel : channels) {
+            sendMessage(channel, WsMsgAssembly.buildIntimacyRank(ranks));
         }
     }
 

@@ -17,6 +17,7 @@ public enum WsRespMethodEnum {
     LIKE("likeMessage", "点赞"),
     CHAT("chatMessage", "聊天"),
     GIFT("giftMessage", "礼物"),
+    INTIMACY_RANK("intimacyRank", "亲密榜"),
     STATS("statsMessage", "状态"),
     ;
 

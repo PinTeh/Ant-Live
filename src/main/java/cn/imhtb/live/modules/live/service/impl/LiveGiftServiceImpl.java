@@ -2,6 +2,7 @@ package cn.imhtb.live.modules.live.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.imhtb.live.common.PageData;
+import cn.imhtb.live.common.enums.PresentRewardTypeEnum;
 import cn.imhtb.live.common.enums.StatusEnum;
 import cn.imhtb.live.common.exception.BusinessException;
 import cn.imhtb.live.common.holder.UserHolder;
@@ -80,6 +81,7 @@ public class LiveGiftServiceImpl implements ILiveGiftService {
         presentReward.setFromId(userId);
         presentReward.setToId(room.getUserId());
         presentReward.setRoomId(req.getRoomId());
+        presentReward.setType(PresentRewardTypeEnum.LIVE.getCode());
         presentReward.setUnitPrice(present.getPrice());
         presentReward.setPresentId(req.getPresentId());
         presentReward.setNumber(req.getNumber());
@@ -97,6 +99,7 @@ public class LiveGiftServiceImpl implements ILiveGiftService {
         Page<RewardRespVo> pageParam = new Page<>(page, pageSize);
         QueryWrapper<RewardRespVo> wrapper = new QueryWrapper<>();
         wrapper.eq("pr.to_id", UserHolder.getUserId());
+        wrapper.orderByDesc("pr.create_time", "pr.id");
         Page<RewardRespVo> res = presentRewardMapper.pageRewardRespVo(pageParam, wrapper);
         PageData<RewardRespVo> pageData = new PageData<>();
         pageData.setList(res.getRecords());

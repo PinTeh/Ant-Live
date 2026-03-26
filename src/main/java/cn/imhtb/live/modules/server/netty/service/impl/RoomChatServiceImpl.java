@@ -1,7 +1,10 @@
 package cn.imhtb.live.modules.server.netty.service.impl;
 
+import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
+import cn.imhtb.live.common.utils.RedisUtil;
 import cn.imhtb.live.mappers.MessageMapper;
 import cn.imhtb.live.modules.live.service.IRoomIntimacyRankService;
+import cn.imhtb.live.modules.server.RedisPrefix;
 import cn.imhtb.live.modules.live.vo.RoomIntimacyRankRespVo;
 import cn.imhtb.live.modules.server.netty.AttrUtil;
 import cn.imhtb.live.modules.server.netty.assembly.WsMsgAssembly;
@@ -14,12 +17,12 @@ import cn.imhtb.live.modules.server.netty.domain.resp.WsMsgRespDTO;
 import cn.imhtb.live.modules.server.netty.service.IRoomChatService;
 import cn.imhtb.live.modules.user.service.IUserService;
 import cn.imhtb.live.pojo.database.Message;
+import cn.imhtb.live.pojo.database.Room;
 import cn.imhtb.live.pojo.database.User;
+import cn.imhtb.live.service.IRoomService;
 import com.alibaba.fastjson.JSON;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
-import io.netty.util.Attribute;
-import io.netty.util.AttributeKey;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,10 @@ public class RoomChatServiceImpl implements IRoomChatService {
     private final MessageMapper messageMapper;
 
     private final IRoomIntimacyRankService roomIntimacyRankService;
+
+    private final IRoomService roomService;
+
+    private final RedisUtil redisUtil;
 
     /**
      * 所有的会话信息维护
@@ -84,14 +91,18 @@ public class RoomChatServiceImpl implements IRoomChatService {
         ONLINE_ROOM.get(roomId).add(channel);
 
         // 会员登录处理
-        AttributeKey<Integer> attributeKey = AttributeKey.valueOf("userId");
-        Attribute<Integer> attr = channel.attr(attributeKey);
         Integer userId = AttrUtil.getAttr(channel, AttrUtil.USER_ID);
         if (Objects.nonNull(userId)) {
             ONLINE_USER.putIfAbsent(userId, new CopyOnWriteArraySet<>());
             ONLINE_USER.get(userId).add(channel);
             channelExtraInfoDto.setUserId(userId);
 //            AttrUtil.setAttr(channel, AttrUtil.USER_ID, userId);
+        }
+
+        Room room = roomService.getById(roomId);
+        if (Objects.nonNull(room) && Objects.equals(room.getStatus(), LiveRoomStatusEnum.LIVING.getCode())) {
+            String viewerKey = Objects.nonNull(userId) ? "u:" + userId : "c:" + channel.id().asLongText();
+            redisUtil.add(String.format(RedisPrefix.LIVE_VIEWER_SET_KEY, roomId), viewerKey);
         }
 
 //        this.sendMessage(channel, WsMsgAssembly.buildWelcome("欢迎进入直播间~"));

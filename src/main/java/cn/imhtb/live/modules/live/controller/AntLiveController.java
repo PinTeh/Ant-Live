@@ -6,6 +6,7 @@ import cn.imhtb.live.common.holder.UserHolder;
 import cn.imhtb.live.modules.live.service.ILiveInfoService;
 import cn.imhtb.live.modules.live.service.ILiveService;
 import cn.imhtb.live.modules.live.vo.LiveInfoReqVo;
+import cn.imhtb.live.modules.live.vo.StopLiveStatsVo;
 import cn.imhtb.live.pojo.LiveStatusVo;
 import cn.imhtb.live.pojo.StartOpenLiveVo;
 import cn.imhtb.live.pojo.database.LiveInfo;
@@ -43,9 +44,8 @@ public class AntLiveController {
 
     @ApiOperation("停止直播")
     @PostMapping("/stopLive")
-    public ApiResponse<?> stopLive() {
-        liveService.stopLive();
-        return ApiResponse.ofSuccess();
+    public ApiResponse<StopLiveStatsVo> stopLive() {
+        return ApiResponse.ofSuccess(liveService.stopLive());
     }
 
     @ApiOperation("获取直播状态")

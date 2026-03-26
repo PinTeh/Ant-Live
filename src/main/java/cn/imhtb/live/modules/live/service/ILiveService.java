@@ -2,6 +2,7 @@ package cn.imhtb.live.modules.live.service;
 
 import cn.imhtb.live.pojo.LiveStatusVo;
 import cn.imhtb.live.pojo.StartOpenLiveVo;
+import cn.imhtb.live.modules.live.vo.StopLiveStatsVo;
 
 /**
  * @author pinteh
@@ -26,7 +27,7 @@ public interface ILiveService {
      * 停止直播
      *
      */
-    void stopLive();
+    StopLiveStatsVo stopLive();
 
     /**
      * 获取直播状态

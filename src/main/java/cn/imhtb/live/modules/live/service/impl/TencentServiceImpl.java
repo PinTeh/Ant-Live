@@ -3,6 +3,7 @@ package cn.imhtb.live.modules.live.service.impl;
 import cn.imhtb.live.common.enums.LiveInfoStatusEnum;
 import cn.imhtb.live.common.enums.LiveRoomStatusEnum;
 import cn.imhtb.live.modules.live.service.ILiveService;
+import cn.imhtb.live.modules.live.vo.StopLiveStatsVo;
 import cn.imhtb.live.pojo.database.LiveInfo;
 import cn.imhtb.live.pojo.LiveStatusVo;
 import cn.imhtb.live.pojo.database.Room;
@@ -64,8 +65,8 @@ public class TencentServiceImpl implements ILiveService {
     }
 
     @Override
-    public void stopLive() {
-
+    public StopLiveStatsVo stopLive() {
+        return null;
     }
 
     @Override
